@@ -38,7 +38,7 @@
                                     <div class="col">
                                         <p class="mb-0 fw-semibold text-black"> <span class="badge bg-danger">
                                             <i  class="mdi mdi-alpha-x-circle-outline"></i> Potential High Risk </span> </p>
-                                        <h3 class="m-0 text-black">{{count($potential_high_risk)}} 
+                                        <h3 class="m-0 text-black">3
                                             <small class="text-danger" style="font-size:14px; font-weight:100; ">request found</small>
                                         </h3>
                                     </div>
@@ -60,7 +60,7 @@
                                     <div class="col">
                                         <p class="mb-0 fw-semibold text-black"> <span class="badge bg-warning">
                                             <i  class="mdi mdi-alpha-x-circle-outline"></i> Potential Medium Risk </span> </p>
-                                        <h3 class="m-0 text-black">{{count($potential_medium_risk)}}
+                                        <h3 class="m-0 text-black">5
                                              <small class="text-warning" style="font-size:14px; font-weight:100; ">request found</small>
                                             </h3>
                                     </div>
@@ -82,7 +82,7 @@
                                     <div class="col">
                                         <p class="mb-0 fw-semibold text-black"> <span class="badge bg-info">
                                             <i  class="mdi mdi-shield-check-outline"></i> No Match Found </span> </p>
-                                        <h3 class="m-0 text-black">{{count($no_match_found)}}
+                                        <h3 class="m-0 text-black">4
                                              <small class="text-info" style="font-size:14px; font-weight:100; ">request found</small> 
                                         </h3>
                                     </div>
@@ -105,7 +105,7 @@
                                     <div class="col">
                                         <p class="mb-0 fw-semibold text-black"> <span class="badge bg-primary">
                                             <i  class="mdi mdi-progress-alert"></i> Total Request </span> </p>
-                                        <h3 class="m-0 text-black">{{count($total_request)}} 
+                                        <h3 class="m-0 text-black">5
                                             <small class="text-primary" style="font-size:14px; font-weight:100; ">request sent</small>
                                         </h3>
                                     </div>
@@ -139,7 +139,7 @@
                        </div>
                        <div class="col-md-6 align-self-center">
                            <div class="card-body d-flex justify-content-lg-end justify-content-center">
-                               <a type="button" class="btn btn-primary btn-lg" href="{{route('user.aml_adverse_media_check', $slug->slug)}}">      <img src="{{asset('assets/images/favicon.png')}}" width="30px" > Check </a>
+                               <a type="button" class="btn btn-primary btn-lg" href="#">      <img src="{{asset('assets/images/favicon.png')}}" width="30px" > Check </a>
                            </div>
                        </div>
                        <!--end col-->
@@ -196,33 +196,30 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($logs as $trans)
+                                 
                                     <tr>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
-                                                <div class="px-2 py-3">{{$loop->iteration}}</div>
+                                            <a class="table-link" href="">
+                                                <div class="px-2 py-3">1</div>
                                             </a>
                                         </td>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
-                                                <div class="px-2 py-3">{{$trans->ref}}</div>
+                                            <a class="table-link" href="">
+                                                <div class="px-2 py-3">qwe321</div>
                                             </a>
                                         </td>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
-                                                <div class="px-2 py-3">{{$trans->query}}</div>
+                                            <a class="table-link" href="">
+                                                <div class="px-2 py-3"></div>
                                             </a>
                                         </td>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
+                                            <a class="table-link" href="">
                                                 <div class="px-2 py-3">
-                                                    @if($trans->status == 'potential-high-risk')
                                                     <span class="badge badge-soft-danger">Potential High Risk</span>
-                                                    @elseif($trans->status == 'medium-high-risk')
-                                                    <span class="badge badge-soft-warning">Medium High Risk</span>
-                                                    @else
-                                                    <span class="badge badge-soft-success">  No Match Found </span>
-                                                    @endif
+                                                    {{-- <span class="badge badge-soft-warning">Medium High Risk</span> --}}
+                                                    {{-- <span class="badge badge-soft-success">  No Match Found </span> --}}
+                                                    
                                                 </div>
                                             </a>
                                         </td>
@@ -232,26 +229,26 @@
                                             </a>
                                         </td> --}}
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
-                                                <div class="px-2 py-3">{{auth()->user()->client->company_name}}</div>
+                                            <a class="table-link" href="">
+                                                <div class="px-2 py-3">company name</div>
                                             </a>
                                         </td>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
-                                                <div class="px-2 py-3">{{date('jS F Y, h:iA', strtotime($trans->created_at))}}</div>
+                                            <a class="table-link" href="">
+                                                <div class="px-2 py-3">12 April, 2023</div>
                                             </a>
                                         </td>
                                         <td class="px-0 py-0">
-                                            <a class="table-link" href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">
+                                            <a class="table-link" href="">
                                                 <div class="px-2 py-3">
                                                
-                                                    <a href="{{route('user.aml_adverse_media_get_report', ['ref'=>encrypt($trans->id)])}}">View Details</a>
+                                                    <a href="">View Details</a>
                                                  
                                                 </div>
                                             </a>
                                         </td>
                                     </tr>
-                                    @endforeach
+                                  
                                 </tbody>
                             </table>
                         </div>

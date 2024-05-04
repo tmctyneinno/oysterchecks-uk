@@ -2,24 +2,12 @@
  
 namespace App\Http\Controllers;
 
-use App\Mail\UserAccount;
-use App\Mail\UserOnboard;
-use App\Models\CandidateService;
-use App\Models\User;
 use App\Models\Applicant;
-use App\Models\ApplicantFieldInput;
-use App\Models\Document;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
-use App\Models\CandidateVerification;
-use App\Models\Client;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Traits\sandbox;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Verification;
 use Exception; 
+use Illuminate\Support\Arr;
 
 class ApplicantController extends Controller
 {
@@ -33,14 +21,13 @@ class ApplicantController extends Controller
         $pass =substr(str_replace(['+', '=', '/'], '', \base64_encode(random_bytes(15))), 0,10);
         return $pass;
     } 
-    
+     
     public function ApplicantIndex(){
         return view('users.applicant.index');
     }
 
     public function ApplicantCreate($slug){
-        $applicant['applicant'] = Verification::where('slug', decrypt($slug))->first();
-        $applicant['fields'] = ApplicantFieldInput::get();
+        $applicant['applicant'] = Verification::where('slug', decrypt($slug))->first(); 
         return view('users.applicant.create', $applicant);
     }
 
@@ -49,11 +36,29 @@ class ApplicantController extends Controller
     }
 
     public function ApplicantStore(Request $request){
-        // Validate applicant form data
-        $validData = $request->validate([
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-        ]);
+        
+      
+        $validData = [
+            'applicant_type' => $request->input('applicant_type'),
+            'firstName' => $request->input('firstname') ?? '', 
+            'lastName' => $request->input('lastname') ?? '',
+            'middleName' => $request->input('middlename') ?? '',
+            'email' => $request->input('email') ?? '',
+            'phone' => $request->input('phone') ?? '',
+            'placeofbirth' => $request->input('placeofbirth') ?? '',
+            'dateofbirth' => $request->input('dateofbirth') ?? '',
+            'country' => $request->input('country') ?? '',
+            'countryofbirth' => $request->input('countryofbirth') ?? '',
+            'gender' => $request->input('gender') ?? '',
+            'address' => $request->input('address') ?? '',
+            'companyname' => $request->input('companyname') ?? '',
+            'registrationnumber' => $request->input('registrationnumber') ?? '',
+            'companycreateddate' => $request->input('companycreateddate') ?? '',
+            'companyType' => $request->input('companyType') ?? '',
+            'taxpayer' => $request->input('taxpayer') ?? '',
+            'websitelink' => $request->input('websitelink') ?? '',
+        ];
+        
         Applicant::create([
             'user_id' => auth()->user()->id,
             'applicant_type'=> $request->input('applicant_type'),
@@ -68,7 +73,6 @@ class ApplicantController extends Controller
             'countryofbirth' => $request->input('countryofbirth'),
             'gender' => $request->input('gender'),
             'address' => $request->input('address'),
-
             "companyname" => $request->input('companyname'),
             "registrationnumber" => $request->input('registrationnumber'),
             "companycreateddate" => $request->input('companycreateddate'),
@@ -94,8 +98,8 @@ class ApplicantController extends Controller
         $dataToSend = [
             'key' => "GVBRNAYKKDHZAJ",
             'info' => [
-                'firstName' => $validData['firstname'],
-                'lastName' => $validData['lastname'],
+                'firstName' => $validData['firstName'],
+                'lastName' => $validData['lastName'],
                 
             ],
             "applicantPlatform" => "API",

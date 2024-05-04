@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <form method="post" action="{{route('createCandidate',encrypt($slug->slug))}}" enctype="multipart/form-data" class="add-candidate-form">
+                    <form method="post" action="#" enctype="multipart/form-data" class="add-candidate-form">
                         @csrf
                         <div class="card-body">
                             <div class="row">
@@ -146,7 +146,7 @@
                                     @endif
                                     <div class="col-md-6 p-3">
                                         <span style="color:red; font-size:11px;"> Note: You will be charged ₦{{number_format($slug->fee, 2)}} for each {{$slug->name}}</span> <br>
-                                        <span style="color:darkblue; font-size:11px;">Your wallet Balance is ₦{{number_format($wallet->avail_balance, 2)}}</span> <br>
+                                        <span style="color:darkblue; font-size:11px;">Your wallet Balance is ₦0.0</span> <br>
 
                                         <input type="checkbox" required>
 

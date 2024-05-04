@@ -19,6 +19,7 @@ use App\Http\Controllers\SanctionPepController;
 use App\Http\Controllers\AdverseMediaController;
 use App\Http\Controllers\EmployeeRefController;
 use App\Http\Middleware\ClientMiddleware;
+use App\Http\Controllers\SumsubController;
 
 // use App\Models\Transaction;
 
@@ -41,6 +42,10 @@ require __DIR__.'/admin.php';
 Route::get('/logouts', [HomeController::class, 'Logouts'])->name('logouts');
 Route::get('/home', [HomeController::class, 'Home'])->name('home');
 Route::get('/fetchInsect', [HomeController::class, 'fetchInsect'])->name('home');
+
+
+Route::get('/process-sumsub', [SumsubController::class, 'processSumsub']);
+
 #===================== USERS ROUTE ===============================
 
 #===================== USERS ROUTE ===============================

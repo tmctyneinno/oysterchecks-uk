@@ -30,5 +30,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'sumsub' => [
+        'secret_key' => env('SUMSUB_SECRET_KEY'),
+        'app_token' => env('SUMSUB_APP_TOKEN'),
+    ],    
 
 ];
