@@ -39,8 +39,9 @@ class ApplicantController extends Controller
         return view('users.applicant.showverify');
     }
 
-    public function ApplicantStore(Request $request)
-    {     
+    public function ApplicantStore(Request $request){
+        
+      
         $validData = [
             'applicant_type' => $request->input('applicant_type'),
             'firstName' => $request->input('firstname') ?? '', 
@@ -62,37 +63,38 @@ class ApplicantController extends Controller
             'websitelink' => $request->input('websitelink') ?? '',
         ];
         
-        Applicant::create([
-            'user_id' => auth()->user()->id,
-            'applicant_type'=> $request->input('applicant_type'),
-            'firstName' => $request->input('firstname'),
-            'lastName' => $request->input('lastname'),
-            'middleName' => $request->input('middlename'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'placeofbirth' => $request->input('placeofbirth'),
-            'dateofbirth' => $request->input('dateofbirth'),
-            'country' => $request->input('country'),
-            'countryofbirth' => $request->input('countryofbirth'),
-            'gender' => $request->input('gender'),
-            'address' => $request->input('address'),
-            "companyname" => $request->input('companyname'),
-            "registrationnumber" => $request->input('registrationnumber'),
-            "companycreateddate" => $request->input('companycreateddate'),
-            "companyType" => $request->input('companyType'),
-            "taxpayer" => $request->input('taxpayer'),
-            "websitelink" => $request->input('websitelink'),
-        ]);
+        // Applicant::create([
+        //     'user_id' => auth()->user()->id,
+        //     'applicant_type'=> $request->input('applicant_type'),
+        //     'firstName' => $request->input('firstname'),
+        //     'lastName' => $request->input('lastname'),
+        //     'middleName' => $request->input('middlename'),
+        //     'email' => $request->input('email'),
+        //     'phone' => $request->input('phone'),
+        //     'placeofbirth' => $request->input('placeofbirth'),
+        //     'dateofbirth' => $request->input('dateofbirth'),
+        //     'country' => $request->input('country'),
+        //     'countryofbirth' => $request->input('countryofbirth'),
+        //     'gender' => $request->input('gender'),
+        //     'address' => $request->input('address'),
+        //     "companyname" => $request->input('companyname'),
+        //     "registrationnumber" => $request->input('registrationnumber'),
+        //     "companycreateddate" => $request->input('companycreateddate'),
+        //     "companyType" => $request->input('companyType'),
+        //     "taxpayer" => $request->input('taxpayer'),
+        //     "websitelink" => $request->input('websitelink'),
+        // ]);
         
         $externalUserId = uniqid(); 
         $levelName = 'basic-kyc-level';
         
-        $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $validData);
+        $applicantId = $this->baseUrl->createApplicant($externalUserId, $levelName, $validData);
+
 
         return response()->json([
             'success' => true,
             'message' => 'Applicant created successfully',
-            "apiResponse" => (string) $applicantData,
+            "apiResponse" => (string) $applicantId,
         ]);
     }
    

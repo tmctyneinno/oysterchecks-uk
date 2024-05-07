@@ -360,22 +360,22 @@
                             })
                             .then(data => {
                                 if (data.success) {
-                                    const apiResponseContainer = document.getElementById('apiResponseContainer');
-                                    apiResponseContainer.innerHTML = ''; // Clear previous content
-                                    
-                                    const paragraph = document.createElement('p');
-                                    paragraph.textContent = data.apiResponse;
-                                    apiResponseContainer.appendChild(paragraph);
+                                        const apiResponseContainer = document.getElementById('apiResponseContainer');
+                                        apiResponseContainer.innerHTML = ''; // Clear previous content
+                                        
+                                        const paragraph = document.createElement('p');
+                                        paragraph.textContent = data.apiResponse;
+                                        apiResponseContainer.appendChild(paragraph);
 
-                                    successMessage.textContent = 'Applicant created successfully';
-                                    successMessage.style.display = 'block';
-                                    // Redirect to another page after a delay
-                                    setTimeout(function() {
-                                        successMessage.style.display = 'none';
-                                        //window.location.href = '{{ route('applicant.showverify') }}';
-                                    }, 2000);
-                                }
-                                else {
+                                        successMessage.textContent = 'Applicant created successfully';
+                                        successMessage.style.display = 'block';
+                                        // Redirect to another page after a delay
+                                        setTimeout(function() {
+                                            successMessage.style.display = 'none';
+                                            //window.location.href = '{{ route('applicant.showverify') }}';
+                                        }, 2000);
+                                    }
+                                    else {
                                     errorMessage.textContent = 'Data went wrong';
                                     errorMessage.style.display = 'block';
                                     setTimeout(() => {

@@ -39,8 +39,9 @@ class ApplicantController extends Controller
         return view('users.applicant.showverify');
     }
 
-    public function ApplicantStore(Request $request)
-    {     
+    public function ApplicantStore(Request $request){
+        
+      
         $validData = [
             'applicant_type' => $request->input('applicant_type'),
             'firstName' => $request->input('firstname') ?? '', 

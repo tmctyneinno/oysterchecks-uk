@@ -39,8 +39,9 @@ class ApplicantController extends Controller
         return view('users.applicant.showverify');
     }
 
-    public function ApplicantStore(Request $request)
-    {     
+    public function ApplicantStore(Request $request){
+        
+      
         $validData = [
             'applicant_type' => $request->input('applicant_type'),
             'firstName' => $request->input('firstname') ?? '', 
@@ -87,12 +88,13 @@ class ApplicantController extends Controller
         $externalUserId = uniqid(); 
         $levelName = 'basic-kyc-level';
         
-        $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $validData);
+        $applicantId = $this->baseUrl->createApplicant($externalUserId, $levelName, $validData);
+
 
         return response()->json([
             'success' => true,
             'message' => 'Applicant created successfully',
-            "apiResponse" => (string) $applicantData,
+            "apiResponse" => (string) $applicantId,
         ]);
     }
    

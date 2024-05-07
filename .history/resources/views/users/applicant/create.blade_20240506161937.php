@@ -68,7 +68,7 @@
                                                     <!-- Tab panes -->
                                                     <div class="tab-content">
                                                         <div class="tab-pane p-3 active show" id="individuals" role="tabpanel" >
-                                                            <form method="post" action="{{ route('applicant.store') }}" class="add-individual-form">
+                                                            <form method="post" action="{{ route('applicant.store') }}" class="add-company-form">
                                                                 @csrf
                                                                 <div class="card-body">
                                                                     <div class="row">
@@ -362,20 +362,20 @@
                                 if (data.success) {
                                     const apiResponseContainer = document.getElementById('apiResponseContainer');
                                     apiResponseContainer.innerHTML = ''; // Clear previous content
-                                    
-                                    const paragraph = document.createElement('p');
-                                    paragraph.textContent = data.apiResponse;
-                                    apiResponseContainer.appendChild(paragraph);
+                                    for (const [key, value] of Object.entries(data.apiResponse)) {
+                                        const paragraph = document.createElement('p');
+                                        paragraph.textContent = `${key}: ${value}`;
+                                        apiResponseContainer.appendChild(paragraph);
+                                    }
 
                                     successMessage.textContent = 'Applicant created successfully';
                                     successMessage.style.display = 'block';
                                     // Redirect to another page after a delay
                                     setTimeout(function() {
                                         successMessage.style.display = 'none';
-                                        //window.location.href = '{{ route('applicant.showverify') }}';
+                                       //window.location.href = '{{ route('applicant.showverify') }}';
                                     }, 2000);
-                                }
-                                else {
+                                } else {
                                     errorMessage.textContent = 'Data went wrong';
                                     errorMessage.style.display = 'block';
                                     setTimeout(() => {
