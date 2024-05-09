@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="my-4 fw-semibold text-dark font-16">Applicant Report - ID 66262e6766685f73fbbcd82e</h4>
+                                    <h4 class="my-4 fw-semibold text-dark font-16">Applicant Report - ID {{ $apiData['id'] }}</h4>
                                     <div>
                                         <a id="printBtn" class="btn btn-primary btn-square">Print</a>
                                         <a id="downloadBtn" class="btn btn-primary btn-square">Download Report</a>

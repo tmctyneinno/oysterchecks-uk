@@ -16,6 +16,11 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('applicantId')->nullable();
+            $table->string('externalUserId')->nullable();
+            $table->string('key')->nullable();
+            $table->string('inspectionId')->nullable();
+            $table->string('sourceKey')->nullable();
             $table->string('applicant_type')->nullable();
             $table->string('companyname')->nullable();
             $table->string('firstName')->nullable();
@@ -32,6 +37,9 @@ return new class extends Migration
             $table->string('registrationnumber')->nullable();
             $table->string('companycreateddate')->nullable();
             $table->string('companyType')->nullable();
+            $table->longText('info')->nullable();
+            $table->longText('companyInfo')->nullable();
+            $table->longText('review')->nullable();
             $table->string('taxpayer')->nullable();
             $table->string('websitelink')->nullable();
             $table->timestamps();

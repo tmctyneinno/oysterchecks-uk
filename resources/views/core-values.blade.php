@@ -29,8 +29,6 @@
     <!--header section end-->
 
    
-    <!--promo section end-->
-
     <!--about us section start-->
     <section class="about-us-section ptb-100">
         <div class="container">

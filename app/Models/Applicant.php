@@ -12,22 +12,10 @@ class Applicant extends Model
     protected $table = 'applicants';
     
     protected $fillable = [
-        'user_id', 'applicant_type', 'companyname', 'firstName', 'lastName', 'middleName', 'email','phone', 'placeofbirth', 'dateofbirth',
-        'country', 'countryofbirth', 'gender', 'address', 'registrationnumber', 'companycreateddate', 'companyType', 'taxpayer', 'websitelink'
+        'user_id', 'applicantId', 'externalUserId', 'applicantKey', 'inspectionId', 'sourceKey', 'applicant_type', 'companyname', 'firstName', 'lastName', 'middleName', 'email','phone', 'placeofbirth', 'dateofbirth',
+        'country', 'countryofbirth', 'gender', 'address', 'registrationnumber', 'companycreateddate', 'companyType', 'taxpayer', 'websitelink', 'info', 'companyInfo', 'review'
     ];
-    public function documents()
-    {
-        return $this->hasMany(Document::class);
-    }
+    
+   
 }
 
-// Document model
-class Document extends Model
-{
-    protected $fillable = ['image','documentType', 'country']; // Add other document fields
-
-    public function applicant()
-    {
-        return $this->belongsTo(Applicant::class);
-    }
-}

@@ -6,9 +6,11 @@ use GuzzleHttp;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use App\Traits\sandbox;
 
 class BAseUrl
 {
+    use sandbox;
     protected const BASE_URL = 'https://api.sumsub.com';
 
     protected GuzzleHttp\Client $guzzleClient;
@@ -30,20 +32,35 @@ class BAseUrl
     {
         $requestBody = [
             'externalUserId' => $externalUserId,
-            'email' => $validData['email'],
-            'phone' => $validData['phone'],
-            'country' => $validData['country'],
+            'email' => $validData['email'] ?? '',
+            'phone' => $validData['phone'] ?? '',
+            'country' => $validData['country'] ?? '',
             'info' => [
-                'firstName' => $validData['firstName'],
-                'lastName' =>  $validData['lastName'],
-                'placeofbirth' => $validData['placeofbirth'],
-                'dateofbirth' => $validData['dateofbirth'],
-                'gender' => $validData['gender'],
+                "companyInfo" => [
+                    'companyName' => $validData['companyname'] ?? '',
+                    'registrationNumber' => $validData['registrationnumber'] ?? '',
+                    "country" => $validData['country'] ?? '',
+                    "incorporatedOn" => $validData['companycreateddate'] ?? '',
+                    "type" => $validData['applicant_type'] ?? '',
+                    "email" => $validData['email'] ?? '',
+                    "phone" => $validData['phone'] ?? '',
+                    "website"=> $validData['websitelink'] ?? '',
+                ],
+                'firstName' => $validData['firstname'] ?? '',
+                'lastName' => $validData['lastname'] ?? '',
+                'middleName' => $validData['middlename'] ?? '',
+                'placeOfBirth' => $validData['placeofbirth'] ?? '',
+                'stateOfBirth' => $validData['placeofbirth'] ?? '',
+                'dob' => $validData['dateofbirth'] ?? '',
+                'gender' => $validData['gender']  ?? '',
+                'countryOfBirth' => $validData['countryofbirth'] ?? '',
+                'address' => $validData['address'] ?? '',
             ],
             'fixedInfo' => [
-                'firstName' => $validData['firstName'],
-                'lastName' =>  $validData['lastName'],
+                'firstName' => $validData['firstname'] ?? '',
+                'lastName' => $validData['lastname'] ?? '',
             ],
+            'type' => $validData['applicant_type'] ?? '',
         ];
 
         $url = '/resources/applicants?' . http_build_query(['levelName' => $levelName]);
@@ -54,17 +71,9 @@ class BAseUrl
             ->withBody(GuzzleHttp\Psr7\Utils::streamFor(json_encode($requestBody)));
 
         $response = $this->sendRequest($request);
-        $body = $this->parseBody($response);
-        // return $body['clientId'];
-        return response()->json([
-            'externalUserId' => $body['externalUserId'],
-            'email' => $body['email'],
-            'phone' => $body['phone'],
-            'id' => $body['id'],
-            "clientId" => (string) $body['clientId'],
-            "info" =>  $body['info'],
-
-        ]);
+        $parsedResponse = $this->parseBody($response);
+    
+        return json_encode($parsedResponse);
     }
 
     /**
@@ -143,7 +152,7 @@ class BAseUrl
     protected function sendRequest(RequestInterface $request): ResponseInterface
     {
         $now = time();
-        $request = $request->withHeader('X-App-Token', "sbx:srabCyZTWuBNb7qh94UXKZHa.TLKbuhsxQ3lFitPWpHrBGFQQ3s1wz17D")
+        $request = $request->withHeader('X-App-Token', $this->ReqToken())
             ->withHeader('X-App-Access-Sig', $this->createSignature($request, $now))
             ->withHeader('X-App-Access-Ts', $now);
 
@@ -164,7 +173,7 @@ class BAseUrl
 
     protected function createSignature(RequestInterface $request, int $ts): string
     {
-        return hash_hmac('sha256', $ts . strtoupper($request->getMethod()) . $request->getUri() . $request->getBody(), "kQYTcpGXGoQmdcY73Hr6UJOl0QjEoFJ1");
+        return hash_hmac('sha256', $ts . strtoupper($request->getMethod()) . $request->getUri() . $request->getBody(), $this->SecretKey());
     }
 
     protected function parseBody(ResponseInterface $response): array

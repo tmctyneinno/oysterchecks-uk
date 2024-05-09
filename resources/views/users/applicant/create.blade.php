@@ -1,5 +1,7 @@
  @extends('layouts.app')
  @section('content')
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
  <div class="page-content">
                 <div class="container-fluid">
                     <div class="row">
@@ -52,7 +54,7 @@
                                                 <div class="accordion-body">
                                                     <!-- Add a container for the error message -->
                                                     <div id="error-message" class="alert alert-danger border-0" role="alert" style="display: none;"></div>
-                                                    <div id="success-message" class="alert alert-success border-0" role="alert"style="display: none;">
+                                                    <div id="success-message" class="alert alert-success border-0" role="alert" style="display: none;">
                                                     </div>
                                                 
 
@@ -103,7 +105,7 @@
 
                                                                         <div class="col-md-6">
                                                                             <label class="form-label" style="font-weight:500">Select country</label>
-                                                                            <select id="country-select"  name="selectcountry" class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;">
+                                                                            <select required id="country-select"  name="selectcountry" class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;">
                                                                                 <option value=""><img>Select</option>
                                                                             </select>
                                                                         </div>
@@ -117,8 +119,8 @@
                                                                             <label class="form-label" style="font-weight:500">Gender</label>
                                                                             <select class="select form-control mb-3 custom-select" id="gender" name="gender" style="width: 100%; height:36px;">
                                                                                 <option>Select</option>
-                                                                                <option value="male">Male</option>
-                                                                                <option value="female">Famale</option>
+                                                                                <option value="M">Male</option>
+                                                                                <option value="F">Famale</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="col-md-12">
@@ -147,11 +149,11 @@
 
                                                                                         const option = document.createElement('option');
                                                                                         const option2 = document.createElement('option');
-                                                                                        option.value = country.name.common;
-                                                                                        option.textContent = country.name.common;
+                                                                                        option.value = country.cca2;
+                                                                                        option.textContent = `${country.name.common} (${country.cca2})`;
 
-                                                                                        option2.value = country.name.common;
-                                                                                        option2.textContent = country.name.common;
+                                                                                        option2.value = country.cca2;
+                                                                                        option2.textContent = `${country.name.common} (${country.cca2})`;
                                                                                         countrySelect.appendChild(option);
                                                                                         countryBirth.appendChild(option2);
                                                                                         // countrySelect.appendChild(img);
@@ -178,7 +180,7 @@
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <label class="form-label" style="font-weight:500">Company Name</label> 
-                                                                            <input type="text" value="" id="companyname" name="companyname" class="form-control mb-3 custom-select" placeholder="Company Name"  required >
+                                                                            <input type="text"  id="companyname" name="companyname" class="form-control mb-3 custom-select" placeholder="Company Name"  required >
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <label class="form-label" style="font-weight:500">Registration Number</label> 
@@ -249,12 +251,12 @@
                                                                                         const option = document.createElement('option');
                                                                                         const option2 = document.createElement('option');
                                                                                         const option3 = document.createElement('option');
-                                                                                        option.value = country.name.common;
-                                                                                        option.textContent = country.name.common;
+                                                                                        option.value = `${country.name.common} (${country.cca2})`; 
+                                                                                        option.textContent = `${country.name.common} (${country.cca2})`;
 
-                                                                                        option2.value = country.name.common;
-                                                                                        option2.textContent = country.name.common;
-                                                                                        option3.textContent = country.name.common;
+                                                                                        option2.value = `${country.name.common} (${country.cca2})`; 
+                                                                                        option2.textContent = `${country.name.common} (${country.cca2})`; 
+                                                                                        option3.textContent = `${country.name.common} (${country.cca2})`; 
                                                                                         countrySelect.appendChild(option);
                                                                                         countryBirth.appendChild(option2);
                                                                                         companyCountry.appendChild(option3);
@@ -288,8 +290,57 @@
                               
                             </div>
                             <div class="col-lg-6">
-                                <a href="{{ route('applicant.showverify') }}" class="btn-secondary btn">View verification page</a>
-                                <div id="apiResponseContainer"></div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Payload Request</h4>
+                                            </div><!--end card-header-->
+                                            <div class="card-body">
+                                                <div class="row d-flex justify-content-center">
+                                                    <div class="col">
+                                                        <h4 id="applicantNameTab" class="mb-0 fw-semibold text-black"> {{$applicant->name}} verifications</h4>
+                                                        <br>
+                                                        <h4 class="m-0 text-success" id="successMessage"></h4>
+                                                        <div id="successMessage" class="alert alert-success border-0" role="alert" style="display: none;"></div>
+                                    
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function() {
+                                                                const tabs = document.querySelectorAll('.nav-link');
+                                                                const tabContents = document.querySelectorAll('.tab-pane');
+
+                                                                tabs.forEach((tab, index) => {
+                                                                    tab.addEventListener('click', function(event) {
+                                                                        event.preventDefault();
+                                                                        tabs.forEach(tab => tab.classList.remove('active'));
+                                                                        tabContents.forEach(content => content.classList.remove('active', 'show'));
+                                                                        tab.classList.add('active');
+                                                                        const targetId = tab.getAttribute('href').replace('#', '');
+
+                                                                        document.getElementById(targetId).classList.add('active', 'show');
+                                                                        const applicantName = document.getElementById('applicantNameTab');
+                                                                        if (targetId === 'individuals') {
+                                                                            applicantName.textContent = 'Individual Verifications ';
+                                                                        } else if (targetId === 'company') {
+                                                                            applicantName.textContent = 'Company Verifications';
+                                                                        }
+                                                                    });
+                                                                });
+                                                            });
+                                                        </script>
+
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div id="apiResponseContainer"></div>
+                                                {{-- <a href="{{ route('applicant.showverify') }}" class="btn-secondary btn">View verification page</a> --}}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
 
                             </div>
                         </div>
@@ -299,7 +350,7 @@
                     <script>
                         document.querySelector('.add-individual-form').addEventListener('submit', function(event) {
                             event.preventDefault(); 
-                            const applicant_type = "{{ $applicant->name }}";
+                            const applicant_type = "individual";
                             //individual
                             const firstname = document.getElementById('firstname').value;
                             const lastname = document.getElementById('lastname').value;
@@ -312,14 +363,17 @@
                             const countryofbirth = document.getElementById('country-of-birth').value;
                             const gender = document.getElementById('gender').value;
                             const address = document.getElementById('address').value;
-                            
                             const errorMessage = document.getElementById('error-message');
                             const successMessage = document.getElementById('success-message');
+                            const successmessage = document.getElementById('successMessage');
 
                             errorMessage.style.display = 'none';
                             errorMessage.textContent = '';
                             successMessage.style.display = 'none';
                             successMessage.textContent = '';
+
+                            successmessage.style.display = 'none';
+                            successmessage.textContent = '';
 
                             if (!firstname || !lastname || !middlename) {
                                 errorMessage.textContent = 'Please enter all required details before submitting.';
@@ -361,11 +415,63 @@
                             .then(data => {
                                 if (data.success) {
                                     const apiResponseContainer = document.getElementById('apiResponseContainer');
-                                    apiResponseContainer.innerHTML = ''; // Clear previous content
+                                    successmessage.textContent = data.message;
+                                    successmessage.style.display = 'block'; 
                                     
-                                    const paragraph = document.createElement('p');
-                                    paragraph.textContent = data.apiResponse;
-                                    apiResponseContainer.appendChild(paragraph);
+                                    apiResponseContainer.innerHTML = ''; 
+                                    successMessage.innerHTML = ''; 
+                                    successmessage.innerHTML = ''; 
+
+                                    const response = JSON.parse(data.apiResponse);
+                                    //create paragraphs to dislay individual data
+                                    const idParagraph = document.createElement('p');
+                                    idParagraph.textContent = `ID: ${response.id}`;
+                                    apiResponseContainer.appendChild(idParagraph);
+
+                                
+                                    const keyParagraph = document.createElement('p');
+                                    keyParagraph.textContent = `key: ${response.key}`;
+                                    apiResponseContainer.appendChild(keyParagraph);
+
+                                    const externalUserIdParagraph = document.createElement('p');
+                                    externalUserIdParagraph.textContent = `ExternalUserId: ${response.externalUserId}`;
+                                    apiResponseContainer.appendChild(externalUserIdParagraph);
+
+                                    const sourceKeyParagraph = document.createElement('p');
+                                    sourceKeyParagraph.textContent = `SourceKey: ${response.sourceKey}`;
+                                    apiResponseContainer.appendChild(sourceKeyParagraph);
+
+                                    const emailParagraph = document.createElement('p');
+                                    emailParagraph.textContent = `Email: ${response.email}`;
+                                    apiResponseContainer.appendChild(emailParagraph);
+
+                                    const phoneParagraph = document.createElement('p');
+                                    phoneParagraph.textContent = `Phone: ${response.phone}`;
+                                    apiResponseContainer.appendChild(phoneParagraph);
+
+                                    // Format createdAt date
+                                    const createdAtDate = new Date(response.createdAt);
+                                    const createdAtFormatted = createdAtDate.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+                                    const createdAtParagraph = document.createElement('p');
+                                    createdAtParagraph.textContent = `Created At: ${createdAtFormatted}`;
+                                    apiResponseContainer.appendChild(createdAtParagraph);
+
+                                    const secretKey = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+                                    const encryptedApiResponse = CryptoJS.AES.encrypt(data.apiResponse, secretKey).toString();
+                                    const link = document.createElement('a');
+                                    link.textContent = 'View verification details';
+                                    link.href = '{{ route('applicant.showverify')}}?apiResponse=' + encodeURIComponent(data.apiResponse);
+                                     link.classList.add('btn', 'btn-secondary');
+                                    apiResponseContainer.appendChild(link);
+
+                                    // const paragraph = document.createElement('p');
+                                    // paragraph.textContent = data.apiResponse;
+                                    // 
+                                    // apiResponseContainer.appendChild(paragraph);
 
                                     successMessage.textContent = 'Applicant created successfully';
                                     successMessage.style.display = 'block';
@@ -433,12 +539,78 @@
                             })
                             .then(data => {
                                 if (data.success) {
+                                    const apiResponseContainer = document.getElementById('apiResponseContainer');
+                                    apiResponseContainer.innerHTML = ''; 
+
+                                    const response = JSON.parse(data.apiResponse);
+                                    //create paragraphs to dislay individual data
+                                    const idParagraph = document.createElement('p');
+                                    idParagraph.textContent = `ID: ${response.id}`;
+                                    apiResponseContainer.appendChild(idParagraph);
+
+                                     // Format createdAt date
+                                     const createdAtDate = new Date(response.createdAt);
+                                    const createdAtFormatted = createdAtDate.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+                                    
+                                    const keyParagraph = document.createElement('p');
+                                    keyParagraph.textContent = `key: ${response.key}`;
+                                    apiResponseContainer.appendChild(keyParagraph);
+
+                                    const externalUserIdParagraph = document.createElement('p');
+                                    externalUserIdParagraph.textContent = `ExternalUserId: ${response.externalUserId}`;
+                                    apiResponseContainer.appendChild(externalUserIdParagraph);
+
+                                    const sourceKeyParagraph = document.createElement('p');
+                                    sourceKeyParagraph.textContent = `SourceKey: ${response.sourceKey}`;
+                                    apiResponseContainer.appendChild(sourceKeyParagraph);
+
+                                    const companyNameParagraph = document.createElement('p');
+                                    companyNameParagraph.textContent = `Company Name: ${response.info.companyInfo.companyName}`;
+                                    apiResponseContainer.appendChild(companyNameParagraph);
+
+                                    const registrationNumber = document.createElement('p');
+                                    registrationNumber.textContent = `Registration Number: ${response.info.companyInfo.registrationNumber}`;
+                                    apiResponseContainer.appendChild(registrationNumber);
+
+                                    const emailCompany = document.createElement('p');
+                                    emailCompany.textContent = `Email: ${response.info.companyInfo.email}`;
+                                    apiResponseContainer.appendChild(emailCompany);
+
+                                     // Format createdAt date
+                                    //  const createdAtDate = new Date(response.createdAt);
+                                    // const createdAtFormatted = createdAtDate.toLocaleDateString('en-US', {
+                                    //     year: 'numeric',
+                                    //     month: 'long',
+                                    //     day: 'numeric'
+                                    // });
+                                    // const createdAtParagraph = document.createElement('p');
+                                    // createdAtParagraph.textContent = `Created At: ${createdAtFormatted}`;
+                                    // apiResponseContainer.appendChild(createdAtParagraph);
+
+                                    const secretKey = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+                                    const encryptedApiResponse = CryptoJS.AES.encrypt(data.apiResponse, secretKey).toString();
+                                    const link = document.createElement('a');
+                                    link.textContent = 'View verification details';
+                                    link.href = '{{ route('applicant.showverify')}}?apiResponse=' + encodeURIComponent(data.apiResponse);
+                                     link.classList.add('btn', 'btn-secondary');
+                                    apiResponseContainer.appendChild(link);
+
+
+                                    // const paragraph = document.createElement('p');
+                                    // paragraph.textContent = data.apiResponse;
+                                    // apiResponseContainer.appendChild(paragraph);
+
+
                                     successMessage.textContent = 'Applicant created successfully';
                                     successMessage.style.display = 'block';
                                     // Redirect to another page after a delay
                                     setTimeout(function() {
                                         successMessage.style.display = 'none';
-                                       window.location.href = '{{ route('applicant.showverify') }}';
+                                    //    window.location.href = '{{ route('applicant.showverify') }}';
                                     }, 2000);
                                 } else {
                                     errorMessage.textContent = 'Data went wrong';

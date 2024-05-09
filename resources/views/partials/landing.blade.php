@@ -1,7 +1,7 @@
 <header class="header">
     <!--start navbar-->
     <nav class="navbar navbar-expand-lg fixed-top bg-transparent">
-        <div class="container">
+        <div class="container"> 
             <a class="navbar-brand pl-2 pr-2" href="{{route('landing')}}">
                 <img src="{{asset('/landing_assets/img/logo-white.png')}}" width="200px" alt="logo" class="img-fluid"/>
             </a>

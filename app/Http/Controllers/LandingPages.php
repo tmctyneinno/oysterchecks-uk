@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail; 
 use App\Mail\AgentRequest;
 
 class LandingPages extends Controller
@@ -17,7 +17,7 @@ class LandingPages extends Controller
      public function WhoWeAre(){
          return view('who-we-are');
      }
-
+ 
      public function CoreValues(){
          return view('core-values');
      }

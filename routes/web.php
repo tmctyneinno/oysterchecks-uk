@@ -57,7 +57,8 @@ Route::group(['middleware' => ['clients', 'auth']], function() {
     Route::get('/user/applicant/{slug}', [ApplicantController::class, 'ApplicantIndex'])->name('applicant');
     Route::get('/user/applicant/create/{slug}', [ApplicantController::class, 'ApplicantCreate'])->name('applicant.create');
     Route::post('/user/applicant/store', [ApplicantController::class, 'ApplicantStore'])->name('applicant.store'); 
-    Route::get('/user/applicant/', [ApplicantController::class, 'Showverify'])->name('applicant.showverify'); 
+    Route::get('/user/applicant', [ApplicantController::class, 'Showverify'])->name('applicant.showverify'); 
+    Route::get('/user/applicant/details/{id}', [ApplicantController::class, 'ApplicantDetails'])->name('applicant.details');
 
     Route::get('/user/reports', [HomeController::class, 'UserReports'])->name('users.report');
     Route::get('/user/profile', [HomeController::class, 'Profile'])->name('user.profile');

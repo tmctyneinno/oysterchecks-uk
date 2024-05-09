@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingPages;
 
+ 
 
-
-// Route::webhooks('verifications/youverify');
+// Route::webhooks('verifications/youverify'); 
 #=====================LANDING PAGES ===========================
-Route::get('/', [LandingPages::class, 'index'])->name('landing');
+Route::get('/', [LandingPages::class, 'index'])->name('landing'); 
 Route::get('/who-we-are', [LandingPages::class, 'WhoWeAre'])->name('who-we-are');
 Route::get('/core-values', [LandingPages::class, 'CoreValues'])->name('core-values');
 Route::get('/mission', [LandingPages::class, 'Mission'])->name('mission');

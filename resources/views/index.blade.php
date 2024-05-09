@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('content')
+@section('content') 
 
 
 <div class="main">
@@ -52,10 +52,10 @@
                         <div class="promo-block-content">
                             <h5>Looking For Quality AML Solutions?</h5>
                             <p>
-You are at the right place because Oysterchecks provides you with a wide range of AML solutions. 
-Our platform runs on the newest technology and infrastructure which places us in a position where we can monitor and interpret the rapid changes around AML areas. We provide work programs, 
-relevant training and insights to our team of professionals so that they can 
-help our clients stay ahead of the rapidly evolving issues. </p>
+                            You are at the right place because Oysterchecks provides you with a wide range of AML solutions. 
+                            Our platform runs on the newest technology and infrastructure which places us in a position where we can monitor and interpret the rapid changes around AML areas. We provide work programs, 
+                            relevant training and insights to our team of professionals so that they can 
+                            help our clients stay ahead of the rapidly evolving issues. </p>
 
                         </div>
                     </div>

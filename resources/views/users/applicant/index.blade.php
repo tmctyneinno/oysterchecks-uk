@@ -116,57 +116,28 @@
                                                 <th>Name</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
-                                                <th>Created On</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="text-center">1</td>
-                                                <td>
-                                                    <b>Eshanokp Daniel<b><br/>
-                                                    <label class="text-muted"> ID:  66262e6766685f73fbbcd82e </label><br>
-                                                    <label class="text-muted mb-1"> Country:  Nigeria </label> <br>
-                                                    <label class="text-muted">Created: Feb 19, 2024, 10:31 AM (GMT+1) </label>
-                                                </td>
-                                                <td>08139267960</td>
-                                                <td>  
-                                                    <span class="badge bg-success"> Verified</span>
-                                                </td>
-                                                <td> Feb 19, 2024 </td>
-                                                <td><a class="badge bg-soft-primary" href=""> view Details</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">2</td>
-                                                <td>
-                                                    <b>Ojo Samuel<b><br/>
-                                                    <label class="text-muted"> ID:  66262e6766685f73fbbcd82e </label><br>
-                                                    <label class="text-muted mb-1"> Country:  Nigeria </label> <br>
-                                                    <label class="text-muted">Created: Feb 19, 2024, 10:31 AM (GMT+1) </label>
-                                                </td>
-                                                <td>08139267960</td>
-                                                <td>  
-                                                    <span class="badge bg-danger"> Rejected </span> 
-                                                </td>
-                                                <td> Feb 19, 2024 </td>
-                                                <td><a class="badge bg-soft-primary" href=""> view Details</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">3</td>
-                                                <td>
-                                                    <b>Ojo Samuel<b><br/>
-                                                    <label class="text-muted"> ID:  66262e6766685f73fbbcd82e </label><br>
-                                                    <label class="text-muted mb-1"> Country:  Nigeria </label> <br>
-                                                    <label class="text-muted">Created: Feb 19, 2024, 10:31 AM (GMT+1) </label>
-                                                </td>
-                                                <td>08139267960</td>
-                                                <td>  
-                                                    <span class="badge bg-danger"> Rejected </span> 
-                                                </td>
-                                                <td> Feb 19, 2024 </td>
-                                                <td><a class="badge bg-soft-primary" href=""> view Details</a></td>
-                                            </tr>
-                                        
+                                            @foreach ($individuals as $index => $individual)
+                                                <tr>
+                                                    <td class="text-center">{{$index + 1}}</td>
+                                                    <td>
+                                                        <b>{{ $individual->firstName}} {{ $individual->lastName}} <b><br/>
+                                                        <label class="text-muted"> ID:  {{ $individual->applicantId}}  </label><br>
+                                                        <label class="text-muted mb-1"> Country:  {{ $individual->country}} </label> <br>
+                                                        <label class="text-muted">Created At: {{$individual->created_at->format('M d, Y, h:i A')}} (GMT+1)</label>
+                                                    </td>
+                                                    <td>{{$individual->phone}}</td>
+                                                    <td>Created At: {{$individual->created_at->format('M d, Y,')}} </td>
+                                                    <td>  
+                                                        <span class="badge bg-success"> Verified</span>
+                                                    </td>
+                                                    <td><a class="badge bg-soft-primary" href=""> view Details</a></td>
+                                                </tr>
+                                            @endforeach 
+                                           
                                         </tbody>
                                         <tfoot>
                                             

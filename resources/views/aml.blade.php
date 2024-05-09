@@ -39,7 +39,7 @@
                         <h2>Looking For Quality AML Solutions?</h2>
                         <p>You are at the right place because Oysterchecks provides you with a wide range of AML solutions. Our platform runs on the newest technology and infrastructure which places us in a position where we can monitor and interpret the rapid changes around AML areas. We provide work programs, relevant training and insights to our team of professionals so that they can help our clients stay ahead of the rapidly evolving issues. Our market is majorly constituting of high-risk and countries prone to money laundering activities such USA and we have still managed to offer quality solutions.
 
-As a result of collaboration with many international financial institutions across the globe, we are able to provide comprehensive details on best AML practices. These practices help clients to operate and perform their businesses more efficiently and effectively.</p>
+                            As a result of collaboration with many international financial institutions across the globe, we are able to provide comprehensive details on best AML practices. These practices help clients to operate and perform their businesses more efficiently and effectively.</p>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 pt-3">
