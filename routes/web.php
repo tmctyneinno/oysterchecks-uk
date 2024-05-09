@@ -48,7 +48,7 @@ Route::get('/process-sumsub', [SumsubController::class, 'processSumsub']);
 
 #===================== USERS ROUTE ===============================
 
-#===================== USERS ROUTE ===============================
+#===================== USERS ROUTE =============================== 
 Route::group(['middleware' => ['clients', 'auth']], function() { 
     Route::get('/getting-started', [HomeController::class, 'gettingStarted'])->name('instructions');
     Route::get('/dashboard', [HomeController::class, 'Home'])->name('index');

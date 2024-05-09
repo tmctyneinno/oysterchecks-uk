@@ -35,6 +35,7 @@
                         <label class="text-muted">Created At: {{$company->created_at->format('M d, Y, h:i A')}} (GMT+1)</label>
                     </td>
                     <td>{{$company->phone}}</td>
+                    <td>Created At: {{$individual->created_at->format('M d, Y,')}} </td>
                     <td>  
                         <span class="badge bg-success"> Verified</span>
                     </td>

@@ -5,7 +5,7 @@
     <title>{{ config('app.name', 'Oysterchecks Comprehensive and Exceptional background checks') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Oysterchecks Comprehensive and Exceptional background checks, KYC & AML compliance Solutions</" name="description" />
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:site_name" content=""/> <!-- website name -->
     <meta property="og:site" content=""/> <!-- website link -->
     <meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
@@ -17,7 +17,7 @@
 
     <!--google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700%7COpen+Sans:400,600&amp;display=swap" rel="stylesheet">
-
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!--Bootstrap css-->
     <link rel="stylesheet" href="{{asset('/landing_assets/css/bootstrap.min.css')}}">
     <!--Magnific popup css-->
@@ -64,7 +64,8 @@
     <span class="ti-angle-up"></span>
 </button>
 <!--bottom to top button end-->
-
+{{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+<script src="{{ mix('js/app.js') }}"></script>
 
 <!--jQuery-->
 <script src="{{asset('/landing_assets/js/jquery-3.4.1.min.js')}}"></script>

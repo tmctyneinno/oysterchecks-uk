@@ -82,7 +82,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       <!-- App js -->
     <script src="{{asset('/assets/js/app.js')}}"></script> 
-
+    <script src="{{ mix('js/app.js') }}"></script>
     <script>     
     let message = {!! json_encode(Session::get('message')) !!};
     let msg = {!! json_encode(Session::get('alert')) !!};

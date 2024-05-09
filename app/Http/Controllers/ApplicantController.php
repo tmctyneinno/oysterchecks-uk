@@ -66,60 +66,78 @@ class ApplicantController extends Controller
     
         return view('users.applicant.showverify', ['apiData' => $apiData]);
     }
+    public function ApplicantStoreaa (Request $request){
+       
+        // return response()->json([
+        //     'code' => 200,
+        //     'success' => 'You have logged in successfully',
+        // ]);
     
+
+    return response()->json([
+        'error' => 'Please insert the correct password or email',
+    ], 401);
+
+    }
     public function ApplicantStore(Request $request)
-    {     
+    {    
+        \Log::info($request->all());
         $externalUserId = uniqid(); 
         $levelName = 'basic-kyc-level';
        
         $data = $request->only([
-            'applicant_type', 'firstname', 'lastname', 'middlename', 'email', 
+            'applicantType', 'firstname', 'lastname', 'middlename', 'email', 
             'phone', 'placeofbirth', 'dateofbirth', 'country', 'countryofbirth', 
             'gender', 'address', 'companyname', 'registrationnumber', 
             'companycreateddate', 'companyType', 'taxpayer', 'websitelink'
         ]);
     
         $data = array_map(fn($value) => $value ?? '', $data);
-    
-        $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $data);
-        $applicantDataArray = json_decode($applicantData, true);
-        // dd($applicantDataArray);
-        $applicantFields = [
-            'user_id' => auth()->user()->id,
-            'applicantId' => $applicantDataArray['id'] ?? '',
-            'externalUserId' => $applicantDataArray['externalUserId'] ?? '',
-            'applicantKey' => $applicantDataArray['key'] ?? '',
-            'inspectionId' => $applicantDataArray['inspectionId'] ?? '',
-            'sourceKey' => $applicantDataArray['sourceKey'] ?? '',
-            'email' => $applicantDataArray['email'] ?? '',
-            'phone' => $applicantDataArray['phone'] ?? '',
-            'country' => $applicantDataArray['country'] ?? $applicantDataArray['info']['companyInfo']['country'],
-            'firstName' => $applicantDataArray['info']['firstName'] ?? '',
-            'lastName' => $applicantDataArray['info']['lastName'] ?? '',
-            'middleName' => $applicantDataArray['info']['middleName'] ?? '',
-            'placeofbirth' => $applicantDataArray['info']['placeofbirth'] ?? '',
-            'dateofbirth' => $applicantDataArray['info']['dateofbirth'] ?? '',
-            'countryofbirth' => $applicantDataArray['info']['countryofbirth'] ?? '',
-            'gender' => $applicantDataArray['info']['gender'] ?? '',
-            'address' => $applicantDataArray['info']['address'] ?? '',
-            'websitelink' => $applicantDataArray['info']['companyInfo']['website'] ?? '',
-            'info' => json_encode($applicantDataArray['info']) ?? '',
-            'companyInfo' => json_encode($applicantDataArray['info']['companyInfo']) ?? '',
-            'companyname' => $applicantDataArray['info']['companyInfo']['companyName'] ?? '',
-            'registrationnumber' => $applicantDataArray['info']['companyInfo']['registrationNumber'] ?? '',
-            'review' => json_encode($applicantDataArray['review']) ?? '',
-            'applicant_type' => $applicantDataArray['info']['companyInfo']['type']  ?? $applicantDataArray['type'] ,
-        ];
-        //  dd($applicantFields);
-      
-        Applicant::create($applicantFields);
+        try{
+            $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $data);
+            $applicantDataArray = json_decode($applicantData, true);
+            // dd($applicantDataArray);
+            $applicantFields = [
+                'user_id' => auth()->user()->id,
+                'applicantId' => $applicantDataArray['id'] ?? '',
+                'externalUserId' => $applicantDataArray['externalUserId'] ?? '',
+                'applicantKey' => $applicantDataArray['key'] ?? '',
+                'inspectionId' => $applicantDataArray['inspectionId'] ?? '',
+                'sourceKey' => $applicantDataArray['sourceKey'] ?? '',
+                'email' => $applicantDataArray['email'] ?? '',
+                'phone' => $applicantDataArray['phone'] ?? '',
+                'country' => $applicantDataArray['country'] ?? $applicantDataArray['info']['companyInfo']['country'],
+                'firstName' => $applicantDataArray['info']['firstName'] ?? '',
+                'lastName' => $applicantDataArray['info']['lastName'] ?? '',
+                'middleName' => $applicantDataArray['info']['middleName'] ?? '',
+                'placeofbirth' => $applicantDataArray['info']['placeofbirth'] ?? '',
+                'dateofbirth' => $applicantDataArray['info']['dateofbirth'] ?? '',
+                'countryofbirth' => $applicantDataArray['info']['countryofbirth'] ?? '',
+                'gender' => $applicantDataArray['info']['gender'] ?? '',
+                'address' => $applicantDataArray['info']['address'] ?? '',
+                'websitelink' => $applicantDataArray['info']['companyInfo']['website'] ?? '',
+                'info' => json_encode($applicantDataArray['info']) ?? '',
+                'companyInfo' => json_encode($applicantDataArray['info']['companyInfo']) ?? '',
+                'companyname' => $applicantDataArray['info']['companyInfo']['companyName'] ?? '',
+                'registrationnumber' => $applicantDataArray['info']['companyInfo']['registrationNumber'] ?? '',
+                'review' => json_encode($applicantDataArray['review']) ?? '',
+                'applicant_type' => $applicantDataArray['info']['companyInfo']['type']  ?? $applicantDataArray['type'] ,
+            ];
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Applicant created successfully',
-            // "apiResponse" => (string) $applicantData,
-            "apiResponse" => (string) $applicantData,
-        ]);
+            Applicant::create($applicantFields);
+            
+            return response()->json([
+                'code' => 200,
+                'success' => 'Applicant created successfully',
+                // "apiResponse" => (string) $applicantData,
+                "apiResponse" => (string) $applicantData,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'error' => 'Failed to create applicant: ' . $e->getMessage(),
+            ], 500);
+        }
     }
    
 

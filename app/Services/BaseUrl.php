@@ -60,7 +60,7 @@ class BAseUrl
                 'firstName' => $validData['firstname'] ?? '',
                 'lastName' => $validData['lastname'] ?? '',
             ],
-            'type' => $validData['applicant_type'] ?? '',
+            'type' => $validData['applicantType'] ?? '',
         ];
 
         $url = '/resources/applicants?' . http_build_query(['levelName' => $levelName]);
