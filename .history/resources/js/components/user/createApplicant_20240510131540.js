@@ -72,9 +72,10 @@ export default function CreateApplicant() {
             const response = await axios.post(urlApplicant, formData);
             console.log(response.data);
             setSuccessMessage(response.data.success);
+            const data = await response.json();
             // let parsedResponseData = JSON.parse(response.data.apiResponse);
             // setResponseData(parsedResponseData);
-            setResponseData(response.data.apiResponse).json();
+            setResponseData(response.data.apiResponse);
             setErrorMessage('');
             
         }catch (error){
@@ -100,7 +101,7 @@ export default function CreateApplicant() {
         }));
     };
     const encryptLink = (id) => {
-      
+        // Your encryption logic here
         return `${url}/${id}`;
     };
 
@@ -199,7 +200,6 @@ export default function CreateApplicant() {
                                                                     <div>
                                                                         <p>{responseData}</p>
                                                                         <p>{responseData.id}</p>
-                                                                        <p>{responseData.info}</p>
                                                                         <p>ID: {responseData.id}</p>
                                                                         
                                                                         <p>Email: {responseData.email}</p>

@@ -100,7 +100,7 @@ export default function CreateApplicant() {
         }));
     };
     const encryptLink = (id) => {
-      
+        // Your encryption logic here
         return `${url}/${id}`;
     };
 
@@ -198,8 +198,7 @@ export default function CreateApplicant() {
                                                                 {responseData && (
                                                                     <div>
                                                                         <p>{responseData}</p>
-                                                                        <p>{responseData.id}</p>
-                                                                        <p>{responseData.info}</p>
+                                                                        <p>{responseData.id.}</p>
                                                                         <p>ID: {responseData.id}</p>
                                                                         
                                                                         <p>Email: {responseData.email}</p>

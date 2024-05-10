@@ -6382,7 +6382,7 @@ function CreateApplicant() {
     setFormDataCompany = _useState14[1];
   var handleFormSubmitCompany = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(formDataCompany) {
-      var urlApplicant, response, parsedResponseData;
+      var urlApplicant, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -6394,13 +6394,13 @@ function CreateApplicant() {
             response = _context.sent;
             console.log(response.data);
             setSuccessMessage(response.data.success);
-            parsedResponseData = JSON.parse(response.data.apiResponse);
-            setResponseData(parsedResponseData);
+            // const parsedResponseData = JSON.parse(response.data.apiResponse);
+            setResponseData(response.data.apiResponse);
             setErrorMessage('');
-            _context.next = 15;
+            _context.next = 14;
             break;
-          case 12:
-            _context.prev = 12;
+          case 11:
+            _context.prev = 11;
             _context.t0 = _context["catch"](1);
             if (_context.t0.response && _context.t0.response.status === 401) {
               setErrorMessage(_context.t0.response.data.error);
@@ -6409,11 +6409,11 @@ function CreateApplicant() {
               setErrorMessage('An unexpected error occurred');
               setSuccessMessage('');
             }
-          case 15:
+          case 14:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[1, 11]]);
     }));
     return function handleFormSubmitCompany(_x) {
       return _ref.apply(this, arguments);
@@ -6441,7 +6441,7 @@ function CreateApplicant() {
             setSuccessMessage(response.data.success);
             // let parsedResponseData = JSON.parse(response.data.apiResponse);
             // setResponseData(parsedResponseData);
-            setResponseData(response.data.apiResponse);
+            setResponseData(response.data.apiResponse).json();
             setErrorMessage('');
             _context2.next = 14;
             break;
@@ -6477,7 +6477,6 @@ function CreateApplicant() {
     });
   };
   var encryptLink = function encryptLink(id) {
-    // Your encryption logic here
     return "".concat(url, "/").concat(id);
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -6680,16 +6679,14 @@ function CreateApplicant() {
                                   children: responseData
                                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
                                   children: responseData.id
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                                  children: responseData.info
                                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
                                   children: ["ID: ", responseData.id]
                                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
                                   children: ["Email: ", responseData.email]
                                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
                                   children: ["Phone: ", responseData.phone]
-                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
-                                  href: "{ encryptLink(responseData.id) }",
-                                  "class": "btn-secondary btn",
-                                  children: "View verification page"
                                 })]
                               })]
                             })

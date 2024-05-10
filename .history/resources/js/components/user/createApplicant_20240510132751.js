@@ -100,7 +100,7 @@ export default function CreateApplicant() {
         }));
     };
     const encryptLink = (id) => {
-      
+        // Your encryption logic here
         return `${url}/${id}`;
     };
 

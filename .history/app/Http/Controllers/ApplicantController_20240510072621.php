@@ -130,7 +130,7 @@ class ApplicantController extends Controller
                 'code' => 200,
                 'success' => 'Applicant created successfully',
                 // "apiResponse" => (string) $applicantData,
-                "apiResponse" =>  $applicantData,
+                "apiResponse" => (string) $applicantData,
             ]);
         } catch (Exception $e) {
             return response()->json([

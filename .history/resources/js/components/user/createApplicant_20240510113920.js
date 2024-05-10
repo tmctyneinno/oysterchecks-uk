@@ -74,7 +74,7 @@ export default function CreateApplicant() {
             setSuccessMessage(response.data.success);
             // let parsedResponseData = JSON.parse(response.data.apiResponse);
             // setResponseData(parsedResponseData);
-            setResponseData(response.data.apiResponse).json();
+            setResponseData(response.data.apiResponse);
             setErrorMessage('');
             
         }catch (error){
@@ -100,7 +100,7 @@ export default function CreateApplicant() {
         }));
     };
     const encryptLink = (id) => {
-      
+        // Your encryption logic here
         return `${url}/${id}`;
     };
 
@@ -199,12 +199,12 @@ export default function CreateApplicant() {
                                                                     <div>
                                                                         <p>{responseData}</p>
                                                                         <p>{responseData.id}</p>
-                                                                        <p>{responseData.info}</p>
                                                                         <p>ID: {responseData.id}</p>
                                                                         
                                                                         <p>Email: {responseData.email}</p>
                                                                         <p>Phone: {responseData.phone}</p>
-                                                                      
+                                                                        {/* <a href="{ encryptLink(responseData.id) }" class="btn-secondary btn">View verification page</a>  */}
+
                                                                     </div>
                                                                 )} 
                                                                 
