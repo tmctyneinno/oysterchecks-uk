@@ -6441,7 +6441,7 @@ function CreateApplicant() {
             setSuccessMessage(response.data.success);
             // let parsedResponseData = JSON.parse(response.data.apiResponse);
             // setResponseData(parsedResponseData);
-            setResponseData(response.data.apiResponse).json();
+            setResponseData(response.data.apiResponse);
             setErrorMessage('');
             _context2.next = 14;
             break;
