@@ -183,55 +183,11 @@
                                                                 @csrf
                                                                 <div class="card-body">
                                                                     <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Company Name</label> 
-                                                                            <input type="text"  id="companyname" name="companyname" class="form-control mb-3 custom-select" placeholder="Company Name"  required >
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Registration Number</label> 
-                                                                            <input type="text" value="" id="registrationnumber" name="registrationnumber" class="form-control mb-3 custom-select" placeholder="Registration Number"  required >
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Select country</label>
-                                                                            <select id="company-country-select"  name="selectcountry" class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;">
-                                                                                <option value=""><img>Select</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Company Email</label> 
-                                                                            <input type="email" value="" id="companyemail" name="companyemail" class="form-control mb-3 custom-select" placeholder="Company Email"   >
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Company Phone number</label> 
-                                                                            <input type="number" value="" id="companyphone" name="companyphone" class="form-control mb-3 custom-select" placeholder="Company Phone"   >
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Created Date</label> 
-                                                                            <input type="date" value=""  id="companycreateddate" name="companycreateddate" class="form-control mb-3 custom-select" placeholder="Date of borth"   >
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Company type </label>
-                                                                            <select class="select2 form-control mb-3 custom-select" id="companyType" name="companyType" style="width: 100%; height:36px;">
-                                                                                <option>Select</option>
-                                                                                <option value="Private">Private company</option>
-                                                                                <option value="Public limited">Public limited company</option>
-                                                                                <option value="State-owned enterprised">State-owned enterprise</option>
-                                                                            </select>
-                                                                        </div>
+                                                                       
+                                                                       
                                                                         
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" style="font-weight:500">Taxpayer registration number</label>
-                                                                            <input type="text" value=""  id="taxpayer" name="taxpayer" class="form-control mb-3 custom-select" placeholder="Taxpayer number"   >
-                                                                        </div>
-                                                                        <div class="col-md-12">
-                                                                            <label class="form-label mt-2" style="font-weight:500">Company website</label>
-                                                                            <input type="text" value=""  id="websitelink" name="websitelink" class="form-control mb-3 custom-select" placeholder="Website link"   >
-                                                                        </div>
                                                                         
-                                                                        <div class="col-md-12">
-                                                                            <label class="form-label" style="font-weight:500">Legal Address</label>
-                                                                            <textarea class="form-control" id="legaladdress" name="legaladdress" rows="2"></textarea>
-                                                                        </div>
+                                                                       
                                                                         
                                                                         <script>
                                                                             // Fetch countries data from the API

@@ -1,112 +1,26 @@
 import React, { useState, useEffect }  from 'react';
 import ReactDOM from 'react-dom';
 import IndividualForm from './individualForm';
-import CompanyForm from './CompanyForm';
 
 export default function CreateApplicant() { 
-    let url = window.location.origin;
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [countries, setCountries] = useState([]);
-    const [countriesOfbirth, sortedCountriesOfbirth] = useState([]);
-    const [responseData, setResponseData] = useState(null);
 
-
+  
     const [formData, setFormData] = useState({
-        applicantType: 'individual',
         firstname: '',
         lastname: '',
-        middlename: '',
-        email: '',
-        phone: '',
-        placeofbirth: '',
-        dateofbirth: '',
-        country: '',
-        countryofbirth: '',
-        gender: '',
-        address: ''
+        // Add other form fields here
     });
-    const [formDataCompany, setFormDataCompany] = useState({
-        applicantType: 'company',
-        companyname: '',
-        registrationnumber: '',
-        companyemail: '',
-        companyphone: '',
-        companycreateddate: '',
-        companyType: '',
-        taxpayer: '',
-        websitelink: '',
-        address: '',
-        country: '',
-    });
-
-    const handleFormSubmitCompany = async (formDataCompany) => {
-        let urlApplicant = `${url}/user/applicant/store`;
-        try{
-            const response = await axios.post(urlApplicant, formData);
-            console.log(response.data);
-            setSuccessMessage(response.data.success);
-            const parsedResponseData = JSON.parse(response.data.apiResponse);
-            setResponseData(parsedResponseData);
-            setErrorMessage('');
-            
-        }catch (error){
-            if (error.response && error.response.status === 401) {
-                setErrorMessage(error.response.data.error);
-                setSuccessMessage('');
-            } else {
-                setErrorMessage('An unexpected error occurred');
-                setSuccessMessage('');
-            }
-        }
-    };
-    
-    // const handleFormSubmit = (formData) => {
-    //     console.log("Form data submitted:", formData);
-    //     setResponseData(formData);
-    // };
-
-    const handleFormSubmit = async (e) => {
-        let urlApplicant = `${url}/user/applicant/store`;
-        try{
-            const response = await axios.post(urlApplicant, formData);
-            console.log(response.data);
-            setSuccessMessage(response.data.success);
-            // let parsedResponseData = JSON.parse(response.data.apiResponse);
-            // setResponseData(parsedResponseData);
-            setResponseData(response.data.apiResponse);
-            setErrorMessage('');
-            
-        }catch (error){
-            if (error.response && error.response.status === 401) {
-                setErrorMessage(error.response.data.error);
-                setSuccessMessage('');
-            } else {
-                setErrorMessage('An unexpected error occurred');
-                setSuccessMessage('');
-            }
-        }
-    }
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        setFormDataCompany(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-    const encryptLink = (id) => {
-        // Your encryption logic here
-        return `${url}/${id}`;
+    const handleFormSubmit = (formData) => {
+        // You can perform any necessary actions with the form data here
+        console.log("Form data submitted:", formData);
+        // For now, let's just set the form data as response data to display in the UI
+        setResponseDataFromChild(formData);
     };
 
     return (
         <div>
-           <div className="page-content">
+           
+            <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-sm-12">
@@ -165,16 +79,12 @@ export default function CreateApplicant() {
                                                     </ul>
 
                                                     <div className="tab-content">
-                                                        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-                                                        {successMessage && <div className="alert alert-success">{successMessage}</div>}
-
+                                                   
                                                         <div className="tab-pane p-3 active show" id="individuals" role="tabpanel">
-                                                            <IndividualForm  formData={formData} onSubmit={handleFormSubmit} onChange={handleChange} />
+                                                            <IndividualForm  formData={formData} onSubmit={handleFormSubmit} />
                                                         </div>
                                                         <div className="tab-pane p-3" id="company" role="tabpanel">
-                                                       
-                                                            <CompanyForm  formData={formDataCompany} onSubmit={handleFormSubmitCompany} onChange={handleChange} />
-                                                            
+                                                        {/* Company form */}
                                                         </div>
                                                     </div>
                                                     </div>
@@ -194,24 +104,19 @@ export default function CreateApplicant() {
                                                             <div class="col">
                                                                 <h4 id="applicantNameTab" class="mb-0 fw-semibold text-black"> Succeess Datails</h4>
                                                                 <br/>
-                                                              
-                                                                {responseData && (
+                                                            
+                                                                {/* {responseDataFromChild && (
                                                                     <div>
-                                                                        <p>{responseData}</p>
-                                                                        <p>{responseData.id}</p>
-                                                                        <p>ID: {responseData.id}</p>
-                                                                        
-                                                                        <p>Email: {responseData.email}</p>
-                                                                        <p>Phone: {responseData.phone}</p>
-                                                                        <a href="{ encryptLink(responseData.id) }" class="btn-secondary btn">View verification page</a> 
-
+                                                                        <h2>Data received from child:</h2>
+                                                                        <p>{responseDataFromChild}</p>
                                                                     </div>
-                                                                )} 
+                                                                )}  */}
                                                                 
                                                             </div>
                                                             
                                                         </div>
-                       
+                                                        {/* <a href="{{ route('applicant.showverify') }}" class="btn-secondary btn">View verification page</a>  */}
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -224,7 +129,6 @@ export default function CreateApplicant() {
                     </div>
                 </div>
             </div>
-          
         </div>
     );
 }
