@@ -62,38 +62,25 @@ class IdentityController extends Controller
     {
         try{
           
-            $request->validate([
-                'applicant' => 'required',
-                'images' => 'array',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'countries' => 'array',
-                'countries.*' => 'string',
-                'documentTypes' => 'array',
-                'documentTypes.*' => 'string',
+            $validatedData = $request->validate([
+                'applicant_id' => 'required|exists:applicants,applicantId',
+                'documents' => 'required|array',
+                'documents.*.file' => 'required|file|mimes:jpeg,png,jpg,gif',
+                'documents.*.country' => 'required|string',
+                'documents.*.documentType' => 'required|string',
             ]);
+    
+            foreach ($validatedData['documents'] as $document) {
+                $path = $document['file']->store('identityDocuments');
+                IdentityVerification::create([
+                    'user_id'=> auth()->id(),
+                    'applicantId' => $validatedData['applicant_id'],
+                    'content' => $path,
+                    'country' => $document['country'],
+                    'documentType' => $document['documentType'],
+                ]);
+            }
 
-            // Create a new instance of IdentityVerification
-            $identity = new IdentityVerification();
-            $identity->applicantId = $request->input('applicant');
-            $identity->content  = $request->input('images');
-            $identity->user_id = auth()->id();
-
-            $identity->save();
-
-            // Process and save images
-        // foreach ($request->images as $imageData) {
-        //     $image = $imageData['file']; // Extract the image file from the request data
-        //     $imageName = $image->getClientOriginalName();
-        //     $image->storeAs('identityDoc', $imageName, 'public'); // Store the image file
-
-        //     // Create a new Image record and associate it with the IdentityVerification instance
-        //     $identity->images()->create([
-        //         'content' => $imageName,
-        //         'country' => $imageData['country'],
-        //         'documentType' => $imageData['documentType'],
-        //     ]);
-        // }
-            
             return response()->json([
                 'code' => 200,
                 'success' => 'Identity created successfully',
@@ -101,7 +88,7 @@ class IdentityController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
-                'error' => 'Failed to create applicant: ' . $e->getMessage(),
+                'error' => 'Error: ' . $e->getMessage(),
             ], 500);
         }
     }

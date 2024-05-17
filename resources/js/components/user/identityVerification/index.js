@@ -29,7 +29,7 @@ export default function IdentityVerification() {
         setSelectedApplicant(e.target.value);
     };
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload22 = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
 
@@ -46,6 +46,25 @@ export default function IdentityVerification() {
         };
 
         reader.readAsDataURL(file);
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImages([...images, {
+                    src: reader.result,
+                    file: file,
+                    country: '',
+                    documentType: '',
+                    name: file.name,
+                    size: file.size,
+                    error: false
+                }]);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const formatBytes = (bytes) => {
@@ -75,11 +94,15 @@ export default function IdentityVerification() {
         'Insurance Document', 'Agreement', 'Contract', 'Income Source', 'Payment Method', 'Bank Card', 'Covid Vaccination Form', 'Other'
     ];
 
-    const handleDeleteImage = (indexToRemove) => {
+    const handleDeleteImage22 = (indexToRemove) => {
         setImages(prevImages => prevImages.filter((image, index) => index !== indexToRemove));
     };
+    const handleDeleteImage = (index) => {
+        const updatedImages = images.filter((_, imgIndex) => imgIndex !== index);
+        setImages(updatedImages);
+    };
 
-    const handleImageDetailChange = (index, key, value) => {
+    const handleImageDetailChange22 = (index, key, value) => {
         const updatedImages = images.map((image, imgIndex) => {
             if (imgIndex === index) {
                 return { ...image, [key]: value };
@@ -88,6 +111,13 @@ export default function IdentityVerification() {
         });
         setImages(updatedImages);
     };
+    const handleImageDetailChange = (index, field, value) => {
+        const updatedImages = images.map((image, imgIndex) => (
+            imgIndex === index ? { ...image, [field]: value, error: false } : image
+        ));
+        setImages(updatedImages);
+    };
+
     const handleUploaddd = async () => {
         let isValid = true;
         const updatedImages = images.map(image => {
@@ -132,7 +162,7 @@ export default function IdentityVerification() {
                 console.error('Upload failed:', error);
             });
     };
-    const handleUpload = async () => {
+    const handleUpload22 = async () => {
         let isValid = true;
         const updatedImages = images.map(image => {
             if (!image.country || !image.documentType) {
@@ -149,7 +179,7 @@ export default function IdentityVerification() {
         }
 
         const formData = new FormData();
-        formData.append('applicant', selectedApplicant);
+        formData.append('applicant_id', selectedApplicant);
         images.forEach((image, index) => {
             formData.append(`images[${index}]`, image.file);
             formData.append(`countries[${index}]`, image.country);
@@ -173,14 +203,53 @@ export default function IdentityVerification() {
                 setSuccessMessage('');
                 console.error('Upload failed:', error);
             });
-        
+    };
+
+    const handleUpload = async () => {
+        for (const image of images) {
+            if (!image.country || !image.documentType) {
+                setImages(images.map((img, index) => (
+                    img === image ? { ...img, error: true } : img
+                )));
+                return;
+            }
+        }
+
+        const formData = new FormData();
+        formData.append('applicant_id', selectedApplicant);
+        images.forEach((image, index) => {
+            formData.append(`documents[${index}][file]`, image.file);
+            formData.append(`documents[${index}][country]`, image.country);
+            formData.append(`documents[${index}][documentType]`, image.documentType);
+        });
+
+        try {
+            let urlIdentify = `${url}/user/identities/store`;
+            await axios.post(urlIdentify, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                setSuccessMessage(response.data.success);
+                setErrorMessage('');
+                console.log('Upload successful:', response.data);
+            })
+            .catch(error => {
+                setErrorMessage(error.response.data.error);
+                setSuccessMessage('');
+                console.error('Upload failed:', error);
+            });
+            // alert('Documents uploaded successfully');
+        } catch (error) {
+            console.error('Error uploading documents:', error);
+        }
     };
 
     return (
         <div>
             <h2>Applicant Select</h2>
             <div>
-                <label htmlFor="applicantSelect">Select Applicant:</label>
+                <label htmlFor="applicantSelect">Select Applicant: {selectedApplicant}</label>
              
             </div>
            
@@ -257,7 +326,7 @@ export default function IdentityVerification() {
                                                                     <div className="mb-3">
                                                                         <label className="form-label" htmlFor="firstname">Select Applicant </label>
                                                                         <select className="form-select" id="applicantSelect" value={selectedApplicant} onChange={handleSelectChange}>
-                                                                            <option value="">Select an applicant</option>
+                                                                            <option value="" selected disabled>Select an applicant</option>
                                                                             {applicants.map(applicant => (
                                                                                 <option key={applicant.id} value={applicant.applicantId}>
                                                                                     {applicant.companyname || `${applicant.firstName} ${applicant.lastName}`}
@@ -361,7 +430,7 @@ export default function IdentityVerification() {
                                                             <div className="col">
                                                                 <p className="mb-0 fw-semibold text-black">Successful Identity verifications</p>
                                                                 <h3 className="m-0 text-success"> Success </h3>
-                                                                <p><span className="text-muted">Created At:</span> April 15, 2024, at 2:30:45 PM</p>
+                                                                {/* <p><span className="text-muted">Created At:</span> April 15, 2024, at 2:30:45 PM</p> */}
                                                             </div>
                                                             <div className="col-auto align-self-center">
                                                                 

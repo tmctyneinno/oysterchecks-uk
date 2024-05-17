@@ -6744,6 +6744,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -6830,7 +6831,7 @@ function IdentityVerification() {
   var handleSelectChange = function handleSelectChange(e) {
     setSelectedApplicant(e.target.value);
   };
-  var handleImageUpload = function handleImageUpload(e) {
+  var handleImageUpload22 = function handleImageUpload22(e) {
     var file = e.target.files[0];
     var reader = new FileReader();
     reader.onload = function (event) {
@@ -6845,6 +6846,24 @@ function IdentityVerification() {
       setImages([].concat(_toConsumableArray(images), [newImage]));
     };
     reader.readAsDataURL(file);
+  };
+  var handleImageUpload = function handleImageUpload(e) {
+    var file = e.target.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        setImages([].concat(_toConsumableArray(images), [{
+          src: reader.result,
+          file: file,
+          country: '',
+          documentType: '',
+          name: file.name,
+          size: file.size,
+          error: false
+        }]));
+      };
+      reader.readAsDataURL(file);
+    }
   };
   var formatBytes = function formatBytes(bytes) {
     if (bytes === 0) return '0 Bytes';
@@ -6885,19 +6904,31 @@ function IdentityVerification() {
     fetchCountries();
   }, []);
   var documentTypes = ['ID Card', 'Passport', 'Driver\'s License', 'Residence Permit', 'Birth Certificate', 'Selfie', 'Video Selfie', 'Profile Image', 'Utility Bill', 'Vehicle Registration Certificate', 'Bank Statement', 'Employment Certificate', 'Insurance Document', 'Agreement', 'Contract', 'Income Source', 'Payment Method', 'Bank Card', 'Covid Vaccination Form', 'Other'];
-  var handleDeleteImage = function handleDeleteImage(indexToRemove) {
+  var handleDeleteImage22 = function handleDeleteImage22(indexToRemove) {
     setImages(function (prevImages) {
       return prevImages.filter(function (image, index) {
         return index !== indexToRemove;
       });
     });
   };
-  var handleImageDetailChange = function handleImageDetailChange(index, key, value) {
+  var handleDeleteImage = function handleDeleteImage(index) {
+    var updatedImages = images.filter(function (_, imgIndex) {
+      return imgIndex !== index;
+    });
+    setImages(updatedImages);
+  };
+  var handleImageDetailChange22 = function handleImageDetailChange22(index, key, value) {
     var updatedImages = images.map(function (image, imgIndex) {
       if (imgIndex === index) {
         return _objectSpread(_objectSpread({}, image), {}, _defineProperty({}, key, value));
       }
       return image;
+    });
+    setImages(updatedImages);
+  };
+  var handleImageDetailChange = function handleImageDetailChange(index, field, value) {
+    var updatedImages = images.map(function (image, imgIndex) {
+      return imgIndex === index ? _objectSpread(_objectSpread({}, image), {}, _defineProperty(_defineProperty({}, field, value), "error", false)) : image;
     });
     setImages(updatedImages);
   };
@@ -6959,7 +6990,7 @@ function IdentityVerification() {
       return _ref3.apply(this, arguments);
     };
   }();
-  var handleUpload = /*#__PURE__*/function () {
+  var handleUpload22 = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var isValid, updatedImages, formData, urlIdentify;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -6985,7 +7016,7 @@ function IdentityVerification() {
             return _context4.abrupt("return");
           case 5:
             formData = new FormData();
-            formData.append('applicant', selectedApplicant);
+            formData.append('applicant_id', selectedApplicant);
             images.forEach(function (image, index) {
               formData.append("images[".concat(index, "]"), image.file);
               formData.append("countries[".concat(index, "]"), image.country);
@@ -7012,17 +7043,118 @@ function IdentityVerification() {
         }
       }, _callee4);
     }));
-    return function handleUpload() {
+    return function handleUpload22() {
       return _ref4.apply(this, arguments);
+    };
+  }();
+  var handleUpload = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _iterator, _step, _loop, _ret, formData, urlIdentify;
+      return _regeneratorRuntime().wrap(function _callee5$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _iterator = _createForOfIteratorHelper(images);
+            _context6.prev = 1;
+            _loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop() {
+              var image;
+              return _regeneratorRuntime().wrap(function _loop$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    image = _step.value;
+                    if (!(!image.country || !image.documentType)) {
+                      _context5.next = 4;
+                      break;
+                    }
+                    setImages(images.map(function (img, index) {
+                      return img === image ? _objectSpread(_objectSpread({}, img), {}, {
+                        error: true
+                      }) : img;
+                    }));
+                    return _context5.abrupt("return", {
+                      v: void 0
+                    });
+                  case 4:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _loop);
+            });
+            _iterator.s();
+          case 4:
+            if ((_step = _iterator.n()).done) {
+              _context6.next = 11;
+              break;
+            }
+            return _context6.delegateYield(_loop(), "t0", 6);
+          case 6:
+            _ret = _context6.t0;
+            if (!_ret) {
+              _context6.next = 9;
+              break;
+            }
+            return _context6.abrupt("return", _ret.v);
+          case 9:
+            _context6.next = 4;
+            break;
+          case 11:
+            _context6.next = 16;
+            break;
+          case 13:
+            _context6.prev = 13;
+            _context6.t1 = _context6["catch"](1);
+            _iterator.e(_context6.t1);
+          case 16:
+            _context6.prev = 16;
+            _iterator.f();
+            return _context6.finish(16);
+          case 19:
+            formData = new FormData();
+            formData.append('applicant_id', selectedApplicant);
+            images.forEach(function (image, index) {
+              formData.append("documents[".concat(index, "][file]"), image.file);
+              formData.append("documents[".concat(index, "][country]"), image.country);
+              formData.append("documents[".concat(index, "][documentType]"), image.documentType);
+            });
+            _context6.prev = 22;
+            urlIdentify = "".concat(url, "/user/identities/store");
+            _context6.next = 26;
+            return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }).then(function (response) {
+              setSuccessMessage(response.data.success);
+              setErrorMessage('');
+              console.log('Upload successful:', response.data);
+            })["catch"](function (error) {
+              setErrorMessage(error.response.data.error);
+              setSuccessMessage('');
+              console.error('Upload failed:', error);
+            });
+          case 26:
+            _context6.next = 31;
+            break;
+          case 28:
+            _context6.prev = 28;
+            _context6.t2 = _context6["catch"](22);
+            console.error('Error uploading documents:', _context6.t2);
+          case 31:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee5, null, [[1, 13, 16, 19], [22, 28]]);
+    }));
+    return function handleUpload() {
+      return _ref5.apply(this, arguments);
     };
   }();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
       children: "Applicant Select"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
         htmlFor: "applicantSelect",
-        children: "Select Applicant:"
+        children: ["Select Applicant: ", selectedApplicant]
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "page-content",
@@ -7183,6 +7315,8 @@ function IdentityVerification() {
                                     onChange: handleSelectChange,
                                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
                                       value: "",
+                                      selected: true,
+                                      disabled: true,
                                       children: "Select an applicant"
                                     }), applicants.map(function (applicant) {
                                       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("option", {
@@ -7379,11 +7513,6 @@ function IdentityVerification() {
                               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
                                 className: "m-0 text-success",
                                 children: " Success "
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                                  className: "text-muted",
-                                  children: "Created At:"
-                                }), " April 15, 2024, at 2:30:45 PM"]
                               })]
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                               className: "col-auto align-self-center",
