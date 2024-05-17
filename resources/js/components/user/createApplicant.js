@@ -10,6 +10,8 @@ export default function CreateApplicant() {
     const [countries, setCountries] = useState([]);
     const [countriesOfbirth, sortedCountriesOfbirth] = useState([]);
     const [responseData, setResponseData] = useState(null);
+    const [applicant, setApplicant ] = useState(null);
+ 
 
 
     const [formData, setFormData] = useState({
@@ -24,8 +26,9 @@ export default function CreateApplicant() {
         country: '',
         countryofbirth: '',
         gender: '',
-        address: ''
+        address: '',
     });
+
     const [formDataCompany, setFormDataCompany] = useState({
         applicantType: 'company',
         companyname: '',
@@ -40,14 +43,14 @@ export default function CreateApplicant() {
         country: '',
     });
 
-    const handleFormSubmitCompany = async (formDataCompany) => {
+    const handleFormSubmitCompany = async (e) => {
         let urlApplicant = `${url}/user/applicant/store`;
         try{
-            const response = await axios.post(urlApplicant, formData);
+            const response = await axios.post(urlApplicant, formDataCompany);
             console.log(response.data);
             setSuccessMessage(response.data.success);
-            // const parsedResponseData = JSON.parse(response.data.apiResponse);
             setResponseData(response.data.apiResponse);
+            setApplicant(response.data.getData);
             setErrorMessage('');
             
         }catch (error){
@@ -70,11 +73,10 @@ export default function CreateApplicant() {
         let urlApplicant = `${url}/user/applicant/store`;
         try{
             const response = await axios.post(urlApplicant, formData);
-            console.log(response.data);
+            console.log('Retrieve applicant'+ response.data.getData);
             setSuccessMessage(response.data.success);
-            // let parsedResponseData = JSON.parse(response.data.apiResponse);
-            // setResponseData(parsedResponseData);
             setResponseData(response.data.apiResponse);
+            setApplicant(response.data.getData);
             setErrorMessage('');
             
         }catch (error){
@@ -99,10 +101,11 @@ export default function CreateApplicant() {
             [name]: value
         }));
     };
-    const encryptLink = (id) => {
-      
-        return `${url}/${id}`;
-    };
+  
+    const handleLearn = (e, id)=>{
+        e.preventDefault(); 
+        window.location.href =`${url}/user/applicant/details/${id}`;
+    }
 
     return (
         <div>
@@ -195,18 +198,35 @@ export default function CreateApplicant() {
                                                                 <h4 id="applicantNameTab" class="mb-0 fw-semibold text-black"> Succeess Datails</h4>
                                                                 <br/>
                                                               
-                                                                {responseData && (
-                                                                    <div>
-                                                                        <p>{responseData}</p>
-                                                                        <p>{responseData.id}</p>
-                                                                        <p>{responseData.info}</p>
-                                                                        <p>ID: {responseData.id}</p>
+                                                                 <div>
+                                                                    {/* {responseData} */}
+                                                                 {errorMessage ? (
+                                                                        <p>Error: {errorMessage}</p>
+                                                                    ) : applicant ? (
+                                                                        <div>
+                                                                            <h2>Applicant Details</h2>
                                                                         
-                                                                        <p>Email: {responseData.email}</p>
-                                                                        <p>Phone: {responseData.phone}</p>
-                                                                      
-                                                                    </div>
-                                                                )} 
+                                                                            <p>Applicant ID: {applicant.applicantId}</p>
+                                                                            <p>External User ID: {applicant.externalUserId}</p>
+                                                                            {applicant.email ? (
+                                                                                <p>Email: {applicant.email}</p>
+                                                                            ) : (
+                                                                                <p>Company Email: {applicant.companyemail}</p>
+                                                                            )}
+                                                                            {applicant.phone ? (
+                                                                                <p>Phone: {applicant.phone}</p>
+                                                                            ) : (
+                                                                                <p>Company Phone: {applicant.companyphone}</p>
+                                                                            )}
+                                                                        
+                                                                            <a onClick={(e)=>handleLearn(e, applicant.applicantId)}   className='btn btn-secondary'>
+                                                                                View Applicant Details
+                                                                            </a>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <p></p>
+                                                                    )}
+                                                                </div>
                                                                 
                                                             </div>
                                                             

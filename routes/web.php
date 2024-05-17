@@ -59,6 +59,8 @@ Route::group(['middleware' => ['clients', 'auth']], function() {
     Route::post('/user/applicant/store', [ApplicantController::class, 'ApplicantStore'])->name('applicant.store'); 
     Route::get('/user/applicant', [ApplicantController::class, 'Showverify'])->name('applicant.showverify'); 
     Route::get('/user/applicant/details/{id}', [ApplicantController::class, 'ApplicantDetails'])->name('applicant.details');
+    Route::get('/user/getapplicant', [ApplicantController::class, 'GetApplicant'])->name('applicant.get'); 
+
 
     Route::get('/user/reports', [HomeController::class, 'UserReports'])->name('users.report');
     Route::get('/user/profile', [HomeController::class, 'Profile'])->name('user.profile');
@@ -70,6 +72,9 @@ Route::group(['middleware' => ['clients', 'auth']], function() {
     Route::get('/user/identities', IdentityIndexController::class)->name('identityIndex');
     Route::get('/user/identities/details/', [IdentityController::class, 'identityDetails'])->name('verify.details');
     Route::get('/user/identities/check/',[IdentityController::class, 'showIdentityVerificationForm'])->name('showIdentityVerificationForm');
+    Route::post('/user/identities/store/',[IdentityController::class, 'store'])->name('storeIdentityVerificationForm');
+
+
     //Address Verification
     // Route definition oys_uk
     Route::get('/user/address/verification/{slug}', [AddressController::class,'AddressIndex'])->name('addressIndex');

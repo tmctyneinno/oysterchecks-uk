@@ -6,6 +6,7 @@ use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Traits\sandbox;
 use App\Models\Verification;
+use App\Models\ApplicantVerification;
 use Exception; 
 use App\Services\BAseUrl;
 use Illuminate\Support\Facades\Crypt;
@@ -29,9 +30,6 @@ class ApplicantController extends Controller
      
     public function ApplicantIndex(){
         $auth = User::where('id', auth()->user()->id)->first();
-       
-        // $individual = Applicant::where(['user_id' => $auth->id, 'is_sandbox' => $this->sandbox()])->get();
-
         $applicant['individuals'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'individual'])->get();
         $applicant['companies'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'company'])->get();
     
@@ -43,61 +41,47 @@ class ApplicantController extends Controller
         return view('users.applicant.create', $applicant);
     }
 
-    public function ApplicantDetails($id){
-        //$data['pending'] = Candidate::where(['client_id' => client_id(), 'status'=>'pending', 'status'=>null, 'is_sandbox' => $this->sandbox()])->get();
-        //$data['candidates'] = Candidate::where(['client_id' => client_id(), 'is_sandbox' => $this->sandbox()])->get();
-        //$data['verified'] = Candidate::where(['client_id' => client_id(), 'status'=>'verified', 'is_sandbox' => $this->sandbox()])->get();
-        //$data['rejected'] = Candidate::where(['client_id'=> client_id(), 'status'=>'rejected', 'is_sandbox' => $this->sandbox()])->get();
-        $applicant = Applicant::where('id', decrypt($id))->first();
-        $data['applicant'] = Applicant::where(['user_id' => $applicant->applicntID])->first();
-        // $data['services'] = CandidateVerification::where('user_id', $candidate->user_id)->get();
-        return view('users.applicant.details', $data); 
+    public function ApplicantDetails($applicantData){
+        $auth = User::where('id', auth()->user()->id)->first();
+        $data['pending'] = Applicant::where(['user_id' => $auth->id, 'status'=>'pending'])->get();
+        $data['applicant'] =  Applicant::where(['user_id' => auth()->user()->id,  ])-> get();
+        $data['individuals'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'individual'])->get();
+        $data['companies'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'company'])->get();
+        $data['appli'] = Applicant::where(['user_id' => $auth->id, 'applicantId' => $applicantData])->first();
+
+        $data['verified'] = Applicant::where(['user_id' => $auth->id, 'status'=>'verified',])->get();
+        $data['rejected'] = Applicant::where(['user_id' => $auth->id,'status'=>'rejected'])->get();
+        
+        return view('users.applicant.details', $data);
     }
 
   
 
-    public function Showverify(Request $request)
+    public function Showverify($applicantId)
     {
-       
-        $encryptedApiResponse = $request->input('apiResponse');
-
-        // $decryptedApiResponse = Crypt::decryptString($encryptedApiResponse);
-        $apiData = json_decode($encryptedApiResponse, true);
-    
-        return view('users.applicant.showverify', ['apiData' => $apiData]);
+        dd($applicantId);
+        return view('users.applicant.showverify', ['apiData' => $applicantId]);
     }
-    public function ApplicantStoreaa (Request $request){
-       
-        // return response()->json([
-        //     'code' => 200,
-        //     'success' => 'You have logged in successfully',
-        // ]);
     
-
-    return response()->json([
-        'error' => 'Please insert the correct password or email',
-    ], 401);
-
-    }
     public function ApplicantStore(Request $request)
     {    
-        \Log::info($request->all());
         $externalUserId = uniqid(); 
         $levelName = 'basic-kyc-level';
        
         $data = $request->only([
-            'applicantType', 'firstname', 'lastname', 'middlename', 'email', 
+            'applicantType', 'firstname', 'lastname', 'middlename', 'email', 'companyemail', 'companyphone',
             'phone', 'placeofbirth', 'dateofbirth', 'country', 'countryofbirth', 
             'gender', 'address', 'companyname', 'registrationnumber', 
-            'companycreateddate', 'companyType', 'taxpayer', 'websitelink'
+            'companycreateddate', 'companyType', 'taxpayer', 'websitelink',
         ]);
     
         $data = array_map(fn($value) => $value ?? '', $data);
         try{
             $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $data);
             $applicantDataArray = json_decode($applicantData, true);
-            // dd($applicantDataArray);
+            // dd($applicantDataArray); 
             $applicantFields = [
+                'status' => 'not verified',
                 'user_id' => auth()->user()->id,
                 'applicantId' => $applicantDataArray['id'] ?? '',
                 'externalUserId' => $applicantDataArray['externalUserId'] ?? '',
@@ -105,7 +89,7 @@ class ApplicantController extends Controller
                 'inspectionId' => $applicantDataArray['inspectionId'] ?? '',
                 'sourceKey' => $applicantDataArray['sourceKey'] ?? '',
                 'email' => $applicantDataArray['email'] ?? '',
-                'phone' => $applicantDataArray['phone'] ?? '',
+                'phone' => $applicantDataArray['phone'] ?? $applicantDataArray['info']['companyInfo']['phone'],
                 'country' => $applicantDataArray['country'] ?? $applicantDataArray['info']['companyInfo']['country'],
                 'firstName' => $applicantDataArray['info']['firstName'] ?? '',
                 'lastName' => $applicantDataArray['info']['lastName'] ?? '',
@@ -118,24 +102,46 @@ class ApplicantController extends Controller
                 'websitelink' => $applicantDataArray['info']['companyInfo']['website'] ?? '',
                 'info' => json_encode($applicantDataArray['info']) ?? '',
                 'companyInfo' => json_encode($applicantDataArray['info']['companyInfo']) ?? '',
+                'companyemail' => $applicantDataArray['info']['companyInfo']['email'] ?? '',
                 'companyname' => $applicantDataArray['info']['companyInfo']['companyName'] ?? '',
+                'companyphone' => $applicantDataArray['info']['companyInfo']['phone']  ?? '',
                 'registrationnumber' => $applicantDataArray['info']['companyInfo']['registrationNumber'] ?? '',
                 'review' => json_encode($applicantDataArray['review']) ?? '',
                 'applicant_type' => $applicantDataArray['info']['companyInfo']['type']  ?? $applicantDataArray['type'] ,
+               
             ];
         
             Applicant::create($applicantFields);
-            
+            $getData = Applicant::where(['user_id' => auth()->user()->id, 'applicantId'=> $applicantDataArray['id'] ])-> first();
+
             return response()->json([
                 'code' => 200,
                 'success' => 'Applicant created successfully',
                 // "apiResponse" => (string) $applicantData,
                 "apiResponse" =>  $applicantData,
+                "getData" =>  $getData,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
                 'error' => 'Failed to create applicant: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function GetApplicant(){
+        try{
+            $applicant = Applicant::all();
+
+            return response()->json([
+                'code' => 200,
+                'success' => 'Applicant get successfully',
+                "apiResponse" =>  $applicant,
+            ]);
+        }  catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'error' => 'Failed to load applicant: ' . $e->getMessage(),
             ], 500);
         }
     }

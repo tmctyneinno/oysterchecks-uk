@@ -42,6 +42,7 @@ return new class extends Migration
             $table->longText('review')->nullable();
             $table->string('taxpayer')->nullable();
             $table->string('websitelink')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

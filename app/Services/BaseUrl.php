@@ -32,18 +32,18 @@ class BAseUrl
     {
         $requestBody = [
             'externalUserId' => $externalUserId,
-            'email' => $validData['email'] ?? '',
-            'phone' => $validData['phone'] ?? '',
+            'email' => $validData['email'] ?? $validData['companyemail'],
+            'phone' => $validData['phone'] ?? $validData['companyphone'],
             'country' => $validData['country'] ?? '',
             'info' => [
                 "companyInfo" => [
                     'companyName' => $validData['companyname'] ?? '',
-                    'registrationNumber' => $validData['registrationnumber'] ?? '',
+                    'registrationNumber' => $validData['registrationnumber'] ?? '' ,
                     "country" => $validData['country'] ?? '',
                     "incorporatedOn" => $validData['companycreateddate'] ?? '',
-                    "type" => $validData['applicant_type'] ?? '',
-                    "email" => $validData['email'] ?? '',
-                    "phone" => $validData['phone'] ?? '',
+                    "type" => $validData['applicantType'] ?? '',
+                    "email" => $validData['companyemail'] ?? '',
+                    "phone" => $validData['companyphone'] ?? '',
                     "website"=> $validData['websitelink'] ?? '',
                 ],
                 'firstName' => $validData['firstname'] ?? '',
@@ -74,6 +74,7 @@ class BAseUrl
         $parsedResponse = $this->parseBody($response);
     
         return json_encode($parsedResponse);
+        // return $parsedResponse;
     }
 
     /**

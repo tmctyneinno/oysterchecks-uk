@@ -18,9 +18,9 @@
             <tr>
                 <th>SN</th> 
                 <th>Name</th>
+                <th>Email</th>
                 <th>Phone</th>
                 <th>Status</th>
-                <th>Created On</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -34,12 +34,14 @@
                         <label class="text-muted mb-1"> Country:  {{ $company->country}} </label> <br>
                         <label class="text-muted">Created At: {{$company->created_at->format('M d, Y, h:i A')}} (GMT+1)</label>
                     </td>
+                    <td>{{$company->email}}</td>
                     <td>{{$company->phone}}</td>
-                    <td>Created At: {{$individual->created_at->format('M d, Y,')}} </td>
+                    
                     <td>  
                         <span class="badge bg-success"> Verified</span>
                     </td>
-                    <td><a class="badge bg-soft-primary" href=""> view Details</a></td>
+                   
+                    <td><a class="badge bg-soft-primary" href="{{ route('applicant.details', $company->applicantId ) }}"> view Details</a></td>
                 </tr>
             @endforeach 
             

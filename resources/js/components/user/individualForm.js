@@ -43,7 +43,7 @@ const IndividualForm = ({ formData, onSubmit, onChange }) => {
             <form onSubmit={handleSubmit} className="add-individual-form">
             <div className="card-body">
                 <div className="row">
-                <input type="hidden" value={formData.applicantType} onChange={onChange} name="applicantType" className="form-control mb-3 custom-select" placeholder="First Name" required />
+                <input type="hidden" value={formData.applicantType} onChange={onChange} name="applicantType" className="form-control mb-3 custom-select"  required />
 
                 <div className="col-md-6">
                     <label className="form-label" style={{ fontWeight: 500 }}>First Name</label>

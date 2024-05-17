@@ -47,9 +47,8 @@ const CompanyForm = ({ formData, onSubmit, onChange }) => {
             <form onSubmit={handleSubmit} className="add-individual-form">
                 <div className="card-body">
                     <div className="row">
-                        
-                        <input type="hidden" value="company" onChange={onChange} name="applicantType" className="form-control mb-3 custom-select" placeholder="" required />
-                        
+                        <input type="hidden" value={formData.companyApplicantType} onChange={onChange} name="companyApplicantType" className="form-control mb-3 custom-select" placeholder="" required />
+                         
                     
                         <div class="col-md-6">
                             <label class="form-label" style={{ fontWeight:500 }}>Company Name</label> 

@@ -16,6 +16,8 @@ require('./components/Faq');
 require('./components/auth/Login'); 
 
 //User
-require('./components/user/createApplicant');  
+require('./components/user/createApplicant'); 
+
+require('./components/user/identityVerification/index');
 
   
