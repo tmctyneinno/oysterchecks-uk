@@ -74,7 +74,7 @@ class ApplicantController extends Controller
             'gender', 'address', 'companyname', 'registrationnumber', 
             'companycreateddate', 'companyType', 'taxpayer', 'websitelink',
         ]);
-    
+     
         $data = array_map(fn($value) => $value ?? '', $data);
         try{
             $applicantData = $this->baseUrl->createApplicant($externalUserId, $levelName, $data);

@@ -17,7 +17,6 @@ class IdentityVerification extends Model
         'content',
         'country',
         'documentType',
-        'documentSubType',
         'firstName',
         'lastName',
         'middleName',

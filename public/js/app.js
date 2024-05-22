@@ -6797,6 +6797,26 @@ function IdentityVerification() {
     _useState14 = _slicedToArray(_useState13, 2),
     errorMessage = _useState14[0],
     setErrorMessage = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState16 = _slicedToArray(_useState15, 2),
+    textFields = _useState16[0],
+    setTextFields = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    firstName = _useState18[0],
+    setFirstName = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState20 = _slicedToArray(_useState19, 2),
+    lastName = _useState20[0],
+    setLastName = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState22 = _slicedToArray(_useState21, 2),
+    middleName = _useState22[0],
+    setMiddleName = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState24 = _slicedToArray(_useState23, 2),
+    issueddate = _useState24[0],
+    setIssuedDate = _useState24[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchApplicants = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -6811,12 +6831,13 @@ function IdentityVerification() {
             case 4:
               response = _context.sent;
               setApplicants(response.data.apiResponse);
-              _context.next = 10;
+              _context.next = 11;
               break;
             case 8:
               _context.prev = 8;
               _context.t0 = _context["catch"](1);
-            case 10:
+              console.error('Error fetching applicants:', _context.t0);
+            case 11:
             case "end":
               return _context.stop();
           }
@@ -6830,22 +6851,6 @@ function IdentityVerification() {
   }, []);
   var handleSelectChange = function handleSelectChange(e) {
     setSelectedApplicant(e.target.value);
-  };
-  var handleImageUpload22 = function handleImageUpload22(e) {
-    var file = e.target.files[0];
-    var reader = new FileReader();
-    reader.onload = function (event) {
-      var newImage = {
-        src: event.target.result,
-        file: file,
-        name: file.name,
-        size: file.size,
-        country: '',
-        documentType: ''
-      };
-      setImages([].concat(_toConsumableArray(images), [newImage]));
-    };
-    reader.readAsDataURL(file);
   };
   var handleImageUpload = function handleImageUpload(e) {
     var file = e.target.files[0];
@@ -6904,25 +6909,9 @@ function IdentityVerification() {
     fetchCountries();
   }, []);
   var documentTypes = ['ID Card', 'Passport', 'Driver\'s License', 'Residence Permit', 'Birth Certificate', 'Selfie', 'Video Selfie', 'Profile Image', 'Utility Bill', 'Vehicle Registration Certificate', 'Bank Statement', 'Employment Certificate', 'Insurance Document', 'Agreement', 'Contract', 'Income Source', 'Payment Method', 'Bank Card', 'Covid Vaccination Form', 'Other'];
-  var handleDeleteImage22 = function handleDeleteImage22(indexToRemove) {
-    setImages(function (prevImages) {
-      return prevImages.filter(function (image, index) {
-        return index !== indexToRemove;
-      });
-    });
-  };
   var handleDeleteImage = function handleDeleteImage(index) {
     var updatedImages = images.filter(function (_, imgIndex) {
       return imgIndex !== index;
-    });
-    setImages(updatedImages);
-  };
-  var handleImageDetailChange22 = function handleImageDetailChange22(index, key, value) {
-    var updatedImages = images.map(function (image, imgIndex) {
-      if (imgIndex === index) {
-        return _objectSpread(_objectSpread({}, image), {}, _defineProperty({}, key, value));
-      }
-      return image;
     });
     setImages(updatedImages);
   };
@@ -6932,137 +6921,22 @@ function IdentityVerification() {
     });
     setImages(updatedImages);
   };
-  var handleUploaddd = /*#__PURE__*/function () {
+  var handleUpload = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var isValid, updatedImages, formData, urlIdentify;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            isValid = true;
-            updatedImages = images.map(function (image) {
-              if (!image.country || !image.documentType) {
-                isValid = false;
-                return _objectSpread(_objectSpread({}, image), {}, {
-                  error: true
-                });
-              }
-              return _objectSpread(_objectSpread({}, image), {}, {
-                error: false
-              });
-            });
-            setImages(updatedImages);
-            if (isValid) {
-              _context3.next = 5;
-              break;
-            }
-            return _context3.abrupt("return");
-          case 5:
-            formData = new FormData();
-            formData.append('applicant', selectedApplicant);
-            images.forEach(function (image, index) {
-              formData.append("images[".concat(index, "][file]"), image.file);
-              formData.append("images[".concat(index, "][country]"), image.country);
-              formData.append("images[".concat(index, "][documentType]"), image.documentType);
-            });
-            setResponseData(formData);
-            urlIdentify = "".concat(url, "/user/identities/store");
-            _context3.next = 12;
-            return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }).then(function (response) {
-              setSuccessMessage(response.data.success);
-              setErrorMessage('');
-              console.log('Upload successful:', response.data);
-            })["catch"](function (error) {
-              setErrorMessage(error.response.data.error);
-              setSuccessMessage('');
-              console.error('Upload failed:', error);
-            });
-          case 12:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3);
-    }));
-    return function handleUploaddd() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var handleUpload22 = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var isValid, updatedImages, formData, urlIdentify;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      var _iterator, _step, _loop, _ret, formData, urlIdentify;
+      return _regeneratorRuntime().wrap(function _callee3$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            isValid = true;
-            updatedImages = images.map(function (image) {
-              if (!image.country || !image.documentType) {
-                isValid = false;
-                return _objectSpread(_objectSpread({}, image), {}, {
-                  error: true
-                });
-              }
-              return _objectSpread(_objectSpread({}, image), {}, {
-                error: false
-              });
-            });
-            setImages(updatedImages);
-            if (isValid) {
-              _context4.next = 5;
-              break;
-            }
-            return _context4.abrupt("return");
-          case 5:
-            formData = new FormData();
-            formData.append('applicant_id', selectedApplicant);
-            images.forEach(function (image, index) {
-              formData.append("images[".concat(index, "]"), image.file);
-              formData.append("countries[".concat(index, "]"), image.country);
-              formData.append("documentTypes[".concat(index, "]"), image.documentType);
-            });
-            urlIdentify = "".concat(url, "/user/identities/store");
-            _context4.next = 11;
-            return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }).then(function (response) {
-              setSuccessMessage(response.data.success);
-              setErrorMessage('');
-              console.log('Upload successful:', response.data);
-            })["catch"](function (error) {
-              setErrorMessage(error.response.data.error);
-              setSuccessMessage('');
-              console.error('Upload failed:', error);
-            });
-          case 11:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4);
-    }));
-    return function handleUpload22() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var handleUpload = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-      var _iterator, _step, _loop, _ret, formData, urlIdentify;
-      return _regeneratorRuntime().wrap(function _callee5$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
-          case 0:
             _iterator = _createForOfIteratorHelper(images);
-            _context6.prev = 1;
+            _context4.prev = 1;
             _loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop() {
               var image;
-              return _regeneratorRuntime().wrap(function _loop$(_context5) {
-                while (1) switch (_context5.prev = _context5.next) {
+              return _regeneratorRuntime().wrap(function _loop$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
                   case 0:
                     image = _step.value;
                     if (!(!image.country || !image.documentType)) {
-                      _context5.next = 4;
+                      _context3.next = 4;
                       break;
                     }
                     setImages(images.map(function (img, index) {
@@ -7070,60 +6944,68 @@ function IdentityVerification() {
                         error: true
                       }) : img;
                     }));
-                    return _context5.abrupt("return", {
+                    return _context3.abrupt("return", {
                       v: void 0
                     });
                   case 4:
                   case "end":
-                    return _context5.stop();
+                    return _context3.stop();
                 }
               }, _loop);
             });
             _iterator.s();
           case 4:
             if ((_step = _iterator.n()).done) {
-              _context6.next = 11;
+              _context4.next = 11;
               break;
             }
-            return _context6.delegateYield(_loop(), "t0", 6);
+            return _context4.delegateYield(_loop(), "t0", 6);
           case 6:
-            _ret = _context6.t0;
+            _ret = _context4.t0;
             if (!_ret) {
-              _context6.next = 9;
+              _context4.next = 9;
               break;
             }
-            return _context6.abrupt("return", _ret.v);
+            return _context4.abrupt("return", _ret.v);
           case 9:
-            _context6.next = 4;
+            _context4.next = 4;
             break;
           case 11:
-            _context6.next = 16;
+            _context4.next = 16;
             break;
           case 13:
-            _context6.prev = 13;
-            _context6.t1 = _context6["catch"](1);
-            _iterator.e(_context6.t1);
+            _context4.prev = 13;
+            _context4.t1 = _context4["catch"](1);
+            _iterator.e(_context4.t1);
           case 16:
-            _context6.prev = 16;
+            _context4.prev = 16;
             _iterator.f();
-            return _context6.finish(16);
+            return _context4.finish(16);
           case 19:
             formData = new FormData();
             formData.append('applicant_id', selectedApplicant);
+            formData.append('firstName', firstName);
+            formData.append('lastName', lastName);
+            formData.append('middleName', middleName);
+            formData.append('issueddate', issueddate);
             images.forEach(function (image, index) {
               formData.append("documents[".concat(index, "][file]"), image.file);
               formData.append("documents[".concat(index, "][country]"), image.country);
               formData.append("documents[".concat(index, "][documentType]"), image.documentType);
             });
-            _context6.prev = 22;
+            textFields.forEach(function (field, index) {
+              formData.append("textFields[".concat(index, "]"), field);
+            });
+            _context4.prev = 27;
             urlIdentify = "".concat(url, "/user/identities/store");
-            _context6.next = 26;
+            _context4.next = 31;
             return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               }
             }).then(function (response) {
               setSuccessMessage(response.data.success);
+              setResponseData(response.data.apiResponse);
               setErrorMessage('');
               console.log('Upload successful:', response.data);
             })["catch"](function (error) {
@@ -7131,23 +7013,44 @@ function IdentityVerification() {
               setSuccessMessage('');
               console.error('Upload failed:', error);
             });
-          case 26:
-            _context6.next = 31;
-            break;
-          case 28:
-            _context6.prev = 28;
-            _context6.t2 = _context6["catch"](22);
-            console.error('Error uploading documents:', _context6.t2);
           case 31:
+            _context4.next = 36;
+            break;
+          case 33:
+            _context4.prev = 33;
+            _context4.t2 = _context4["catch"](27);
+            console.error('Error uploading documents:', _context4.t2);
+          case 36:
           case "end":
-            return _context6.stop();
+            return _context4.stop();
         }
-      }, _callee5, null, [[1, 13, 16, 19], [22, 28]]);
+      }, _callee3, null, [[1, 13, 16, 19], [27, 33]]);
     }));
     return function handleUpload() {
-      return _ref5.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
+  var handleAddTextField = function handleAddTextField(index) {
+    var updatedImages = images.map(function (image, imgIndex) {
+      return imgIndex === index ? {
+        textFields: [].concat(_toConsumableArray(textFields), ['']),
+        isAddFieldDisabled: true
+      } : image;
+    });
+    setTextFields(updatedImages);
+  };
+  var handleTextFieldChange = function handleTextFieldChange(index, value) {
+    var updatedTextFields = textFields.map(function (field, fieldIndex) {
+      return fieldIndex === index ? value : field;
+    });
+    setTextFields(updatedTextFields);
+  };
+  var handleDeleteTextField = function handleDeleteTextField(index) {
+    var updatedTextFields = textFields.filter(function (_, fieldIndex) {
+      return fieldIndex !== index;
+    });
+    setTextFields(updatedTextFields);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
       children: "Applicant Select"
@@ -7168,17 +7071,12 @@ function IdentityVerification() {
               className: "page-title-box",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                 className: "row",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                   className: "col",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
                     className: "page-title",
                     children: "IDENTITY Verification"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("ol", {
-                    className: "breadcrumb",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("li", {
-                      className: "breadcrumb-item"
-                    })
-                  })]
+                  })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                   className: "col-auto align-self-center",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
@@ -7359,7 +7257,7 @@ function IdentityVerification() {
                                       className: "d-block mx-auto rounded",
                                       src: image.src,
                                       alt: "Document ".concat(index),
-                                      height: "150"
+                                      height: "100"
                                     })
                                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                                     className: "col-md-6 py-2",
@@ -7409,11 +7307,9 @@ function IdentityVerification() {
                                           children: "*"
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
-                                        className: "select2 form-control mb-3 custom-select ".concat(image.error && !image.documentType ? 'is-invalid' : ''),
-                                        style: {
-                                          width: '100%',
-                                          height: '36px'
-                                        },
+                                        className: "select2 form-control mb-3 custom-select ".concat(image.error && !image.documentType ? 'is-invalid' : '')
+                                        // style={{ width: '100%', height: '36px' }}
+                                        ,
                                         value: image.documentType,
                                         onChange: function onChange(e) {
                                           return handleImageDetailChange(index, 'documentType', e.target.value);
@@ -7437,15 +7333,18 @@ function IdentityVerification() {
                                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                                         type: "button",
                                         className: "btn btn-primary",
-                                        onClick: handleUpload,
-                                        children: "Upload"
+                                        onClick: function onClick() {
+                                          return handleAddTextField(index);
+                                        },
+                                        disabled: images[index].isAddFieldDisabled,
+                                        children: "Add"
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                                         type: "button",
                                         className: "btn btn-danger",
                                         onClick: function onClick() {
                                           return handleDeleteImage(index);
                                         },
-                                        children: "Cancel"
+                                        children: "Delete"
                                       })]
                                     })]
                                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -7458,8 +7357,146 @@ function IdentityVerification() {
                                       })]
                                     })
                                   })]
-                                }, index)
-                              });
+                                })
+                              }, index);
+                            }), textFields.map(function (field, index) {
+                              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                                className: "card",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                                  className: "accordion-body",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                                    className: "card-body",
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                      className: "row",
+                                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "firstname",
+                                          children: "First name"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "firstName",
+                                          placeholder: "First name",
+                                          required: true,
+                                          value: firstName,
+                                          onChange: function onChange(e) {
+                                            return setFirstName(e.target.value);
+                                          }
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "lastName",
+                                          children: "Last Name"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "lastName",
+                                          required: true,
+                                          placeholder: "Last name",
+                                          value: lastName,
+                                          onChange: function onChange(e) {
+                                            return setLastName(e.target.value);
+                                          }
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "middleName",
+                                          children: "Middle Name"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "middleName",
+                                          required: true,
+                                          placeholder: "Middle name",
+                                          value: middleName,
+                                          onChange: function onChange(e) {
+                                            return setMiddleName(e.target.value);
+                                          }
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "middleName",
+                                          children: "Issued Date"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "date",
+                                          className: "form-control",
+                                          id: "issueddate",
+                                          required: true,
+                                          placeholder: "Issued Date",
+                                          value: issueddate,
+                                          onChange: function onChange(e) {
+                                            return setIssuedDate(e.target.value);
+                                          }
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "firstname",
+                                          children: "Valid Until Date"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "date",
+                                          className: "form-control",
+                                          id: "firstname",
+                                          name: "firstname",
+                                          placeholder: "Valid Until Date",
+                                          required: true
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "firstname",
+                                          children: "Document Number"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "firstname",
+                                          name: "firstname",
+                                          placeholder: "Document Number",
+                                          required: true
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "firstname",
+                                          children: "Appicant date of Birth"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "firstname",
+                                          name: "firstname",
+                                          placeholder: "Appicant date of Birth",
+                                          required: true
+                                        })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                                        className: "col-md-12 mb-2",
+                                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                                          className: "form-label",
+                                          htmlFor: "firstname",
+                                          children: "Appicant Place of Birth"
+                                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                                          type: "text",
+                                          className: "form-control",
+                                          id: "firstname",
+                                          name: "firstname",
+                                          placeholder: "Appicant Place of Birth",
+                                          required: true
+                                        })]
+                                      })]
+                                    })
+                                  })
+                                })
+                              }, index);
                             })]
                           })
                         })
@@ -7479,9 +7516,9 @@ function IdentityVerification() {
                           backgroundColor: '#25B794',
                           borderColor: '#25B794'
                         },
-                        type: "submit",
+                        onClick: handleUpload,
                         className: "btn btn-primary btn-lg submitbtn",
-                        children: ["Request verification ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+                        children: [" Request verification ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
                           className: "dripicons-arrow-thin-right mt-1"
                         })]
                       })
@@ -7499,7 +7536,7 @@ function IdentityVerification() {
                           className: "card-header",
                           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
                             className: "card-title",
-                            children: "Payload Request"
+                            children: "Success Notification"
                           })
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                           className: "card-body",
@@ -7509,10 +7546,13 @@ function IdentityVerification() {
                               className: "col",
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
                                 className: "mb-0 fw-semibold text-black",
-                                children: "Successful Identity verifications"
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-                                className: "m-0 text-success",
-                                children: " Success "
+                                children: " Identity verifications"
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), successMessage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                                className: "alert alert-success",
+                                children: successMessage
+                              }), responseData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                                className: "alert alert-info",
+                                children: responseData
                               })]
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                               className: "col-auto align-self-center",
@@ -7525,12 +7565,18 @@ function IdentityVerification() {
                               })
                             })]
                           })
-                        }), errorMessage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                          className: "alert alert-danger",
-                          children: errorMessage
-                        }), successMessage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                          className: "alert alert-success",
-                          children: successMessage
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                          children: errorMessage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+                            children: ["Error: ", errorMessage]
+                          }) : responseData ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("h2", {
+                              children: ["Identity Details ", responseData]
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                              href: "",
+                              className: "btn btn-secondary",
+                              children: "View Applicant Details"
+                            })]
+                          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {})
                         })]
                       })
                     })
@@ -14425,7 +14471,7 @@ module.exports = Array.isArray || function (arr) {
   \*******************************/
 /***/ (() => {
 
-throw new Error("Module build failed (from ./node_modules/laravel-mix/node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/css-loader/dist/cjs.js):\nError: Can't resolve 'tailwindcss/components' in '/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/resources/css'\n    at finishWithoutResolve (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:564:18)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:656:15\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js:89:43\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:57:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/ConditionalPlugin.js:53:42\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/forEachBail.js:39:13\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/ModulesInHierarchicalDirectoriesPlugin.js:79:16\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at processResult (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/webpack/lib/NormalModule.js:841:19)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/webpack/lib/NormalModule.js:966:5\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:400:11\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:252:18\n    at context.callback (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at Object.loader (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/css-loader/dist/index.js:155:5)\n    at runMicrotasks (<anonymous>)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)");
+throw new Error("Module build failed (from ./node_modules/laravel-mix/node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/css-loader/dist/cjs.js):\nError: Can't resolve 'tailwindcss/base' in '/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/resources/css'\n    at finishWithoutResolve (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:564:18)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:656:15\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js:89:43\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:57:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/ConditionalPlugin.js:53:42\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/Resolver.js:714:5\n    at eval (eval at create (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/forEachBail.js:39:13\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/enhanced-resolve/lib/ModulesInHierarchicalDirectoriesPlugin.js:79:16\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at processResult (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/webpack/lib/NormalModule.js:841:19)\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/webpack/lib/NormalModule.js:966:5\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:400:11\n    at /Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:252:18\n    at context.callback (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at Object.loader (/Users/ultraputers/Desktop/laravel/oystercheck_uk/oysterchecks-uk-main/node_modules/css-loader/dist/index.js:155:5)\n    at runMicrotasks (<anonymous>)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)");
 
 /***/ }),
 

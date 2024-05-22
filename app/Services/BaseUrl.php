@@ -110,6 +110,10 @@ class BAseUrl
 
         $response = $this->sendRequest($request);
         return $response->getHeader('X-Image-Id')[0] ?? '';
+        // return json_decode($this->sendRequest($request));
+        // var_dump( $response) ;
+        // die();
+        // return json_encode($response);
     }
 
     /**

@@ -19,7 +19,7 @@ class SumsubController extends Controller
         // Your Sumsub code here 
         $externalUserId = uniqid(); // Use your internal UserID instead in production code
         $levelName = 'basic-kyc-level';
-        
+         
         $applicantId = $this->sumsubClient->createApplicant($externalUserId, $levelName);
         echo 'The applicant was successfully created: ' . $applicantId . PHP_EOL;
          

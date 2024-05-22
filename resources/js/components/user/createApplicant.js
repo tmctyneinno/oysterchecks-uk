@@ -199,8 +199,8 @@ export default function CreateApplicant() {
                                                                 <br/>
                                                               
                                                                  <div>
-                                                                    {/* {responseData} */}
-                                                                 {errorMessage ? (
+                                                                
+                                                                    {errorMessage ? (
                                                                         <p>Error: {errorMessage}</p>
                                                                     ) : applicant ? (
                                                                         <div>

@@ -11,6 +11,12 @@ export default function IdentityVerification() {
     const [responseData, setResponseData] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [textFields, setTextFields] = useState([]);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [middleName, setMiddleName] = useState('');
+    const [issueddate, setIssuedDate] = useState('');
+   
 
     useEffect(() => {
         const fetchApplicants = async () => {
@@ -19,7 +25,7 @@ export default function IdentityVerification() {
                 const response = await axios.get(urlGetApplicant);
                 setApplicants(response.data.apiResponse);
             } catch (error) {
-                // console.log('errorData', error.response.data.error);
+                console.error('Error fetching applicants:', error);
             }
         };
         fetchApplicants();
@@ -27,25 +33,6 @@ export default function IdentityVerification() {
 
     const handleSelectChange = (e) => {
         setSelectedApplicant(e.target.value);
-    };
-
-    const handleImageUpload22 = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            const newImage = { 
-                src: event.target.result, 
-                file:file,
-                name: file.name, 
-                size: file.size,
-                country: '',
-                documentType: ''
-            };
-            setImages([...images, newImage]);
-        };
-
-        reader.readAsDataURL(file);
     };
 
     const handleImageUpload = (e) => {
@@ -94,115 +81,16 @@ export default function IdentityVerification() {
         'Insurance Document', 'Agreement', 'Contract', 'Income Source', 'Payment Method', 'Bank Card', 'Covid Vaccination Form', 'Other'
     ];
 
-    const handleDeleteImage22 = (indexToRemove) => {
-        setImages(prevImages => prevImages.filter((image, index) => index !== indexToRemove));
-    };
     const handleDeleteImage = (index) => {
         const updatedImages = images.filter((_, imgIndex) => imgIndex !== index);
         setImages(updatedImages);
     };
 
-    const handleImageDetailChange22 = (index, key, value) => {
-        const updatedImages = images.map((image, imgIndex) => {
-            if (imgIndex === index) {
-                return { ...image, [key]: value };
-            }
-            return image;
-        });
-        setImages(updatedImages);
-    };
     const handleImageDetailChange = (index, field, value) => {
         const updatedImages = images.map((image, imgIndex) => (
             imgIndex === index ? { ...image, [field]: value, error: false } : image
         ));
         setImages(updatedImages);
-    };
-
-    const handleUploaddd = async () => {
-        let isValid = true;
-        const updatedImages = images.map(image => {
-            if (!image.country || !image.documentType) {
-                isValid = false;
-                return { ...image, error: true };
-            }
-            return { ...image, error: false };
-        });
-
-        setImages(updatedImages);
-
-        if (!isValid) {
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('applicant', selectedApplicant);
-        images.forEach((image, index) => {
-            formData.append(`images[${index}][file]`, image.file);
-            formData.append(`images[${index}][country]`, image.country);
-            formData.append(`images[${index}][documentType]`, image.documentType);
-        });
-        
-
-        setResponseData(formData);
-
-        let urlIdentify = `${url}/user/identities/store`;
-        await axios.post(urlIdentify, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(response => {
-                setSuccessMessage(response.data.success);
-                setErrorMessage('');
-                console.log('Upload successful:', response.data);
-            })
-            .catch(error => {
-                setErrorMessage(error.response.data.error);
-                setSuccessMessage('');
-                console.error('Upload failed:', error);
-            });
-    };
-    const handleUpload22 = async () => {
-        let isValid = true;
-        const updatedImages = images.map(image => {
-            if (!image.country || !image.documentType) {
-                isValid = false;
-                return { ...image, error: true };
-            }
-            return { ...image, error: false };
-        });
-
-        setImages(updatedImages);
-
-        if (!isValid) {
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('applicant_id', selectedApplicant);
-        images.forEach((image, index) => {
-            formData.append(`images[${index}]`, image.file);
-            formData.append(`countries[${index}]`, image.country);
-            formData.append(`documentTypes[${index}]`, image.documentType);
-        });
-        
-
-        let urlIdentify = `${url}/user/identities/store`;
-        await axios.post(urlIdentify, formData, {
-            headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            .then(response => {
-                setSuccessMessage(response.data.success);
-                setErrorMessage('');
-                console.log('Upload successful:', response.data);
-            })
-            .catch(error => {
-                setErrorMessage(error.response.data.error);
-                setSuccessMessage('');
-                console.error('Upload failed:', error);
-            });
     };
 
     const handleUpload = async () => {
@@ -217,10 +105,19 @@ export default function IdentityVerification() {
 
         const formData = new FormData();
         formData.append('applicant_id', selectedApplicant);
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('middleName', middleName);
+        formData.append('issueddate', issueddate);
+        
         images.forEach((image, index) => {
             formData.append(`documents[${index}][file]`, image.file);
             formData.append(`documents[${index}][country]`, image.country);
             formData.append(`documents[${index}][documentType]`, image.documentType);
+        });
+
+        textFields.forEach((field, index) => {
+            formData.append(`textFields[${index}]`, field);
         });
 
         try {
@@ -231,6 +128,7 @@ export default function IdentityVerification() {
                 }
             }).then(response => {
                 setSuccessMessage(response.data.success);
+                setResponseData(response.data.apiResponse);
                 setErrorMessage('');
                 console.log('Upload successful:', response.data);
             })
@@ -239,10 +137,29 @@ export default function IdentityVerification() {
                 setSuccessMessage('');
                 console.error('Upload failed:', error);
             });
-            // alert('Documents uploaded successfully');
         } catch (error) {
             console.error('Error uploading documents:', error);
         }
+    };
+
+   
+    const handleAddTextField = (index) => {
+        const updatedImages = images.map((image, imgIndex) => (
+            imgIndex === index ? {  textFields: [...textFields, ''], isAddFieldDisabled: true } : image
+        ));
+        setTextFields(updatedImages);
+    };
+
+    const handleTextFieldChange = (index, value) => {
+        const updatedTextFields = textFields.map((field, fieldIndex) => (
+            fieldIndex === index ? value : field
+        ));
+        setTextFields(updatedTextFields);
+    };
+
+    const handleDeleteTextField = (index) => {
+        const updatedTextFields = textFields.filter((_, fieldIndex) => fieldIndex !== index);
+        setTextFields(updatedTextFields);
     };
 
     return (
@@ -250,9 +167,7 @@ export default function IdentityVerification() {
             <h2>Applicant Select</h2>
             <div>
                 <label htmlFor="applicantSelect">Select Applicant: {selectedApplicant}</label>
-             
             </div>
-           
 
             <div className="page-content">
                 <div className="container-fluid">
@@ -262,9 +177,6 @@ export default function IdentityVerification() {
                                 <div className="row">
                                     <div className="col">
                                         <h4 className="page-title">IDENTITY Verification</h4>
-                                        <ol className="breadcrumb">
-                                            <li className="breadcrumb-item"></li>
-                                        </ol>
                                     </div>
                                     <div className="col-auto align-self-center">
                                         <a href="#" className="btn btn-sm btn-outline-primary" id="Dash_Date">
@@ -350,10 +262,10 @@ export default function IdentityVerification() {
                                                             </div>
 
                                                             {images.map((image, index) => (
-                                                                <div className='card'>
-                                                                    <div key={index} className="row mt-4">
+                                                                <div className='card' key={index}>
+                                                                    <div className="row mt-4">
                                                                         <div className="col-md-6">
-                                                                            <img className='d-block mx-auto rounded' src={image.src} alt={`Document ${index}`} height="150" />
+                                                                            <img className='d-block mx-auto rounded' src={image.src} alt={`Document ${index}`} height="100"/>
                                                                         </div>
 
                                                                         <div className="col-md-6 py-2">
@@ -379,7 +291,7 @@ export default function IdentityVerification() {
                                                                                 <label className="form-label">Select a Document Type <span style={{ color: 'red' }}>*</span></label>
                                                                                 <select
                                                                                     className={`select2 form-control mb-3 custom-select ${image.error && !image.documentType ? 'is-invalid' : ''}`}
-                                                                                    style={{ width: '100%', height: '36px' }}
+                                                                                    // style={{ width: '100%', height: '36px' }}
                                                                                     value={image.documentType}
                                                                                     onChange={(e) => handleImageDetailChange(index, 'documentType', e.target.value)}
                                                                                 >
@@ -392,8 +304,17 @@ export default function IdentityVerification() {
                                                                             </div>
 
                                                                             <div className="d-grid gap-2">
-                                                                                <button type="button" className="btn btn-primary" onClick={handleUpload}>Upload</button>
-                                                                                <button type="button" className="btn btn-danger" onClick={() => handleDeleteImage(index)}>Cancel</button>
+                                                                                {/* <button type="button" className="btn btn-primary" onClick={handleAddTextField}>Add</button> */}
+                                                                                <button 
+                                                                                    type="button" 
+                                                                                    className="btn btn-primary" 
+                                                                                    onClick={() => handleAddTextField(index)}
+                                                                                    disabled={images[index].isAddFieldDisabled}
+                                                                                >
+                                                                                    Add 
+                                                                                </button>
+
+                                                                                <button type="button" className="btn btn-danger" onClick={() => handleDeleteImage(index)}>Delete</button>
                                                                             </div>
                                                                         </div>
                                                                         <div className="col-md-12">
@@ -403,6 +324,85 @@ export default function IdentityVerification() {
                                                                     </div>
                                                                 </div>
                                                             ))}
+
+                                                            {textFields.map((field, index) => (
+                                                                <div className='card' key={index}>
+                                                                    <div className="accordion-body">
+                                                                        <div className="card-body">
+                                                                            <div className="row">
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="firstname">First name</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        id="firstName"
+                                                                                        placeholder="First name"
+                                                                                        required
+                                                                                        value={firstName}
+                                                                                        onChange={(e) => setFirstName(e.target.value)}
+                                                                                    />
+                                                                                </div>
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="lastName">Last Name</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        id="lastName"
+                                                                                        required
+                                                                                        placeholder="Last name"
+                                                                                        value={lastName}
+                                                                                        onChange={(e) => setLastName(e.target.value)}
+                                                                                    />
+                                                                                </div>
+                                                                               <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="middleName">Middle Name</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        id="middleName"
+                                                                                        required
+                                                                                        placeholder="Middle name" 
+                                                                                        value={middleName}
+                                                                                        onChange={(e) => setMiddleName(e.target.value)}
+                                                                                    />
+                                                                                </div>
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="middleName">Issued Date</label>
+                                                                                    <input
+                                                                                        type="date"
+                                                                                        className="form-control"
+                                                                                        id="issueddate"
+                                                                                        required
+                                                                                        placeholder="Issued Date" 
+                                                                                        value={issueddate}
+                                                                                        onChange={(e) => setIssuedDate(e.target.value)}
+                                                                                    />
+                                                                                </div>
+                                                                                
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="firstname">Valid Until Date</label>
+                                                                                    <input type="date" className="form-control" id="firstname" name="firstname" placeholder="Valid Until Date" required />
+                                                                                </div>
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="firstname">Document Number</label>
+                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Document Number" required />
+                                                                                </div>
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="firstname">Appicant date of Birth</label>
+                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Appicant date of Birth" required />
+                                                                                </div>
+                                                                                <div className="col-md-12 mb-2">
+                                                                                    <label className="form-label" htmlFor="firstname">Appicant Place of Birth</label>
+                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Appicant Place of Birth" required />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            ))}
+
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
@@ -413,35 +413,46 @@ export default function IdentityVerification() {
                                         <div id="accordionExample"></div>
                                         <div className="row mt-4">
                                             <div className="col-sm-12 d-grid">
-                                                <button style={{ backgroundColor: '#25B794', borderColor: '#25B794' }} type="submit" className="btn btn-primary btn-lg submitbtn">Request verification <i className="dripicons-arrow-thin-right mt-1"></i></button>
+                                                <button style={{ backgroundColor: '#25B794', borderColor: '#25B794' }} onClick={handleUpload} className="btn btn-primary btn-lg submitbtn"> Request verification <i className="dripicons-arrow-thin-right mt-1"></i></button>
                                             </div>
                                         </div>
-                                       
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="card">
                                             <div className="card-body">
                                                 <div className="row">
                                                     <div className="card-header">
-                                                        <h4 className="card-title">Payload Request</h4>
+                                                        <h4 className="card-title">Success Notification</h4>
                                                     </div>
                                                     <div className="card-body">
                                                         <div className="row d-flex justify-content-center">
                                                             <div className="col">
-                                                                <p className="mb-0 fw-semibold text-black">Successful Identity verifications</p>
-                                                                <h3 className="m-0 text-success"> Success </h3>
-                                                                {/* <p><span className="text-muted">Created At:</span> April 15, 2024, at 2:30:45 PM</p> */}
+                                                                <p className="mb-0 fw-semibold text-black"> Identity verifications</p>
+                                                                <br/>
+                                                                {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                                                                {responseData && <div className="alert alert-info">{responseData}</div>}
                                                             </div>
                                                             <div className="col-auto align-self-center">
-                                                                
                                                                 <div className="report-main-icon bg-light-alt">
                                                                     <i data-feather="users" className="align-self-center text-muted icon-sm"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-                                                    {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                                                    <div> 
+                                                        {errorMessage ? (
+                                                            <p>Error: {errorMessage}</p>
+                                                        ) : responseData ? (
+                                                            <div>
+                                                                <h2>Identity Details {responseData}</h2>
+                                                                <a href="" className='btn btn-secondary'>
+                                                                    View Applicant Details
+                                                                </a>
+                                                            </div>
+                                                        ) : (
+                                                            <p></p>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -451,7 +462,6 @@ export default function IdentityVerification() {
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );

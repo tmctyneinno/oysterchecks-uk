@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Traits\sandbox;
 use App\Models\FieldInput;
 use App\Models\Verification;
 use App\Models\IdentityVerification;
 use Illuminate\Http\Request;
 use Exception; 
+use App\Services\BAseUrl;
 
 class IdentityController extends Controller
 {
    
-//Constructor
-    public function __construct()
+    //Constructor
+    use sandbox;
+    
+    protected $baseUrl;
+
+    public function __construct(BAseUrl $baseUrl)
     {
-         return $this->middleware('clients');
+        $this->baseUrl = $baseUrl;
     }
 
     public function identityIndex($slug)
@@ -68,6 +73,10 @@ class IdentityController extends Controller
                 'documents.*.file' => 'required|file|mimes:jpeg,png,jpg,gif',
                 'documents.*.country' => 'required|string',
                 'documents.*.documentType' => 'required|string',
+                'firstName' => 'required|string',
+                'lastName' => 'required|string',
+                'middleName' => 'required|string',
+                'issueddate' => 'required|string',
             ]);
     
             foreach ($validatedData['documents'] as $document) {
@@ -78,12 +87,34 @@ class IdentityController extends Controller
                     'content' => $path,
                     'country' => $document['country'],
                     'documentType' => $document['documentType'],
+                    'firstName' =>  $validatedData['firstName'],
+                    'lastName' =>  $validatedData['lastName'],
+                    'middleName' =>  $validatedData['middleName'],
+                    'issuedDate' =>  $validatedData['issueddate'],
                 ]);
+               
+                $applicantData = $this->baseUrl->addDocument(
+                    $validatedData['applicant_id'],
+                    // storage_path($path), 
+                    storage_path('app/' . $path),
+                    // storage_path('app/sumsub-logo.png'), 
+                    [
+                        "idDocType" => "PASSPORT",
+                        "country" => "GBR",
+                        "number" => "123456789",
+                        "issuedDate" => "2015-01-02",
+                        "dob" => "2000-02-01",
+                        "placeOfBirth" => "London"
+                    ],
+                );
+                $apiResponse = json_decode($applicantData, true);
             }
 
             return response()->json([
                 'code' => 200,
                 'success' => 'Identity created successfully',
+                'apiResponse'=> $apiResponse,
+                // 'apiResponse'=> ''
             ]);
         } catch (Exception $e) {
             return response()->json([

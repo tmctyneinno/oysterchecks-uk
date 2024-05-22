@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('content')->nullable();
             $table->string('country')->nullable();
             $table->string('documentType')->nullable();
-            $table->string('documentSubType')->nullable();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->string('middleName')->nullable();
