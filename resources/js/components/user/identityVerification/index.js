@@ -16,6 +16,10 @@ export default function IdentityVerification() {
     const [lastName, setLastName] = useState('');
     const [middleName, setMiddleName] = useState('');
     const [issueddate, setIssuedDate] = useState('');
+    const [validUntil, setValidUntil] = useState('');
+    const [documentNumber, setDocumentNumber] = useState('');
+    const [dataofBirth, setDateofBirth] = useState('');
+    const [placeofBirth, setPlaaceofBirth] = useState('');
    
 
     useEffect(() => {
@@ -109,6 +113,10 @@ export default function IdentityVerification() {
         formData.append('lastName', lastName);
         formData.append('middleName', middleName);
         formData.append('issueddate', issueddate);
+        formData.append('validUntil', validUntil);
+        formData.append('documentNumber', documentNumber);
+        formData.append('dataofBirth', dataofBirth);
+        formData.append('placeofBirth', placeofBirth);
         
         images.forEach((image, index) => {
             formData.append(`documents[${index}][file]`, image.file);
@@ -381,19 +389,51 @@ export default function IdentityVerification() {
                                                                                 
                                                                                 <div className="col-md-12 mb-2">
                                                                                     <label className="form-label" htmlFor="firstname">Valid Until Date</label>
-                                                                                    <input type="date" className="form-control" id="firstname" name="firstname" placeholder="Valid Until Date" required />
+                                                                                     <input
+                                                                                        type="date"
+                                                                                        className="form-control"
+                                                                                        id="issueddate"
+                                                                                        required
+                                                                                        placeholder="Valida Until Date" 
+                                                                                        value={validdate}
+                                                                                        onChange={(e) => setValidUntil(e.target.value)}
+                                                                                    />
                                                                                 </div>
                                                                                 <div className="col-md-12 mb-2">
                                                                                     <label className="form-label" htmlFor="firstname">Document Number</label>
-                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Document Number" required />
+                                                                                    <input
+                                                                                        type="date"
+                                                                                        className="form-control"
+                                                                                        id="number"
+                                                                                        required
+                                                                                        placeholder="Document Number" 
+                                                                                        value={documentNumber}
+                                                                                        onChange={(e) => setDocumentNumber(e.target.value)}
+                                                                                    />
                                                                                 </div>
                                                                                 <div className="col-md-12 mb-2">
                                                                                     <label className="form-label" htmlFor="firstname">Appicant date of Birth</label>
-                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Appicant date of Birth" required />
+                                                                                    <input
+                                                                                        type="date"
+                                                                                        className="form-control"
+                                                                                        id="dateofBirth"
+                                                                                        required
+                                                                                        placeholder="Appicant date of Birth" 
+                                                                                        value={dataofBirth}
+                                                                                        onChange={(e) => setDateofBirth(e.target.value)}
+                                                                                    />
                                                                                 </div>
                                                                                 <div className="col-md-12 mb-2">
                                                                                     <label className="form-label" htmlFor="firstname">Appicant Place of Birth</label>
-                                                                                    <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Appicant Place of Birth" required />
+                                                                                    <input
+                                                                                        type="date"
+                                                                                        className="form-control"
+                                                                                        id="placeofBirth"
+                                                                                        required
+                                                                                        placeholder="Appicant Place of Birth" 
+                                                                                        value={dataofBirth}
+                                                                                        onChange={(e) => setPlaaceofBirth(e.target.value)}
+                                                                                    />
                                                                                 </div>
                                                                             </div>
                                                                         </div>

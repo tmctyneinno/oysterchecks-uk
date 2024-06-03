@@ -77,6 +77,10 @@ class IdentityController extends Controller
                 'lastName' => 'required|string',
                 'middleName' => 'required|string',
                 'issueddate' => 'required|string',
+                'validUntil' => 'required|string',
+                'documentNumber' => 'required|string',
+                'dataofBirth' => 'required|string', 
+                'placeofBirth' => 'required|string',
             ]);
     
             foreach ($validatedData['documents'] as $document) {
@@ -86,12 +90,17 @@ class IdentityController extends Controller
                     'applicantId' => $validatedData['applicant_id'],
                     'content' => $path,
                     'country' => $document['country'],
-                    'documentType' => $document['documentType'],
+                    'idDocType' => $document['documentType'],
+                    'idDocSubType' => 'null',
                     'firstName' =>  $validatedData['firstName'],
                     'lastName' =>  $validatedData['lastName'],
                     'middleName' =>  $validatedData['middleName'],
                     'issuedDate' =>  $validatedData['issueddate'],
-                ]);
+                    'validUntil' => $validatedData['validUntil'],
+                    'documentNumber' => $validatedData['validUntil'],
+                    'dataofBirth' => $validatedData['dataofBirth'],
+                    'placeofBirth' => $validatedData['placeofBirth'],
+                 ]);
                
                 $applicantData = $this->baseUrl->addDocument(
                     $validatedData['applicant_id'],
@@ -101,10 +110,14 @@ class IdentityController extends Controller
                     [
                         "idDocType" => "PASSPORT",
                         "country" => "GBR",
-                        "number" => "123456789",
-                        "issuedDate" => "2015-01-02",
+                        "firstName" => $validatedData['firstName'],
+                        "middleName" => $validatedData['middleName'],
+                        "lastName" => $validatedData['lastName'],
+                        "issuedDate" => $validatedData['issueddate'],
+                        "number" => $validatedData['issueddate'],
+                        "validUntil" => $validatedData['validUntil'],
                         "dob" => "2000-02-01",
-                        "placeOfBirth" => "London"
+                        "placeOfBirth" => "London",
                     ],
                 );
                 $apiResponse = json_decode($applicantData, true);

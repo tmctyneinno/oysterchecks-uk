@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('externalUserId')->nullable();
             $table->string('content')->nullable();
             $table->string('country')->nullable();
-            $table->string('documentType')->nullable();
+            $table->string('idDocType')->nullable();
+            $table->string('idDocSubType')->nullable();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->string('middleName')->nullable();

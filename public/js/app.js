@@ -6817,6 +6817,22 @@ function IdentityVerification() {
     _useState24 = _slicedToArray(_useState23, 2),
     issueddate = _useState24[0],
     setIssuedDate = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState26 = _slicedToArray(_useState25, 2),
+    validUntil = _useState26[0],
+    setValidUntil = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState28 = _slicedToArray(_useState27, 2),
+    documentNumber = _useState28[0],
+    setDocumentNumber = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState30 = _slicedToArray(_useState29, 2),
+    dataofBirth = _useState30[0],
+    setDateofBirth = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState32 = _slicedToArray(_useState31, 2),
+    placeofBirth = _useState32[0],
+    setPlaaceofBirth = _useState32[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchApplicants = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -6988,6 +7004,10 @@ function IdentityVerification() {
             formData.append('lastName', lastName);
             formData.append('middleName', middleName);
             formData.append('issueddate', issueddate);
+            formData.append('validUntil', validUntil);
+            formData.append('documentNumber', documentNumber);
+            formData.append('dataofBirth', dataofBirth);
+            formData.append('placeofBirth', placeofBirth);
             images.forEach(function (image, index) {
               formData.append("documents[".concat(index, "][file]"), image.file);
               formData.append("documents[".concat(index, "][country]"), image.country);
@@ -6996,9 +7016,9 @@ function IdentityVerification() {
             textFields.forEach(function (field, index) {
               formData.append("textFields[".concat(index, "]"), field);
             });
-            _context4.prev = 27;
+            _context4.prev = 31;
             urlIdentify = "".concat(url, "/user/identities/store");
-            _context4.next = 31;
+            _context4.next = 35;
             return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
@@ -7013,18 +7033,18 @@ function IdentityVerification() {
               setSuccessMessage('');
               console.error('Upload failed:', error);
             });
-          case 31:
-            _context4.next = 36;
+          case 35:
+            _context4.next = 40;
             break;
-          case 33:
-            _context4.prev = 33;
-            _context4.t2 = _context4["catch"](27);
+          case 37:
+            _context4.prev = 37;
+            _context4.t2 = _context4["catch"](31);
             console.error('Error uploading documents:', _context4.t2);
-          case 36:
+          case 40:
           case "end":
             return _context4.stop();
         }
-      }, _callee3, null, [[1, 13, 16, 19], [27, 33]]);
+      }, _callee3, null, [[1, 13, 16, 19], [31, 37]]);
     }));
     return function handleUpload() {
       return _ref3.apply(this, arguments);
@@ -7445,10 +7465,13 @@ function IdentityVerification() {
                                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                                           type: "date",
                                           className: "form-control",
-                                          id: "firstname",
-                                          name: "firstname",
-                                          placeholder: "Valid Until Date",
-                                          required: true
+                                          id: "issueddate",
+                                          required: true,
+                                          placeholder: "Valida Until Date",
+                                          value: validdate,
+                                          onChange: function onChange(e) {
+                                            return setValidUntil(e.target.value);
+                                          }
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                                         className: "col-md-12 mb-2",
@@ -7457,12 +7480,15 @@ function IdentityVerification() {
                                           htmlFor: "firstname",
                                           children: "Document Number"
                                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-                                          type: "text",
+                                          type: "date",
                                           className: "form-control",
-                                          id: "firstname",
-                                          name: "firstname",
+                                          id: "number",
+                                          required: true,
                                           placeholder: "Document Number",
-                                          required: true
+                                          value: documentNumber,
+                                          onChange: function onChange(e) {
+                                            return setDocumentNumber(e.target.value);
+                                          }
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                                         className: "col-md-12 mb-2",
@@ -7471,12 +7497,15 @@ function IdentityVerification() {
                                           htmlFor: "firstname",
                                           children: "Appicant date of Birth"
                                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-                                          type: "text",
+                                          type: "date",
                                           className: "form-control",
-                                          id: "firstname",
-                                          name: "firstname",
+                                          id: "dateofBirth",
+                                          required: true,
                                           placeholder: "Appicant date of Birth",
-                                          required: true
+                                          value: dataofBirth,
+                                          onChange: function onChange(e) {
+                                            return setDateofBirth(e.target.value);
+                                          }
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                                         className: "col-md-12 mb-2",
@@ -7485,12 +7514,15 @@ function IdentityVerification() {
                                           htmlFor: "firstname",
                                           children: "Appicant Place of Birth"
                                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-                                          type: "text",
+                                          type: "date",
                                           className: "form-control",
-                                          id: "firstname",
-                                          name: "firstname",
+                                          id: "placeofBirth",
+                                          required: true,
                                           placeholder: "Appicant Place of Birth",
-                                          required: true
+                                          value: dataofBirth,
+                                          onChange: function onChange(e) {
+                                            return setPlaaceofBirth(e.target.value);
+                                          }
                                         })]
                                       })]
                                     })
