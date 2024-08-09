@@ -9,6 +9,9 @@ use App\Models\IdentityVerification;
 use Illuminate\Http\Request;
 use Exception; 
 use App\Services\BAseUrl;
+use App\Models\Applicant;
+use App\Models\User;
+use App\Models\Wallet;
 
 class IdentityController extends Controller
 {
@@ -29,10 +32,65 @@ class IdentityController extends Controller
      
     }
 
-    public function showIdentityVerificationForm($slug)
+    public function getIdentityFee(Request $request){
+        $identity = $request->input('identity');
+        // $identity = 'identity';
+        $user = User::where('id', auth()->user()->id)->first();
+        $slug = Verification::where(['slug' => $identity])->first(); 
+        $wallet = Wallet::where('user_id', $user->id)->first();
+
+        return response()->json([
+            'slug' => $slug,
+            'wallet' => $wallet,
+        ]);
+    }
+   
+  
+    public function GetIdentityVerification(){
+        try{
+            $identityData = IdentityVerification::where(['user_id' => auth()->user()->id])->get();
+
+            return response()->json([
+                'code' => 200,
+                'success' => 'Applicant get successfully',
+                "identityData" =>  $identityData,
+            ]);
+        }  catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'error' => 'Failed to load applicant: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function identityDetails($imageID) {  
+        // dd($imageID);
+        $user = auth()->user();
+        $auth = User::where('id', auth()->user()->id)->first();
+        $data['slug'] = 'Identity';
+        $data['success'] = 'success';
+        $data['failed'] = 'failed';
+        $data['pending'] = 'Pending';
+        $data['verified'] = 'verified';
+        $data['user'] = $user; 
+        $identityVerificationdetails = IdentityVerification::where(['imageID' => $imageID, 'user_id' => auth()->user()->id])->first();
+        $identityVerificationData = IdentityVerification::where([ 'user_id' => auth()->user()->id])->get();
+        $data['identityVerificationdetails'] = $identityVerificationdetails;
+        $applicantID = $identityVerificationdetails->applicantId;
+        $data['applicant'] = Applicant::where(['user_id' => $auth->id, 'applicantId' => $applicantID])->first();
+       
+        $identityVerificationStatus = $this->baseUrl->getApplicantStatus($applicantID);
+        // dd($identityVerificationStatus);
+        return view('users.identity.details', compact('data', 'identityVerificationStatus', 'identityVerificationData')); 
+    }
+    
+
+    public function showIdentityVerification($slug)
     {
         $this->RedirectUser();
         $user = auth()->user();
+
+        dd($slug);
 
         $slug = Verification::where('slug', $slug)->first();
         $data['slug'] = $slug;
@@ -41,28 +99,7 @@ class IdentityController extends Controller
         return view('users.individual.identityVerify', $data);
     }
 
-    public function stores(Request $request){
-        try{
-             // Validate the request data
-            $request->validate([
-                'applicant' => 'required',
-                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size and allowed file types as needed
-                'countries.*' => 'required',
-                'documentTypes.*' => 'required',
-            ]);
-            return response()->json([
-                'code' => 200,
-                'success' => 'Applicant created successfully',
-            
-            ]);
-
-        } catch (Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'error' => 'Failed to create applicant: ' . $e->getMessage(),
-            ], 500);
-        }
-    } 
+   
     public function store(Request $request)
     {
         try{
@@ -73,55 +110,60 @@ class IdentityController extends Controller
                 'documents.*.file' => 'required|file|mimes:jpeg,png,jpg,gif',
                 'documents.*.country' => 'required|string',
                 'documents.*.documentType' => 'required|string',
-                'firstName' => 'required|string',
-                'lastName' => 'required|string',
-                'middleName' => 'required|string',
-                'issueddate' => 'required|string',
-                'validUntil' => 'required|string',
-                'documentNumber' => 'required|string',
-                'dataofBirth' => 'required|string', 
-                'placeofBirth' => 'required|string',
+                // 'firstName' => 'required|string', 
+                // 'lastName' => 'required|string', 
+                // 'middleName' => 'required|string', 
+                // 'issuedDate' => 'required|string', 
+                // 'number' => 'required|string', 
+                // 'validUntil' => 'required|string', 
+                // 'dob' => 'required|string', 
+                
             ]);
+            
     
-            foreach ($validatedData['documents'] as $document) {
-                $path = $document['file']->store('identityDocuments');
-                IdentityVerification::create([
-                    'user_id'=> auth()->id(),
-                    'applicantId' => $validatedData['applicant_id'],
-                    'content' => $path,
-                    'country' => $document['country'],
-                    'idDocType' => $document['documentType'],
-                    'idDocSubType' => 'null',
-                    'firstName' =>  $validatedData['firstName'],
-                    'lastName' =>  $validatedData['lastName'],
-                    'middleName' =>  $validatedData['middleName'],
-                    'issuedDate' =>  $validatedData['issueddate'],
-                    'validUntil' => $validatedData['validUntil'],
-                    'documentNumber' => $validatedData['validUntil'],
-                    'dataofBirth' => $validatedData['dataofBirth'],
-                    'placeofBirth' => $validatedData['placeofBirth'],
-                 ]);
-               
-                $applicantData = $this->baseUrl->addDocument(
-                    $validatedData['applicant_id'],
-                    // storage_path($path), 
-                    storage_path('app/' . $path),
-                    // storage_path('app/sumsub-logo.png'), 
-                    [
-                        "idDocType" => "PASSPORT",
-                        "country" => "GBR",
-                        "firstName" => $validatedData['firstName'],
-                        "middleName" => $validatedData['middleName'],
-                        "lastName" => $validatedData['lastName'],
-                        "issuedDate" => $validatedData['issueddate'],
-                        "number" => $validatedData['issueddate'],
-                        "validUntil" => $validatedData['validUntil'],
-                        "dob" => "2000-02-01",
-                        "placeOfBirth" => "London",
-                    ],
-                );
-                $apiResponse = json_decode($applicantData, true);
-            }
+                foreach ($validatedData['documents'] as $document) {
+                    $path = $document['file']->store('identityDocuments');
+
+                    $applicantData = $this->baseUrl->addDocument(
+                        $validatedData['applicant_id'],
+                        // storage_path($path), 
+                        storage_path('app/' . $path),
+                        // storage_path('app/sumsub-logo.png'), 
+                        [
+                            "idDocType" => "PASSPORT",
+                            "country" => "GBR",
+                            "firstName" => $validatedData['firstName'] ?? '',
+                            "lastName" => $validatedData['lastName'] ?? '',
+                            "middleName" => $validatedData['middleName'] ?? '', 
+                            "issuedDate" => $validatedData['issueddate'] ?? '',
+                            "number" => $validatedData['documentNumber'] ?? '',
+                            "validUntil" => $validatedData['validUntil'] ?? '',
+                            "dob" => $validatedData['dataofBirth'] ?? '',
+                            "placeOfBirth" => $validatedData['placeOfBirth'] ?? '',
+                        ],
+                    );
+
+                    $apiResponse = json_decode($applicantData, true);
+                    IdentityVerification::create([
+                        'user_id'=> auth()->id(),
+                        'applicantId' => $validatedData['applicant_id'],
+                        'content' => $path,
+                        'country' => $document['country'],
+                        'idDocType' => $document['documentType'],
+                        'idDocSubType' => 'null',
+                        'firstName' => $request->input('firstName'),
+                        'lastName' =>   $request->input('lastName'), 
+                        'middleName' =>    $request->input('middleName'),
+                        'issuedDate' =>   $request->input('issueddate'),
+                        'validUntil' => $request->input('validUntil'), 
+                        'docNumber' =>   $request->input('docNumber'), 
+                        'dataofBirth' => $request->input('dataofBirth'),  
+                        'placeOfBirth' => $request->input('placeOfBirth'), 
+                        'imageID' => $apiResponse,
+                        'fee' => $request->input('fee'),
+                    ]);
+                }
+            
 
             return response()->json([
                 'code' => 200,
@@ -132,23 +174,12 @@ class IdentityController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
-                'error' => 'Error: ' . $e->getMessage(),
+                // 'error' => 'Error: ' . $e->getMessage(),
+                'error' => 'The Applicant and Document field is required',
             ], 500);
         }
     }
 
-
-
-  public function identityDetails(){  
-        $user = auth()->user();
-        $data['slug'] = 'Identity';
-        $data['success'] = 'success';
-        $data['failed'] = 'failed';
-        $data['pending'] = 'Pending';
-        $data['verified'] = 'verified';
-        $data['user'] = $user; 
-        return view('users.identity.details',$data); 
-    }
 
 
     public function RedirectUser()

@@ -17,11 +17,20 @@ class VerificationSeeder extends Seeder
     {
     
         $data = [
-            ['slug' => 'address', 'name'=>'Address Verification', 'sub_name'=>'', 'sub2_name'=>'', 'report_type'=>'address', 'type'=>'address', 'fee'=>1000], 
-            ['slug' => 'adverse-media-intelligence', 'name'=>'Aml', 'sub_name'=>'', 'sub2_name'=>'', 'report_type'=>'aml', 'type'=>'aml', 'fee'=>1000], 
-            ['slug' => 'applicants', 'name'=>'Applicants', 'sub_name'=>'individual', 'sub2_name'=>'company', 'report_type'=>'Applicants', 'type'=>'applicants', 'fee'=>1000], 
-            ['slug' => 'company', 'name'=>'company', 'sub_name'=>'', 'sub2_name'=>'', 'report_type'=>'company', 'type'=>'company', 'fee'=>1000], 
-            ['slug' => 'individual', 'name'=>'individual', 'sub_name'=>'', 'sub2_name'=>'', 'report_type'=>'individual', 'type'=>'individual', 'fee'=>1000], 
+            ['slug' => 'identity', 'name'=>'Identity', 'report_type'=>'identity','fee'=>1000], 
+            ['slug' => 'pvc', 'name'=>'Permanent Voters Card', 'report_type'=>'pvc','fee'=>250], 
+            ['slug' => 'bvn', 'name'=>'Bank Verification Number', 'report_type'=>'bvn','fee'=>500], 
+            ['slug' => 'nin', 'name'=>'National Identity Number', 'report_type'=>'nin','fee'=>900], 
+            ['slug' => 'ndl', 'name'=>'Nigerian Driver\'s License', 'report_type'=>'drivers-license','fee'=>200], 
+            ['slug' => 'phone-number', 'name'=>'Phone Number', 'report_type'=>'phone-number','fee'=>500],
+            ['slug'=>'bank-account', 'name'=>'Bank Account', 'report_type'=>'bank-account','fee'=>400],
+            ['slug'=>'compare-images', 'name'=>'Compare Images', 'report_type'=>'compare-images','fee'=>400],
+            ['slug' => 'cac', 'name'=>'Company Search (CAC)', 'report_type'=>'business','fee'=>200],
+            ['slug' => 'tin', 'name'=>'Tax Identification Number', 'report_type'=>'business','fee'=>200],
+            ['slug' => 'individual-address', 'name'=>'Individual Address Verification', 'report_type'=>'address','fee'=>1000], 
+            ['slug' => 'reference-address', 'name'=>'Reference Address Verification', 'report_type'=>'address','fee'=>1000], 
+            ['slug' => 'business-address', 'name'=>'Business Address Verification', 'report_type'=>'address','fee'=>1000],
+            ['slug' => 'applicants', 'name'=>'applicants', 'report_type'=>'applicants','fee'=>0],
           ];
 
     foreach($data as $datum){

@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 export default function IdentityVerification() {
     let url = window.location.origin;
     const [applicants, setApplicants] = useState([]);
+    const [identityData, setIdentityData] = useState([]);
     const [selectedApplicant, setSelectedApplicant] = useState('');
     const [images, setImages] = useState([]);
     const [countries, setCountries] = useState([]);
@@ -12,28 +13,67 @@ export default function IdentityVerification() {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [textFields, setTextFields] = useState([]);
-    const [firstName, setFirstName] = useState('');
+    
+    const [firstName, setFirstName] = useState(null);
     const [lastName, setLastName] = useState('');
     const [middleName, setMiddleName] = useState('');
     const [issueddate, setIssuedDate] = useState('');
-    const [validUntil, setValidUntil] = useState('');
+    const [validUntilDate, setValidUntilDate] = useState('');
     const [documentNumber, setDocumentNumber] = useState('');
-    const [dataofBirth, setDateofBirth] = useState('');
-    const [placeofBirth, setPlaaceofBirth] = useState('');
-   
+    const [dataofBirth, setDataOfBirth] = useState('');
+    const [placeOfBirth, setPlaceOfBirth] = useState('');
+    const [slug, setSlug] = useState([]);
+    const [wallet, setWallet] = useState([]);
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
 
+    const handleCheckboxChange = (e) => {
+        setIsCheckboxChecked(e.target.checked);
+    };
+   
     useEffect(() => {
-        const fetchApplicants = async () => {
-            let urlGetApplicant = `${url}/user/getapplicant`;
+        const getIdentityFee = async () => {
             try {
-                const response = await axios.get(urlGetApplicant);
+                const response = await axios.get(`${url}/user/getIdentityFee`, {
+                    params: { identity: 'identity' }
+                });
+                setSlug(response.data.slug);
+                setWallet(response.data.wallet);
+            } catch (error) {
+                console.error('Error fetching getIdentityFee:', error);
+            }
+        };
+
+        const fetchApplicants = async () => {
+            try {
+                const response = await axios.get(`${url}/user/getapplicant`);
                 setApplicants(response.data.apiResponse);
             } catch (error) {
                 console.error('Error fetching applicants:', error);
             }
         };
+        const fetchIdentityVerification = async () => {
+            try {
+                const response = await axios.get(`${url}/user/identityVerification`);
+                setIdentityData(response.data.identityData);
+            } catch (error) {
+                console.error('Error fetching applicants:', error);
+            }
+        };
+        const fetchCountries = async () => {
+            try {
+                const response = await axios.get('https://restcountries.com/v3.1/all');
+                setCountries(response.data);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+            }
+        };
         fetchApplicants();
+        getIdentityFee();
+        fetchIdentityVerification();
+        fetchCountries();
     }, []);
+
 
     const handleSelectChange = (e) => {
         setSelectedApplicant(e.target.value);
@@ -51,7 +91,8 @@ export default function IdentityVerification() {
                     documentType: '',
                     name: file.name,
                     size: file.size,
-                    error: false
+                    error: false,
+                    isAddFieldDisabled: false,
                 }]);
             };
             reader.readAsDataURL(file);
@@ -65,19 +106,6 @@ export default function IdentityVerification() {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
-
-    useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                const response = await axios.get('https://restcountries.com/v3.1/all');
-                setCountries(response.data);
-            } catch (error) {
-                console.error('Error fetching countries:', error);
-            }
-        };
-
-        fetchCountries();
-    }, []);
 
     const documentTypes = [
         'ID Card', 'Passport', 'Driver\'s License', 'Residence Permit', 'Birth Certificate', 'Selfie', 'Video Selfie',
@@ -98,6 +126,10 @@ export default function IdentityVerification() {
     };
 
     const handleUpload = async () => {
+        if (!isCheckboxChecked) {
+            alert("You must acknowledge consent before uploading an image.");
+            return;
+        }
         for (const image of images) {
             if (!image.country || !image.documentType) {
                 setImages(images.map((img, index) => (
@@ -106,63 +138,56 @@ export default function IdentityVerification() {
                 return;
             }
         }
-
-        const formData = new FormData();
-        formData.append('applicant_id', selectedApplicant);
-        formData.append('firstName', firstName);
-        formData.append('lastName', lastName);
-        formData.append('middleName', middleName);
-        formData.append('issueddate', issueddate);
-        formData.append('validUntil', validUntil);
-        formData.append('documentNumber', documentNumber);
-        formData.append('dataofBirth', dataofBirth);
-        formData.append('placeofBirth', placeofBirth);
-        
+        setIsLoading(true); 
+        // Create a new FormData instance
+        const formDataToSubmit = new FormData();
+        formDataToSubmit.append('applicant_id', selectedApplicant);
+        formDataToSubmit.append('firstName', firstName);
+        formDataToSubmit.append('lastName', lastName);
+        formDataToSubmit.append('middleName', middleName);
+        formDataToSubmit.append('issueddate', issueddate);
+        formDataToSubmit.append('validUntil', validUntilDate);
+        formDataToSubmit.append('docNumber', documentNumber);
+        formDataToSubmit.append('dataofBirth', dataofBirth);
+        formDataToSubmit.append('placeOfBirth', placeOfBirth);
+        formDataToSubmit.append('fee', slug ? slug.fee : '');
+    
+        // Append data for each image inside the loop
         images.forEach((image, index) => {
-            formData.append(`documents[${index}][file]`, image.file);
-            formData.append(`documents[${index}][country]`, image.country);
-            formData.append(`documents[${index}][documentType]`, image.documentType);
+            formDataToSubmit.append(`documents[${index}][file]`, image.file);
+            formDataToSubmit.append(`documents[${index}][country]`, image.country);
+            formDataToSubmit.append(`documents[${index}][documentType]`, image.documentType);
         });
-
+    
         textFields.forEach((field, index) => {
-            formData.append(`textFields[${index}]`, field);
+            formDataToSubmit.append(`textFields[${index}]`, field);
         });
-
+    
         try {
-            let urlIdentify = `${url}/user/identities/store`;
-            await axios.post(urlIdentify, formData, {
+            const response = await axios.post(`${url}/user/identities/store`, formDataToSubmit, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-            }).then(response => {
-                setSuccessMessage(response.data.success);
-                setResponseData(response.data.apiResponse);
-                setErrorMessage('');
-                console.log('Upload successful:', response.data);
-            })
-            .catch(error => {
-                setErrorMessage(error.response.data.error);
-                setSuccessMessage('');
-                console.error('Upload failed:', error);
             });
+            setSuccessMessage(response.data.success);
+            setResponseData(response.data.apiResponse);
+            setErrorMessage('');
+            console.log('Upload successful:', response.data);
         } catch (error) {
-            console.error('Error uploading documents:', error);
+            setErrorMessage(error.response.data.error);
+            setSuccessMessage('');
+            console.error('Upload failed:', error);
+        }finally {
+            setIsLoading(false); // End loading
         }
     };
-
-   
+    
     const handleAddTextField = (index) => {
         const updatedImages = images.map((image, imgIndex) => (
-            imgIndex === index ? {  textFields: [...textFields, ''], isAddFieldDisabled: true } : image
+            imgIndex === index ? { ...image, isAddFieldDisabled: true } : image
         ));
-        setTextFields(updatedImages);
-    };
-
-    const handleTextFieldChange = (index, value) => {
-        const updatedTextFields = textFields.map((field, fieldIndex) => (
-            fieldIndex === index ? value : field
-        ));
-        setTextFields(updatedTextFields);
+        setImages(updatedImages);
+        setTextFields([...textFields, '']);
     };
 
     const handleDeleteTextField = (index) => {
@@ -170,12 +195,17 @@ export default function IdentityVerification() {
         setTextFields(updatedTextFields);
     };
 
+    const handleLearn = (e, id)=>{
+        e.preventDefault(); 
+        window.location.href =`${url}/user/identities/details/${id}`;
+    }
+
     return (
         <div>
-            <h2>Applicant Select</h2>
-            <div>
+            {/* <h2>Applicant Select</h2> */}
+            {/* <div>
                 <label htmlFor="applicantSelect">Select Applicant: {selectedApplicant}</label>
-            </div>
+            </div> */}
 
             <div className="page-content">
                 <div className="container-fluid">
@@ -339,7 +369,7 @@ export default function IdentityVerification() {
                                                                         <div className="card-body">
                                                                             <div className="row">
                                                                                 <div className="col-md-12 mb-2">
-                                                                                    <label className="form-label" htmlFor="firstname">First name</label>
+                                                                                    <label className="form-label" htmlFor="firstName">First name</label>
                                                                                     <input
                                                                                         type="text"
                                                                                         className="form-control"
@@ -395,10 +425,11 @@ export default function IdentityVerification() {
                                                                                         id="issueddate"
                                                                                         required
                                                                                         placeholder="Valida Until Date" 
-                                                                                        value={validdate}
-                                                                                        onChange={(e) => setValidUntil(e.target.value)}
+                                                                                        value={validUntilDate}
+                                                                                        onChange={(e) => setValidUntilDate(e.target.value)}
                                                                                     />
                                                                                 </div>
+                                                                                
                                                                                 <div className="col-md-12 mb-2">
                                                                                     <label className="form-label" htmlFor="firstname">Document Number</label>
                                                                                     <input
@@ -420,7 +451,7 @@ export default function IdentityVerification() {
                                                                                         required
                                                                                         placeholder="Appicant date of Birth" 
                                                                                         value={dataofBirth}
-                                                                                        onChange={(e) => setDateofBirth(e.target.value)}
+                                                                                        onChange={(e) => setDataOfBirth(e.target.value)}
                                                                                     />
                                                                                 </div>
                                                                                 <div className="col-md-12 mb-2">
@@ -431,10 +462,14 @@ export default function IdentityVerification() {
                                                                                         id="placeofBirth"
                                                                                         required
                                                                                         placeholder="Appicant Place of Birth" 
-                                                                                        value={dataofBirth}
-                                                                                        onChange={(e) => setPlaaceofBirth(e.target.value)}
+                                                                                        value={placeOfBirth}
+                                                                                        onChange={(e) => setPlaceOfBirth(e.target.value)}
                                                                                     />
                                                                                 </div>
+                                                                                <br/>
+                                                                                <button type="button" className="btn btn-danger" onClick={() => handleDeleteTextField(index)}>Delete</button>
+
+                                                                                
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -448,12 +483,43 @@ export default function IdentityVerification() {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                           
+                                            <div class="col-md-12 p-3">
+                                           
+                                                {slug && (
+                                                    <><span style={{ color: 'red', fontSize: '13px' }}> Note: You will be charged {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(slug.fee)}  for each {slug.name}</span><br /></>
+                                                )}
+                                                {wallet && (
+                                                    <> <span style={{color:'darkblue', fontSize:'13px'}}>Your wallet Balance is {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(wallet.avail_balance)} </span> <br/></>
+                                                )}
+                                               
+                                                <input
+                                                    type="checkbox"
+                                                    // checked={isCheckboxChecked}
+                                                    onChange={handleCheckboxChange}
+                                                    required
+                                                />
+
+                                                <span style={{fontSize:'11px'}}> By checking this box you acknowledge that you have gotten consent from that data subject to use their data for verification purposes on our platform in accourdance to our <a href="#"> Privacy Policy</a></span>
+                                            </div>
+                                            {/* <span class="float-center p-2"><button type="submit" class="btn btn-primary w-23">Create Candidate</button> </span> */}
+                                        </div>
 
                                         <div className="document-details" id="document-details"></div>
                                         <div id="accordionExample"></div>
                                         <div className="row mt-4">
                                             <div className="col-sm-12 d-grid">
-                                                <button style={{ backgroundColor: '#25B794', borderColor: '#25B794' }} onClick={handleUpload} className="btn btn-primary btn-lg submitbtn"> Request verification <i className="dripicons-arrow-thin-right mt-1"></i></button>
+                                                {/* <button style={{ backgroundColor: '#25B794', borderColor: '#25B794' }} onClick={handleUpload} className="btn btn-primary btn-lg submitbtn"> Create Identity Verification <i className="dripicons-arrow-thin-right mt-1"></i></button> */}
+                                                <button
+                                                    style={{ backgroundColor: '#25B794', borderColor: '#25B794' }}
+                                                    onClick={handleUpload}
+                                                    className="btn btn-primary btn-lg submitbtn"
+                                                    disabled={isLoading}
+                                                >
+                                                    {isLoading ? 'Loading...' : 'Create Identity Verification '}
+                                                    {!isLoading && <i className="dripicons-arrow-thin-right mt-1"></i>}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -471,6 +537,7 @@ export default function IdentityVerification() {
                                                                 <br/>
                                                                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
                                                                 {responseData && <div className="alert alert-info">{responseData}</div>}
+                                                                {isLoading && <p>Loading...</p>} {/* Loading indicator */}
                                                             </div>
                                                             <div className="col-auto align-self-center">
                                                                 <div className="report-main-icon bg-light-alt">
@@ -481,11 +548,11 @@ export default function IdentityVerification() {
                                                     </div>
                                                     <div> 
                                                         {errorMessage ? (
-                                                            <p>Error: {errorMessage}</p>
+                                                            <p style={{color:'red'}}> {errorMessage}</p>
                                                         ) : responseData ? (
                                                             <div>
-                                                                <h2>Identity Details {responseData}</h2>
-                                                                <a href="" className='btn btn-secondary'>
+                                                                {/* <h2>Identity Details {responseData}</h2> */}
+                                                                <a  onClick={(e)=>handleLearn(e, responseData)}  className='btn btn-secondary'>
                                                                     View Applicant Details
                                                                 </a>
                                                             </div>
@@ -502,6 +569,65 @@ export default function IdentityVerification() {
                         </div>
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="card">
+                            <div className='card-header'>
+                                <h4 class="card-title">Identity Verification Log</h4>
+                            </div>
+                            <div className="card-body">
+                                <div class="table-responsive">
+                                    <table id="datatable-buttons" class="table table-striped table-hover dt-responsive nowrap " style={{borderCollapse: 'collapse', borderSpacing: '0', width: '100%'}}>
+                                        <thead>
+                                            <tr>
+                                                <th class="px-2 py-3">S/N</th>
+                                                <th class="px-2 py-3">Inspection ID</th>
+                                                <th class="px-2 py-3">Name</th>
+                                                <th class="px-2 py-3">Review Status</th>
+                                                <th class="px-2 py-3">Type</th>
+                                                <th class="px-2 py-3">Fee</th>
+                                                <th class="px-2 py-3">Created At</th>
+                                                <th class="px-2 py-3">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {identityData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3"><td>{index + 1}</td></div></a></td>
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3">{data.applicantId}</div></a></td>
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3">{data.firstName} {data.lastName}</div></a></td>
+                                                    
+                                                    <td class="px-0 py-0">
+                                                        <div class="px-2 py-3">
+                                                            <span class="badge badge-soft-secondary">Init</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-0 py-0">
+                                                        <div class="px-2 py-3">
+                                                            <span class="badge badge-soft-secondary">Individual</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3">#20,000</div></a></td>
+                                                
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3">20 March, 2024</div></a></td>
+                                                    <td class="px-0 py-0"><a class="table-link" href=""><div class="px-2 py-3"> 
+                                                    
+                                                        <a onClick={(e)=>handleLearn(e, data.imageID)}>View Details</a>
+                                                    
+                                                        </div>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     );

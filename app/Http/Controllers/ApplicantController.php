@@ -44,6 +44,7 @@ class ApplicantController extends Controller
     public function ApplicantDetails($applicantData){
         $auth = User::where('id', auth()->user()->id)->first();
         $data['pending'] = Applicant::where(['user_id' => $auth->id, 'status'=>'pending'])->get();
+        $data['notverified'] = Applicant::where(['user_id' => $auth->id, 'status'=>'not verified'])->get();
         $data['applicant'] =  Applicant::where(['user_id' => auth()->user()->id,  ])-> get();
         $data['individuals'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'individual'])->get();
         $data['companies'] = Applicant::where(['user_id' => $auth->id, 'applicant_type' => 'company'])->get();
@@ -125,13 +126,13 @@ class ApplicantController extends Controller
             return response()->json([
                 'code' => 500,
                 'error' => 'Failed to create applicant: ' . $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
     public function GetApplicant(){
         try{
-            $applicant = Applicant::all();
+            $applicant = Applicant::where(['user_id' => auth()->user()->id])->get();
 
             return response()->json([
                 'code' => 200,

@@ -28,6 +28,8 @@ class BAseUrl
      * @throws RuntimeException
      * @return string Applicant ID
      */
+    
+    
     public function createApplicant(string $externalUserId, string $levelName, $validData): string
     {
         $requestBody = [

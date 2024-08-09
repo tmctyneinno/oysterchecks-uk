@@ -21,7 +21,7 @@ export default function CreateApplicant() {
         middlename: '',
         email: '',
         phone: '',
-        placeofbirth: '',
+        placeofbirth: '', 
         dateofbirth: '',
         country: '',
         countryofbirth: '',
@@ -63,11 +63,6 @@ export default function CreateApplicant() {
             }
         }
     };
-    
-    // const handleFormSubmit = (formData) => {
-    //     console.log("Form data submitted:", formData);
-    //     setResponseData(formData);
-    // };
 
     const handleFormSubmit = async (e) => {
         let urlApplicant = `${url}/user/applicant/store`;

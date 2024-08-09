@@ -38,7 +38,17 @@
                     <td>{{$company->phone}}</td>
                     
                     <td>  
-                        <span class="badge bg-success"> Verified</span>
+                        @if($company->status == 'found')
+                            @if($company->validations != null && json_decode($company->validations)->validationMessages != "")
+                            <span class="badge badge-soft-warning">Found</span>
+                            @else
+                            <span class="badge badge-soft-success"> Found</span> 
+                            @endif
+                            @elseif($company->status == 'not_found')
+                            <span class="badge badge-soft-danger">Not Found</span>
+                            @else
+                            <span class="badge badge-soft-purple"> {{$company->status}}</span>
+                        @endif  
                     </td>
                    
                     <td><a class="badge bg-soft-primary" href="{{ route('applicant.details', $company->applicantId ) }}"> view Details</a></td>

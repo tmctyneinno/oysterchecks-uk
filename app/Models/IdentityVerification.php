@@ -26,6 +26,8 @@ class IdentityVerification extends Model
         'docNumber',
         'dob',
         'placeOfBirth',
+        'imageID',
+        'fee',
     ];
 
    

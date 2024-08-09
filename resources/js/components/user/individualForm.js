@@ -6,20 +6,16 @@ const IndividualForm = ({ formData, onSubmit, onChange }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [countries, setCountries] = useState([]);
-    const [countriesOfbirth, sortedCountriesOfbirth] = useState([]);
+    const [countriesOfbirth, setCountriesOfbirth] = useState([]);
    
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formData);
     };
 
-
-   
-
     useEffect(() => {
         fetchCountries();
+        fetchCountriesOfbirth();
     }, []);
 
     const fetchCountries = () => {
@@ -27,9 +23,16 @@ const IndividualForm = ({ formData, onSubmit, onChange }) => {
             .then(response => response.json())
             .then(data => {
             const sortedCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
-            const sortedCountriesOfbirth = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
             setCountries(sortedCountries);
-            sortedCountriesOfbirth(sortedCountriesOfbirth);
+            })
+            .catch(error => console.error('Error fetching countries:', error));
+    };
+    const fetchCountriesOfbirth = () => {
+        fetch('https://restcountries.com/v3.1/all')
+            .then(response => response.json())
+            .then(data => {
+            const sortedCountriesOfbirth = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+            setCountriesOfbirth(sortedCountriesOfbirth);
             })
             .catch(error => console.error('Error fetching countries:', error));
     };

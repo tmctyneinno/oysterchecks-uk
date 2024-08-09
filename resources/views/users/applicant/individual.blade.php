@@ -39,7 +39,17 @@
                         <td>{{$individual->email}}</td>
                         <td>{{$individual->phone}}</td>
                         <td>  
-                            <span class="badge bg-success"> Verified</span>
+                            @if($individual->status == 'found')
+                            @if($individual->validations != null && json_decode($individual->validations)->validationMessages != "")
+                            <span class="badge badge-soft-warning">Found</span>
+                            @else
+                            <span class="badge badge-soft-success"> Found</span> 
+                            @endif
+                            @elseif($individual->status == 'not_found')
+                            <span class="badge badge-soft-danger">Not Found</span>
+                            @else
+                            <span class="badge badge-soft-purple"> {{$individual->status}}</span>
+                            @endif  
                         </td>
                         <td><a class="badge bg-soft-primary" href="{{ route('applicant.details', $individual->applicantId ) }}"> view Details</a></td>
                     </tr>

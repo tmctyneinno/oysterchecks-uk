@@ -152,6 +152,7 @@
 
                                         <span style="font-size:11px;"> By checking this box you acknowledge that you have gotten consent from that data subject to use their data for verification purposes on our platform in accourdance to our <a href="#"> Privacy Policy</a></span>
                                     </div>
+                                    
                                     <span class="float-center p-2">
                                         <button style="background-color: #25B794; border-color:#25B794" type="submit" class="btn btn-primary btn-lg w-23">Request verification <i class="dripicons-arrow-thin-right mt-1"></i></button>
 

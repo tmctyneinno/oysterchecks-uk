@@ -83,6 +83,7 @@
                                                  {{ Session::get('message') }}
                                              </span>
                                          @endif
+                                         
                                          <div class="col-md-6 p-3">
                                              <span style="color:red; font-size:11px;"> Note: You will be charged
                                                  ₦{{ number_format($slug->fee, 2) }} for each {{ $slug->name }}</span>

@@ -24,8 +24,9 @@
                     </li>
                     <hr class="hr-dashed hr-menu">
                     
-                    <li class="menu-label my-2">Applicants Onboarding</li>
+                    <li class="menu-label my-2 text-white">Applicants Onboarding</li>
                     <li>
+                     
                         @foreach ($applicants as $applicant)
                             <a class="nav-link" href="{{ route('applicant', $applicant->slug) }}">
                                 <i data-feather="user-plus" class="align-self-center menu-icon"></i>

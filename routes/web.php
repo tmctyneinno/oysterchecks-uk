@@ -68,10 +68,12 @@ Route::group(['middleware' => ['clients', 'auth']], function() {
     Route::get('/user/transactions', [HomeController::class, 'UserTransactions'])->name('user.transactions');
     Route::get('/user/activated/account', [HomeController::class, 'AccountActivate'])->name('client.AccountActivate');
 
-    //Verification
+    //Identity Verification
     Route::get('/user/identities', IdentityIndexController::class)->name('identityIndex');
-    Route::get('/user/identities/details/', [IdentityController::class, 'identityDetails'])->name('verify.details');
-    Route::get('/user/identities/check/',[IdentityController::class, 'showIdentityVerificationForm'])->name('showIdentityVerificationForm');
+    Route::get('/user/identities/details/{id}', [IdentityController::class, 'identityDetails'])->name('verify.details');
+    Route::get('/user/identityVerification', [IdentityController::class, 'GetIdentityVerification'])->name('getIdentity.Verification'); 
+    Route::get('/user/getIdentityFee', [IdentityController::class, 'getIdentityFee'])->name('applicant.getIdentityFee'); 
+    // Route::get('/user/identities/check/',[IdentityController::class, 'showIdentityVerification'])->name('showIdentityVerification');
     Route::post('/user/identities/store/',[IdentityController::class, 'store'])->name('storeIdentityVerificationForm');
 
 

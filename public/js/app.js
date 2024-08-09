@@ -6424,12 +6424,6 @@ function CreateApplicant() {
       return _ref.apply(this, arguments);
     };
   }();
-
-  // const handleFormSubmit = (formData) => {
-  //     console.log("Form data submitted:", formData);
-  //     setResponseData(formData);
-  // };
-
   var handleFormSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
       var urlApplicant, response;
@@ -6773,97 +6767,211 @@ function IdentityVerification() {
     _useState2 = _slicedToArray(_useState, 2),
     applicants = _useState2[0],
     setApplicants = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState4 = _slicedToArray(_useState3, 2),
-    selectedApplicant = _useState4[0],
-    setSelectedApplicant = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    identityData = _useState4[0],
+    setIdentityData = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    images = _useState6[0],
-    setImages = _useState6[1];
+    selectedApplicant = _useState6[0],
+    setSelectedApplicant = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState8 = _slicedToArray(_useState7, 2),
-    countries = _useState8[0],
-    setCountries = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    images = _useState8[0],
+    setImages = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState10 = _slicedToArray(_useState9, 2),
-    responseData = _useState10[0],
-    setResponseData = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    countries = _useState10[0],
+    setCountries = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    successMessage = _useState12[0],
-    setSuccessMessage = _useState12[1];
+    responseData = _useState12[0],
+    setResponseData = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    errorMessage = _useState14[0],
-    setErrorMessage = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    successMessage = _useState14[0],
+    setSuccessMessage = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    textFields = _useState16[0],
-    setTextFields = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    errorMessage = _useState16[0],
+    setErrorMessage = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState18 = _slicedToArray(_useState17, 2),
-    firstName = _useState18[0],
-    setFirstName = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    textFields = _useState18[0],
+    setTextFields = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState20 = _slicedToArray(_useState19, 2),
-    lastName = _useState20[0],
-    setLastName = _useState20[1];
+    firstName = _useState20[0],
+    setFirstName = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState22 = _slicedToArray(_useState21, 2),
-    middleName = _useState22[0],
-    setMiddleName = _useState22[1];
+    lastName = _useState22[0],
+    setLastName = _useState22[1];
   var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState24 = _slicedToArray(_useState23, 2),
-    issueddate = _useState24[0],
-    setIssuedDate = _useState24[1];
+    middleName = _useState24[0],
+    setMiddleName = _useState24[1];
   var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState26 = _slicedToArray(_useState25, 2),
-    validUntil = _useState26[0],
-    setValidUntil = _useState26[1];
+    issueddate = _useState26[0],
+    setIssuedDate = _useState26[1];
   var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState28 = _slicedToArray(_useState27, 2),
-    documentNumber = _useState28[0],
-    setDocumentNumber = _useState28[1];
+    validUntilDate = _useState28[0],
+    setValidUntilDate = _useState28[1];
   var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState30 = _slicedToArray(_useState29, 2),
-    dataofBirth = _useState30[0],
-    setDateofBirth = _useState30[1];
+    documentNumber = _useState30[0],
+    setDocumentNumber = _useState30[1];
   var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState32 = _slicedToArray(_useState31, 2),
-    placeofBirth = _useState32[0],
-    setPlaaceofBirth = _useState32[1];
+    dataofBirth = _useState32[0],
+    setDataOfBirth = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState34 = _slicedToArray(_useState33, 2),
+    placeOfBirth = _useState34[0],
+    setPlaceOfBirth = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState36 = _slicedToArray(_useState35, 2),
+    slug = _useState36[0],
+    setSlug = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState38 = _slicedToArray(_useState37, 2),
+    wallet = _useState38[0],
+    setWallet = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState40 = _slicedToArray(_useState39, 2),
+    isCheckboxChecked = _useState40[0],
+    setIsCheckboxChecked = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState42 = _slicedToArray(_useState41, 2),
+    isLoading = _useState42[0],
+    setIsLoading = _useState42[1];
+  var handleCheckboxChange = function handleCheckboxChange(e) {
+    setIsCheckboxChecked(e.target.checked);
+  };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var fetchApplicants = /*#__PURE__*/function () {
+    var getIdentityFee = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var urlGetApplicant, response;
+        var response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              urlGetApplicant = "".concat(url, "/user/getapplicant");
-              _context.prev = 1;
-              _context.next = 4;
-              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(urlGetApplicant);
-            case 4:
+              _context.prev = 0;
+              _context.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("".concat(url, "/user/getIdentityFee"), {
+                params: {
+                  identity: 'identity'
+                }
+              });
+            case 3:
               response = _context.sent;
-              setApplicants(response.data.apiResponse);
+              setSlug(response.data.slug);
+              setWallet(response.data.wallet);
               _context.next = 11;
               break;
             case 8:
               _context.prev = 8;
-              _context.t0 = _context["catch"](1);
-              console.error('Error fetching applicants:', _context.t0);
+              _context.t0 = _context["catch"](0);
+              console.error('Error fetching getIdentityFee:', _context.t0);
             case 11:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[1, 8]]);
+        }, _callee, null, [[0, 8]]);
       }));
-      return function fetchApplicants() {
+      return function getIdentityFee() {
         return _ref.apply(this, arguments);
       };
     }();
+    var fetchApplicants = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("".concat(url, "/user/getapplicant"));
+            case 3:
+              response = _context2.sent;
+              setApplicants(response.data.apiResponse);
+              _context2.next = 10;
+              break;
+            case 7:
+              _context2.prev = 7;
+              _context2.t0 = _context2["catch"](0);
+              console.error('Error fetching applicants:', _context2.t0);
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, null, [[0, 7]]);
+      }));
+      return function fetchApplicants() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    var fetchIdentityVerification = /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("".concat(url, "/user/identityVerification"));
+            case 3:
+              response = _context3.sent;
+              setIdentityData(response.data.identityData);
+              _context3.next = 10;
+              break;
+            case 7:
+              _context3.prev = 7;
+              _context3.t0 = _context3["catch"](0);
+              console.error('Error fetching applicants:', _context3.t0);
+            case 10:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3, null, [[0, 7]]);
+      }));
+      return function fetchIdentityVerification() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    var fetchCountries = /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              _context4.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get('https://restcountries.com/v3.1/all');
+            case 3:
+              response = _context4.sent;
+              setCountries(response.data);
+              _context4.next = 10;
+              break;
+            case 7:
+              _context4.prev = 7;
+              _context4.t0 = _context4["catch"](0);
+              console.error('Error fetching countries:', _context4.t0);
+            case 10:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4, null, [[0, 7]]);
+      }));
+      return function fetchCountries() {
+        return _ref4.apply(this, arguments);
+      };
+    }();
     fetchApplicants();
+    getIdentityFee();
+    fetchIdentityVerification();
+    fetchCountries();
   }, []);
   var handleSelectChange = function handleSelectChange(e) {
     setSelectedApplicant(e.target.value);
@@ -6880,7 +6988,8 @@ function IdentityVerification() {
           documentType: '',
           name: file.name,
           size: file.size,
-          error: false
+          error: false,
+          isAddFieldDisabled: false
         }]));
       };
       reader.readAsDataURL(file);
@@ -6893,37 +7002,6 @@ function IdentityVerification() {
     var i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var fetchCountries = /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var response;
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_3__["default"].get('https://restcountries.com/v3.1/all');
-            case 3:
-              response = _context2.sent;
-              setCountries(response.data);
-              _context2.next = 10;
-              break;
-            case 7:
-              _context2.prev = 7;
-              _context2.t0 = _context2["catch"](0);
-              console.error('Error fetching countries:', _context2.t0);
-            case 10:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2, null, [[0, 7]]);
-      }));
-      return function fetchCountries() {
-        return _ref2.apply(this, arguments);
-      };
-    }();
-    fetchCountries();
-  }, []);
   var documentTypes = ['ID Card', 'Passport', 'Driver\'s License', 'Residence Permit', 'Birth Certificate', 'Selfie', 'Video Selfie', 'Profile Image', 'Utility Bill', 'Vehicle Registration Certificate', 'Bank Statement', 'Employment Certificate', 'Insurance Document', 'Agreement', 'Contract', 'Income Source', 'Payment Method', 'Bank Card', 'Covid Vaccination Form', 'Other'];
   var handleDeleteImage = function handleDeleteImage(index) {
     var updatedImages = images.filter(function (_, imgIndex) {
@@ -6938,21 +7016,28 @@ function IdentityVerification() {
     setImages(updatedImages);
   };
   var handleUpload = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _iterator, _step, _loop, _ret, formData, urlIdentify;
-      return _regeneratorRuntime().wrap(function _callee3$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _iterator, _step, _loop, _ret, formDataToSubmit, response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
+            if (isCheckboxChecked) {
+              _context6.next = 3;
+              break;
+            }
+            alert("You must acknowledge consent before uploading an image.");
+            return _context6.abrupt("return");
+          case 3:
             _iterator = _createForOfIteratorHelper(images);
-            _context4.prev = 1;
+            _context6.prev = 4;
             _loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop() {
               var image;
-              return _regeneratorRuntime().wrap(function _loop$(_context3) {
-                while (1) switch (_context3.prev = _context3.next) {
+              return _regeneratorRuntime().wrap(function _loop$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
                   case 0:
                     image = _step.value;
                     if (!(!image.country || !image.documentType)) {
-                      _context3.next = 4;
+                      _context5.next = 4;
                       break;
                     }
                     setImages(images.map(function (img, index) {
@@ -6960,110 +7045,110 @@ function IdentityVerification() {
                         error: true
                       }) : img;
                     }));
-                    return _context3.abrupt("return", {
+                    return _context5.abrupt("return", {
                       v: void 0
                     });
                   case 4:
                   case "end":
-                    return _context3.stop();
+                    return _context5.stop();
                 }
               }, _loop);
             });
             _iterator.s();
-          case 4:
+          case 7:
             if ((_step = _iterator.n()).done) {
-              _context4.next = 11;
+              _context6.next = 14;
               break;
             }
-            return _context4.delegateYield(_loop(), "t0", 6);
-          case 6:
-            _ret = _context4.t0;
-            if (!_ret) {
-              _context4.next = 9;
-              break;
-            }
-            return _context4.abrupt("return", _ret.v);
+            return _context6.delegateYield(_loop(), "t0", 9);
           case 9:
-            _context4.next = 4;
+            _ret = _context6.t0;
+            if (!_ret) {
+              _context6.next = 12;
+              break;
+            }
+            return _context6.abrupt("return", _ret.v);
+          case 12:
+            _context6.next = 7;
             break;
-          case 11:
-            _context4.next = 16;
+          case 14:
+            _context6.next = 19;
             break;
-          case 13:
-            _context4.prev = 13;
-            _context4.t1 = _context4["catch"](1);
-            _iterator.e(_context4.t1);
           case 16:
-            _context4.prev = 16;
-            _iterator.f();
-            return _context4.finish(16);
+            _context6.prev = 16;
+            _context6.t1 = _context6["catch"](4);
+            _iterator.e(_context6.t1);
           case 19:
-            formData = new FormData();
-            formData.append('applicant_id', selectedApplicant);
-            formData.append('firstName', firstName);
-            formData.append('lastName', lastName);
-            formData.append('middleName', middleName);
-            formData.append('issueddate', issueddate);
-            formData.append('validUntil', validUntil);
-            formData.append('documentNumber', documentNumber);
-            formData.append('dataofBirth', dataofBirth);
-            formData.append('placeofBirth', placeofBirth);
+            _context6.prev = 19;
+            _iterator.f();
+            return _context6.finish(19);
+          case 22:
+            setIsLoading(true);
+            // Create a new FormData instance
+            formDataToSubmit = new FormData();
+            formDataToSubmit.append('applicant_id', selectedApplicant);
+            formDataToSubmit.append('firstName', firstName);
+            formDataToSubmit.append('lastName', lastName);
+            formDataToSubmit.append('middleName', middleName);
+            formDataToSubmit.append('issueddate', issueddate);
+            formDataToSubmit.append('validUntil', validUntilDate);
+            formDataToSubmit.append('docNumber', documentNumber);
+            formDataToSubmit.append('dataofBirth', dataofBirth);
+            formDataToSubmit.append('placeOfBirth', placeOfBirth);
+            formDataToSubmit.append('fee', slug ? slug.fee : '');
+
+            // Append data for each image inside the loop
             images.forEach(function (image, index) {
-              formData.append("documents[".concat(index, "][file]"), image.file);
-              formData.append("documents[".concat(index, "][country]"), image.country);
-              formData.append("documents[".concat(index, "][documentType]"), image.documentType);
+              formDataToSubmit.append("documents[".concat(index, "][file]"), image.file);
+              formDataToSubmit.append("documents[".concat(index, "][country]"), image.country);
+              formDataToSubmit.append("documents[".concat(index, "][documentType]"), image.documentType);
             });
             textFields.forEach(function (field, index) {
-              formData.append("textFields[".concat(index, "]"), field);
+              formDataToSubmit.append("textFields[".concat(index, "]"), field);
             });
-            _context4.prev = 31;
-            urlIdentify = "".concat(url, "/user/identities/store");
-            _context4.next = 35;
-            return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(urlIdentify, formData, {
+            _context6.prev = 36;
+            _context6.next = 39;
+            return axios__WEBPACK_IMPORTED_MODULE_3__["default"].post("".concat(url, "/user/identities/store"), formDataToSubmit, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               }
-            }).then(function (response) {
-              setSuccessMessage(response.data.success);
-              setResponseData(response.data.apiResponse);
-              setErrorMessage('');
-              console.log('Upload successful:', response.data);
-            })["catch"](function (error) {
-              setErrorMessage(error.response.data.error);
-              setSuccessMessage('');
-              console.error('Upload failed:', error);
             });
-          case 35:
-            _context4.next = 40;
+          case 39:
+            response = _context6.sent;
+            setSuccessMessage(response.data.success);
+            setResponseData(response.data.apiResponse);
+            setErrorMessage('');
+            console.log('Upload successful:', response.data);
+            _context6.next = 51;
             break;
-          case 37:
-            _context4.prev = 37;
-            _context4.t2 = _context4["catch"](31);
-            console.error('Error uploading documents:', _context4.t2);
-          case 40:
+          case 46:
+            _context6.prev = 46;
+            _context6.t2 = _context6["catch"](36);
+            setErrorMessage(_context6.t2.response.data.error);
+            setSuccessMessage('');
+            console.error('Upload failed:', _context6.t2);
+          case 51:
+            _context6.prev = 51;
+            setIsLoading(false); // End loading
+            return _context6.finish(51);
+          case 54:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
-      }, _callee3, null, [[1, 13, 16, 19], [31, 37]]);
+      }, _callee5, null, [[4, 16, 19, 22], [36, 46, 51, 54]]);
     }));
     return function handleUpload() {
-      return _ref3.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
   var handleAddTextField = function handleAddTextField(index) {
     var updatedImages = images.map(function (image, imgIndex) {
-      return imgIndex === index ? {
-        textFields: [].concat(_toConsumableArray(textFields), ['']),
+      return imgIndex === index ? _objectSpread(_objectSpread({}, image), {}, {
         isAddFieldDisabled: true
-      } : image;
+      }) : image;
     });
-    setTextFields(updatedImages);
-  };
-  var handleTextFieldChange = function handleTextFieldChange(index, value) {
-    var updatedTextFields = textFields.map(function (field, fieldIndex) {
-      return fieldIndex === index ? value : field;
-    });
-    setTextFields(updatedTextFields);
+    setImages(updatedImages);
+    setTextFields([].concat(_toConsumableArray(textFields), ['']));
   };
   var handleDeleteTextField = function handleDeleteTextField(index) {
     var updatedTextFields = textFields.filter(function (_, fieldIndex) {
@@ -7071,15 +7156,12 @@ function IdentityVerification() {
     });
     setTextFields(updatedTextFields);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
-      children: "Applicant Select"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
-        htmlFor: "applicantSelect",
-        children: ["Select Applicant: ", selectedApplicant]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+  var handleLearn = function handleLearn(e, id) {
+    e.preventDefault();
+    window.location.href = "".concat(url, "/user/identities/details/").concat(id);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "page-content",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "container-fluid",
@@ -7392,7 +7474,7 @@ function IdentityVerification() {
                                         className: "col-md-12 mb-2",
                                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
                                           className: "form-label",
-                                          htmlFor: "firstname",
+                                          htmlFor: "firstName",
                                           children: "First name"
                                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                                           type: "text",
@@ -7468,9 +7550,9 @@ function IdentityVerification() {
                                           id: "issueddate",
                                           required: true,
                                           placeholder: "Valida Until Date",
-                                          value: validdate,
+                                          value: validUntilDate,
                                           onChange: function onChange(e) {
-                                            return setValidUntil(e.target.value);
+                                            return setValidUntilDate(e.target.value);
                                           }
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -7504,7 +7586,7 @@ function IdentityVerification() {
                                           placeholder: "Appicant date of Birth",
                                           value: dataofBirth,
                                           onChange: function onChange(e) {
-                                            return setDateofBirth(e.target.value);
+                                            return setDataOfBirth(e.target.value);
                                           }
                                         })]
                                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -7519,11 +7601,18 @@ function IdentityVerification() {
                                           id: "placeofBirth",
                                           required: true,
                                           placeholder: "Appicant Place of Birth",
-                                          value: dataofBirth,
+                                          value: placeOfBirth,
                                           onChange: function onChange(e) {
-                                            return setPlaaceofBirth(e.target.value);
+                                            return setPlaceOfBirth(e.target.value);
                                           }
                                         })]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                                        type: "button",
+                                        className: "btn btn-danger",
+                                        onClick: function onClick() {
+                                          return handleDeleteTextField(index);
+                                        },
+                                        children: "Delete"
                                       })]
                                     })
                                   })
@@ -7532,6 +7621,48 @@ function IdentityVerification() {
                             })]
                           })
                         })
+                      })]
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                    "class": "col-md-12",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                      "class": "col-md-12 p-3",
+                      children: [slug && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+                          style: {
+                            color: 'red',
+                            fontSize: '13px'
+                          },
+                          children: [" Note: You will be charged ", new Intl.NumberFormat('en-NG', {
+                            style: 'currency',
+                            currency: 'NGN'
+                          }).format(slug.fee), "  for each ", slug.name]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {})]
+                      }), wallet && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+                        children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+                          style: {
+                            color: 'darkblue',
+                            fontSize: '13px'
+                          },
+                          children: ["Your wallet Balance is ", new Intl.NumberFormat('en-NG', {
+                            style: 'currency',
+                            currency: 'NGN'
+                          }).format(wallet.avail_balance), " "]
+                        }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {})]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                        type: "checkbox"
+                        // checked={isCheckboxChecked}
+                        ,
+                        onChange: handleCheckboxChange,
+                        required: true
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+                        style: {
+                          fontSize: '11px'
+                        },
+                        children: [" By checking this box you acknowledge that you have gotten consent from that data subject to use their data for verification purposes on our platform in accourdance to our ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                          href: "#",
+                          children: " Privacy Policy"
+                        })]
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -7550,7 +7681,8 @@ function IdentityVerification() {
                         },
                         onClick: handleUpload,
                         className: "btn btn-primary btn-lg submitbtn",
-                        children: [" Request verification ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+                        disabled: isLoading,
+                        children: [isLoading ? 'Loading...' : 'Create Identity Verification ', !isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
                           className: "dripicons-arrow-thin-right mt-1"
                         })]
                       })
@@ -7585,7 +7717,9 @@ function IdentityVerification() {
                               }), responseData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                                 className: "alert alert-info",
                                 children: responseData
-                              })]
+                              }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                                children: "Loading..."
+                              }), " "]
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                               className: "col-auto align-self-center",
                               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -7599,15 +7733,18 @@ function IdentityVerification() {
                           })
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                           children: errorMessage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-                            children: ["Error: ", errorMessage]
-                          }) : responseData ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("h2", {
-                              children: ["Identity Details ", responseData]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-                              href: "",
+                            style: {
+                              color: 'red'
+                            },
+                            children: [" ", errorMessage]
+                          }) : responseData ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                              onClick: function onClick(e) {
+                                return handleLearn(e, responseData);
+                              },
                               className: "btn btn-secondary",
                               children: "View Applicant Details"
-                            })]
+                            })
                           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {})
                         })]
                       })
@@ -7618,8 +7755,157 @@ function IdentityVerification() {
             })
           })
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: "row",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "col-lg-12",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "card",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "card-header",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
+                "class": "card-title",
+                children: "Identity Verification Log"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "card-body",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                "class": "table-responsive",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
+                  id: "datatable-buttons",
+                  "class": "table table-striped table-hover dt-responsive nowrap ",
+                  style: {
+                    borderCollapse: 'collapse',
+                    borderSpacing: '0',
+                    width: '100%'
+                  },
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("thead", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "S/N"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Inspection ID"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Name"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Review Status"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Type"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Fee"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Created At"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
+                        "class": "px-2 py-3",
+                        children: "Action"
+                      })]
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("tbody", {
+                    children: identityData.map(function (data, index) {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                              "class": "px-2 py-3",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                                children: index + 1
+                              })
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                              "class": "px-2 py-3",
+                              children: data.applicantId
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                              "class": "px-2 py-3",
+                              children: [data.firstName, " ", data.lastName]
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                            "class": "px-2 py-3",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                              "class": "badge badge-soft-secondary",
+                              children: "Init"
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                            "class": "px-2 py-3",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                              "class": "badge badge-soft-secondary",
+                              children: "Individual"
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                              "class": "px-2 py-3",
+                              children: "#20,000"
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                              "class": "px-2 py-3",
+                              children: "20 March, 2024"
+                            })
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          "class": "px-0 py-0",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            "class": "table-link",
+                            href: "",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                              "class": "px-2 py-3",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                                onClick: function onClick(e) {
+                                  return handleLearn(e, data.imageID);
+                                },
+                                children: "View Details"
+                              })
+                            })
+                          })
+                        })]
+                      }, index);
+                    })
+                  })]
+                })
+              })
+            })]
+          })
+        })
       })]
-    })]
+    })
   });
 }
 if (document.getElementById('identityVerification')) {
@@ -7671,13 +7957,14 @@ var IndividualForm = function IndividualForm(_ref) {
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState8 = _slicedToArray(_useState7, 2),
     countriesOfbirth = _useState8[0],
-    sortedCountriesOfbirth = _useState8[1];
+    setCountriesOfbirth = _useState8[1];
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
     onSubmit(formData);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetchCountries();
+    fetchCountriesOfbirth();
   }, []);
   var fetchCountries = function fetchCountries() {
     fetch('https://restcountries.com/v3.1/all').then(function (response) {
@@ -7686,11 +7973,19 @@ var IndividualForm = function IndividualForm(_ref) {
       var sortedCountries = data.sort(function (a, b) {
         return a.name.common.localeCompare(b.name.common);
       });
+      setCountries(sortedCountries);
+    })["catch"](function (error) {
+      return console.error('Error fetching countries:', error);
+    });
+  };
+  var fetchCountriesOfbirth = function fetchCountriesOfbirth() {
+    fetch('https://restcountries.com/v3.1/all').then(function (response) {
+      return response.json();
+    }).then(function (data) {
       var sortedCountriesOfbirth = data.sort(function (a, b) {
         return a.name.common.localeCompare(b.name.common);
       });
-      setCountries(sortedCountries);
-      sortedCountriesOfbirth(sortedCountriesOfbirth);
+      setCountriesOfbirth(sortedCountriesOfbirth);
     })["catch"](function (error) {
       return console.error('Error fetching countries:', error);
     });
