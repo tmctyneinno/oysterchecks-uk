@@ -16,6 +16,17 @@ return new class extends Migration
             $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('client_ref')->nullable();
+            $table->string('type')->nullable();
+            $table->string('classification')->nullable();
+            $table->string('document_side')->nullable();
+            $table->string('file_name')->nullable();
+            $table->string('download_link')->nullable();
+            $table->string('content_type')->nullable();
+            $table->string('size')->nullable();
+            $table->string('document_id')->nullable();
+            $table->string('live_photo_id')->nullable();
+            $table->string('status')->nullable();
+            $table->dateTime('updated_date')->nullable();
             $table->timestamps();
         });
     }

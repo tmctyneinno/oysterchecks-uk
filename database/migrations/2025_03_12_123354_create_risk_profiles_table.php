@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('risk_profiles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
+            $table->string('service_reference')->nullable();
+            $table->string('type')->nullable();
+            $table->string('line')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->string('fromDate')->nullable();
             $table->timestamps();
         });
     }

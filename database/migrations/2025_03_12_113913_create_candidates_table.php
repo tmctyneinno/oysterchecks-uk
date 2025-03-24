@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->nullable();
             $table->string('type')->default('person');
-            $table->string('client_ref')->nullable();
+            $table->string('service_reference')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->nullable();

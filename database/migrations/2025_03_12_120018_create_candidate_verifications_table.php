@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('candidate_id')->constrained();
             $table->foreignId('verification_id')->constrained();
-            $table->string('client_ref')->nullable();
+            $table->string('service_reference')->nullable();
             $table->string('status')->nullable();
             $table->string('is_paid')->nullable();
             $table->timestamps();

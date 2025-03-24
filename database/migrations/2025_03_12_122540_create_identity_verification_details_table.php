@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('identity_verification_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('identity_verification_id')->constrained()->onDelete('cascade');
+            $table->string('entity_name')->nullable();
+            $table->string('type')->nullable();
+            $table->string('document_id')->nullable();
+            $table->string('live_photo_id')->nullable();
+            $table->string('status')->nullable();
+            $table->longText('faceAnalysis')->nullable();
+            $table->longText('authenticityAnalysis')->nullable();
+            $table->longText('integrityAnalysis')->nullable();
             $table->timestamps();
         });
     }

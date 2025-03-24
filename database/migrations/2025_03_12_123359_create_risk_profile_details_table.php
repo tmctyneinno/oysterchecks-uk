@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('risk_profile_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
+            $table->string('service_reference')->nullable();
+            $table->string('overall')->nullable();
+            $table->string('risk')->nullable();
+            $table->longText('breakdown')->nullable();
+            $table->string('country')->nullable();
+            $table->string('political_exposure_risk')->nullable();
+            $table->string('occupation_risk')->nullable();
+            $table->string('watchlist_risk')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('bureau_checks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
+            $table->string('service_reference')->nullable();
+            $table->string('line')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

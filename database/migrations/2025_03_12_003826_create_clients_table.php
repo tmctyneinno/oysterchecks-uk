@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('country')->nullable();
             $table->string('zip_code')->nullable();
-            $table->string('client_id')->nullable();
             $table->string('company_email')->nullable();
             $table->string('client_id')->nullable();
             $table->string('user_token')->nullable();
