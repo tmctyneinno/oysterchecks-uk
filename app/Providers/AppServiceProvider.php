@@ -28,4 +28,4 @@ class AppServiceProvider extends ServiceProvider
 
         app()->bind(AuthInterface::class, AuthService::class);
     }
-}
+} 

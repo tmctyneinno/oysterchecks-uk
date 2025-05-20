@@ -1,9 +1,12 @@
-<?php 
+<?php
 
 namespace App\Interface;
 
-interface AuthInterface 
+use App\Dtos\RegisterDto; 
+
+interface AuthInterface
 {
-    public function RegisterUser($requestDto);
-    public function LoginUser($requestDto);
+    
+    public function Register($requestDto);
+    public function LoginUser($requestDto); 
 }

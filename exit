@@ -1,0 +1,3 @@
+z
+tail -n 20 storage/logs/laravel.log
+

@@ -11,18 +11,16 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+        return true;
+    } 
+ 
+   
     public function rules(): array
-    {
+    { 
         return [
-            //
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:8|max:128',
+            'remember' => 'nullable|boolean',
         ];
     }
 }
