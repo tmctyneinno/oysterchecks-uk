@@ -56,15 +56,9 @@ class AuthController extends Controller
 
         $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
 
-
         [$email, $password] = explode('oystercheck', $decrypted);
 
-        return response()->json(['email' => $email, 'password' => $password], 200);
-
-        // $detached = explode('oystercheck', $validated['c']);
-
-        // $email = base64_decode($detached[0], true);
-        // $password = base64_decode($detached[1], true);
+        // return response()->json(['email' => $email, 'password' => $password], 200);
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = User::where('email', $email)->first();
