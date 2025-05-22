@@ -46,18 +46,26 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'c' => 'required|string',
+            'iv' => 'required|string',
             't' => 'required|numeric',
         ]);
 
-        $detached = explode('oystercheck', $request->input('c'));
+        $ciphertext = base64_decode($validated['c']);
+        $iv = base64_decode($validated['iv']);
+        $key = env('AES_SECRET_KEY');
 
-        $email = base64_decode($detached[0]);
-        $password = base64_decode($detached[1]);
+        $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+
+        [$email, $password] = explode('oystercheck', $decrypted);
 
         return response()->json(['email' => $email, 'password' => $password], 200);
 
+        // $detached = explode('oystercheck', $validated['c']);
 
-        // Proceed with Laravel's auth
+        // $email = base64_decode($detached[0], true);
+        // $password = base64_decode($detached[1], true);
+
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = User::where('email', $email)->first();
             return response()->json(['token' => $user->createToken('API')->plainTextToken]);
