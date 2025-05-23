@@ -9,6 +9,7 @@ use App\Interface\AuthInterface;
 use App\Dtos\LoginDto;
 use App\Dtos\RegisterDto;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -22,17 +23,12 @@ class AuthController extends Controller
 
     public function Register(RegisterRequest $request)
     {
-        Log::info('Register method hit');
-        Log::info('Registration attempt', $request->all());
         try {
             $validatedData = $request->validated();
-            Log::info('Validated data', $validatedData);
 
             $requestDto = RegisterDto::fromRequest($validatedData);
-            Log::info('DTO created', (array) $requestDto);
 
             $result = $this->authService->Register($requestDto);
-            Log::info('Registration result', $result);
 
             return response()->json($result, 201);
         } catch (\Exception $e) {
@@ -58,52 +54,22 @@ class AuthController extends Controller
 
         [$email, $password] = explode('oystercheck', $decrypted);
 
-        // return response()->json(['email' => $email, 'password' => $password], 200);
-
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = User::where('email', $email)->first();
+            $user->last_login = Carbon::now();
+            $user->save();
             return response()->json(['token' => $user->createToken('API')->plainTextToken]);
         }
 
         return response()->json([
-            'message' => 'Invalid credentials'
+            'message' => 'Invalid credentials, try again.'
         ], 401);
     }
 
 
-
-
-
-
-
-    public function Loginxxxxx(LoginRequest $request)
+    public function profile(Request $request)
     {
-        Log::info('Login attempt', ['email' => $request->email, 'ip' => $request->ip()]);
-
-        try {
-            $validatedData = $request->validated();
-            $dto = new LoginDto(...$validatedData);
-
-            $loginResult = $this->authService->LoginUser($dto);
-
-            if (!$loginResult) {
-                Log::warning('Failed login attempt', ['email' => $request->email]);
-                return response()->json([
-                    'message' => 'Invalid credentials'
-                ], 401);
-            }
-            Log::info('User logged in', ['email' => $request->email]);
-            return response()->json([
-                'access_token' => $loginResult['access_token'],
-                'token_type' => 'Bearer',
-                'user' => $loginResult['user'],
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Login failed',
-                'error' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
-        }
+        $user = User::find($request->user()->id);
+        return response()->json($user, 200);
     }
 }

@@ -1,5 +1,7 @@
-<?php 
+<?php
+
 namespace App\Services;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Interface\AuthInterface;
@@ -11,14 +13,16 @@ class AuthService  implements AuthInterface
 
     public function Register($requestDto)
     {
-        
+
         $user = User::create([
             'name' => $requestDto->first_name . ' ' . $requestDto->last_name,
             'email' => $requestDto->email,
             'password' => Hash::make($requestDto->password),
+            'phone' => $requestDto->phone,
+            'company_name' => $requestDto->company_name,
         ]);
 
-        $user->login_ip = request()->ip(); 
+        $user->login_ip = request()->ip();
         $user->save();
 
         return [
@@ -44,7 +48,7 @@ class AuthService  implements AuthInterface
         $user = Auth::user();
         $user->login_ip = request()->ip();
         $user->save();
-        
+
         $token = $user->createToken('auth_token' . $user->id)->plainTextToken;
         Log::info('User logged in successfully.', ['user_id' => $user->id, 'email' => $user->email]);
         // return $token;
