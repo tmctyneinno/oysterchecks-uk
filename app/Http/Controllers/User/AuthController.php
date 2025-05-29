@@ -14,11 +14,64 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use App\Services\OtpService;
+use App\Services\EmailService;
 
 class AuthController extends Controller
 {
+    protected $otpService;
+    protected $emailService;
 
-    public function __construct(public readonly AuthInterface $authService) {}
+    public function __construct(public readonly AuthInterface $authService, OtpService $otpService, EmailService $emailService)
+    {
+        $this->otpService = $otpService;
+        $this->emailService = $emailService;
+    }
+
+
+
+    // sent OTP
+    public function sendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users|max:255',
+            'phone' => 'nullable|string'
+        ]);
+
+        $identifier = $request->email;
+        $otp = $this->otpService->generateOtp($identifier);
+
+        try {
+            $this->emailService->sendOtp($identifier, $otp);
+            return response()->json(['message' => 'OTP sent successfully.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error sending OTP', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Failed to send OTP.'], 500);
+        }
+    }
+
+    // verify OTP
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+            'otp_code' => 'required|string'
+        ]);
+
+        $email = $request->email;
+        $phone = $request->phone;
+        $otpCode = $request->otp_code;
+
+        if ($this->otpService->verifyOtp($email, $phone, $otpCode)) {
+            return response()->json(['message' => 'OTP verified successfully.'], 200);
+        }
+
+        return response()->json(['message' => 'Invalid or expired OTP.'], 400);
+    }
+
+
+
 
 
     public function Register(RegisterRequest $request)

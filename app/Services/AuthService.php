@@ -45,7 +45,7 @@ class AuthService  implements AuthInterface
             return null;
         }
 
-        $user = Auth::user();
+        $user = User::find(Auth::id());
         $user->login_ip = request()->ip();
         $user->save();
 
