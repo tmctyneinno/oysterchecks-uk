@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OTP_TYPE;
 use App\Models\Otp;
 use Carbon\Carbon;
 
@@ -9,9 +10,9 @@ class OtpService
 {
     protected $otpExpirationMinutes = 5; // OTP valid for 5 minutes
 
-    public function generateOtp($email, $phone = null)
+    public function generateOtp($email, $phone, OTP_TYPE $otp_type)
     {
-        // Delete any existing OTPs for this identifier
+        // Delete any existing OTPs for this email
         Otp::where('email', $email)->delete();
 
         // Generate random 6-digit OTP
@@ -22,6 +23,7 @@ class OtpService
             'email' => $email,
             'phone' => $phone,
             'otp_code' => $otpCode,
+            'otp_type' => $otp_type->value,
             'expires_at' => Carbon::now()->addMinutes($this->otpExpirationMinutes)
         ]);
 

@@ -9,13 +9,11 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailService
 {
-
-
     public function sendOtp($email, $otpCode)
     {
         $data = [
             'otp' => $otpCode,
-            'expires_at' => Carbon::now()->addMinutes(10)->format('H:i:s'),
+            'expires_at' => Carbon::now()->addMinutes(5)->format('H:i:s'),
         ];
 
         Log::info('Sending OTP email', [

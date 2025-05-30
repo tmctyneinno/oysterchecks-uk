@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Interface\AuthInterface;
 use App\Dtos\LoginDto;
 use App\Dtos\RegisterDto;
+use App\Enums\OTP_TYPE;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,11 +39,12 @@ class AuthController extends Controller
             'phone' => 'nullable|string'
         ]);
 
-        $identifier = $request->email;
-        $otp = $this->otpService->generateOtp($identifier);
+        $email = $request->email;
+        $phone = $request->phone;
+        $otp = $this->otpService->generateOtp($email, $phone, OTP_TYPE::REGISTER);
 
         try {
-            $this->emailService->sendOtp($identifier, $otp);
+            $this->emailService->sendOtp($email, $otp);
             return response()->json(['message' => 'OTP sent successfully.'], 200);
         } catch (\Exception $e) {
             Log::error('Error sending OTP', ['error' => $e->getMessage()]);
