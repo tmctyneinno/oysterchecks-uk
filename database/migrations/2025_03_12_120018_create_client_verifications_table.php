@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidate_verifications', function (Blueprint $table) {
+        Schema::create('client_verifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidate_id')->constrained();
+            $table->foreignId('client_id')->constrained();
             $table->foreignId('verification_id')->constrained();
             $table->string('service_reference')->nullable();
             $table->string('status')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidate_verifications');
+        Schema::dropIfExists('client_verifications');
     }
 };
