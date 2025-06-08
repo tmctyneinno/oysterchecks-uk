@@ -11,6 +11,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 
 require __DIR__ . '/userAuth.php';
+require __DIR__ . '/clients_verifications.php';
 Route::post('debug-test', function (Request $request) {
     return response()->json(['status' => 'logged']);
 });

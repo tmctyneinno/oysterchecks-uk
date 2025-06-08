@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'complycube' => [
+        'token' => env('COMPLY_CUBE_AUTH'),
+        'endpoint' => 'https://api.complycube.com/v1/',
+    ],
+
 ];

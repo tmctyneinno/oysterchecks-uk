@@ -106,8 +106,7 @@ class AuthController extends Controller
         $key = env('AES_SECRET_KEY');
 
         $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-       
-        return  $decrypted;
+
         [$email, $password] = explode('oystercheck', $decrypted);
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
