@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateClientRequest;
 use App\Models\Client;
 use App\Services\ComplyCubeService;
 use Carbon\Carbon;
@@ -35,9 +36,9 @@ class ClientsVerificationController extends Controller
         return response()->json(['data' =>  $clients, 'message' => 'All clients retrieved successfully.']);
     }
 
-    public function createClient(Request $request)
+    public function createClient(CreateClientRequest $request)
     {
-        $response = $this->complyCubeService->createClient($request->all());
+        $response = $this->complyCubeService->createClient($request->validated());
 
         if ($response->successful()) {
             $createdClient = $response->json();
@@ -65,7 +66,9 @@ class ClientsVerificationController extends Controller
         }
     }
 
-    public function clientDetails($id)
+    public function getVerifications(Request $request) {}
+
+    public function clientChecks($id)
     {
         // Logic to retrieve client details by ID
         return response()->json(['message' => 'Client details retrieved successfully.']);
