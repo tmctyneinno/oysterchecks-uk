@@ -25,9 +25,7 @@ class ClientsVerificationController extends Controller
 
     public function allClients(Request $request)
     {
-        $query = Client::where('service_reference', Auth::user()->id);
-
-        $clients = $query->when($request->search, function ($query) use ($request) {
+        $clients = Auth::user()->serviceClients()->when($request->search, function ($query) use ($request) {
             $query->where('first_name', 'LIKE', "%{$request->search}%")
                 ->orWhere('last_name', 'LIKE', "%{$request->search}%")
                 ->orWhere('email', 'LIKE', "%{$request->search}%");
@@ -66,7 +64,15 @@ class ClientsVerificationController extends Controller
         }
     }
 
-    public function getVerifications(Request $request) {}
+
+
+    public function clientDetails($id)
+    {
+        $client = Auth::user()->serviceClients()->find($id);
+        return response()->json($client, 200);
+    }
+
+
 
     public function clientChecks($id)
     {

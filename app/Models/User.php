@@ -43,4 +43,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function serviceClients()
+    {
+        return $this->hasMany(Client::class, 'service_reference', 'id');
+    }
 }
