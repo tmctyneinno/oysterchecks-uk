@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('aml_verification_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('aml_verification_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('aml_verification_id')->constrained()->onDelete('cascade');
+            $table->string('aml_verification_id');
+            $table->foreign('aml_verification_id')
+                ->references('service_reference')
+                ->on('aml_verification')
+                ->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('client_ref')->nullable();
             $table->string('outcome')->nullable();

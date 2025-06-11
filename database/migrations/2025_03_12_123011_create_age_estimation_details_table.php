@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('age_estimation_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('age_estimation_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('age_estimation_id')->constrained()->onDelete('cascade');
+            $table->string('age_estimation_id');
+            $table->foreign('age_estimation_id')
+                ->references('service_reference')
+                ->on('age_estimations')
+                ->onDelete('cascade');
             $table->string('entity_name')->nullable();
             $table->string('type')->nullable();
             $table->string('live_photo_id')->nullable();

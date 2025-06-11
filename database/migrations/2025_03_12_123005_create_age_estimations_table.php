@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('age_estimations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->string('client_id');
+            $table->foreign('client_id')
+                ->references('client_id')
+                ->on('clients')
+                ->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('download_link')->nullable();
             $table->string('content_type')->nullable();
@@ -24,7 +29,6 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
-
         });
     }
 

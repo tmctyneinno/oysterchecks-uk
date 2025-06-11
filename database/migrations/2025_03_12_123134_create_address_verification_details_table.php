@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('address_verification_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('address_verification_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('address_verification_id')->constrained()->onDelete('cascade');
+            $table->string('address_verification_id');
+            $table->foreign('address_verification_id')
+                ->references('service_reference')
+                ->on('address_verifications')
+                ->onDelete('cascade');
+
             $table->string('entity_name')->nullable();
             $table->string('type')->nullable();
             $table->string('document_id')->nullable();

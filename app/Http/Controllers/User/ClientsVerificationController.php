@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Constants\ChecksResources;
+use App\Models\AmlVerification;
+use App\Models\AmlVerificationDetail;
 
 // use App\Services\EmailService;
 
@@ -79,29 +81,50 @@ class ClientsVerificationController extends Controller
 
     public function clientDetails($id)
     {
-        $client = Auth::user()->serviceClients()->find($id);
+        $client = Client::find($id);
         return response()->json($client, 200);
     }
 
 
-
     public function clientChecks($id)
     {
-        // Logic to retrieve client details by ID
-        return response()->json(['message' => 'Client details retrieved successfully.']);
+        // 
     }
 
-    public function amlStandard(Request $request)
+    public function verifyAML($id, $type)
     {
-        // Logic to verify AML standard
-        // $result = $verificationService->verifyAMLStandard($request);
-        // return response()->json(['message' => 'AML Standard verification successful.', 'data' => $result]);
-    }
+        $client = Client::find($id);
 
-    public function amlExtensive(Request $request)
-    {
-        // Logic to verify AML extensive
-        // $result = $verificationService->verifyAMLExtensive($request);
-        // return response()->json(['message' => 'AML Extensive verification successful.', 'data' => $result]);
+        $data = [
+            'clientId' => $client->client_id,
+            'type' => $type, // standard_screening_check || extensive_screening_check
+            'enableMonitoring' => false,
+        ];
+
+        $response = $this->complyCubeService->verifyAML($data);
+        if ($response->successful()) {
+
+            $result = $response->json();
+
+            AmlVerification::create([
+                'client_id' => $result['clientId'],
+                'service_reference' => $result['id'],
+                'client_ref' => $id,
+                'entity_name' => $result['entityName'],
+                'type' => $result['type'],
+                'enable_monitoring' => $result['enableMonitoring'],
+                'status' => $result['status'],
+            ]);
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'Verification Successful.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Could not perform verificication, Something went wrong.'
+            ]);
+        }
     }
 }

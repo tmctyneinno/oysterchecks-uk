@@ -28,13 +28,10 @@ class ComplyCubeService
     }
 
 
-    public function verifyAMLStandard(Request $request)
+    public function verifyAML(array $data)
     {
-        return $request;
-    }
-
-    public function verifyAMLExtensive(Request $request)
-    {
-        return $request;
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'checks', $data);
     }
 }

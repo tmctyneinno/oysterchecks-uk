@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('risk_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->string('client_id');
+            $table->foreign('client_id')
+                ->references('client_id')
+                ->on('clients')
+                ->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('type')->nullable();
             $table->string('line')->nullable();

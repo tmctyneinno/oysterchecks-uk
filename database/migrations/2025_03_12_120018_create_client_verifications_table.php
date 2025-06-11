@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('client_verifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained();
+            // $table->foreignId('client_id')->constrained();
+            $table->string('client_id');
+            $table->foreign('client_id')
+                ->references('client_id')
+                ->on('clients')
+                ->onDelete('cascade');
             $table->foreignId('verification_id')->constrained();
             $table->string('service_reference')->nullable();
             $table->string('status')->nullable();

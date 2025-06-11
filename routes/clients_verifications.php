@@ -13,8 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::post('/update/{id}', [ClientsVerificationController::class, 'updateClient']);
         // Route::post('/delete/{id}', [ClientsVerificationController::class, 'deleteClient']);
 
-        Route::post('verify/aml-standard', [ClientsVerificationController::class, 'amlStandard']);
-        Route::post('verify/aml-extensive', [ClientsVerificationController::class, 'amlExtensive']);
+        Route::post('verify/aml', [ClientsVerificationController::class, 'verifyAML']);
     });
 
     Route::get('checks/all', [ClientsVerificationController::class, 'allchecks']);
