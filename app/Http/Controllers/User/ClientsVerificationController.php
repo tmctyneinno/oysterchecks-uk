@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
+use App\Constants\ChecksResources;
+
 // use App\Services\EmailService;
 
 class ClientsVerificationController extends Controller
@@ -22,6 +24,15 @@ class ClientsVerificationController extends Controller
     {
         $this->complyCubeService = $complyCubeService;
     }
+
+    public function getChecksResources()
+    {
+        return response()->json([
+            'check_types' => ChecksResources::CHECK_TYPES,
+            'document_types' => ChecksResources::DOCUMENT_TYPES
+        ]);
+    }
+
 
     public function allClients(Request $request)
     {
