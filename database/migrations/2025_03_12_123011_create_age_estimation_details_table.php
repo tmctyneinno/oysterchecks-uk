@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('age_estimation_id')->constrained()->onDelete('cascade');
             $table->string('age_estimation_id');
-            $table->foreign('age_estimation_id')
-                ->references('service_reference')
-                ->on('age_estimations')
-                ->onDelete('cascade');
+            // $table->foreign('age_estimation_id')
+            //     ->references('service_reference')
+            //     ->on('age_estimations')
+            //     ->onDelete('cascade');
             $table->string('entity_name')->nullable();
             $table->string('type')->nullable();
             $table->string('live_photo_id')->nullable();

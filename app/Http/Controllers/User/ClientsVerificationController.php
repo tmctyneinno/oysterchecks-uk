@@ -91,13 +91,13 @@ class ClientsVerificationController extends Controller
         // 
     }
 
-    public function verifyAML($id, $type)
+    public function verifyAML(Request $request)
     {
-        $client = Client::find($id);
+        $client = Client::find($request->id);
 
         $data = [
             'clientId' => $client->client_id,
-            'type' => $type, // standard_screening_check || extensive_screening_check
+            'type' => $request->type, // standard_screening_check || extensive_screening_check
             'enableMonitoring' => false,
         ];
 
@@ -106,10 +106,12 @@ class ClientsVerificationController extends Controller
 
             $result = $response->json();
 
+            Log::info($result);
+
             AmlVerification::create([
                 'client_id' => $result['clientId'],
                 'service_reference' => $result['id'],
-                'client_ref' => $id,
+                'client_ref' => $request->id,
                 'entity_name' => $result['entityName'],
                 'type' => $result['type'],
                 'enable_monitoring' => $result['enableMonitoring'],

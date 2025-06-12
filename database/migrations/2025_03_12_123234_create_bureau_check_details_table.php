@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('bureau_check_id')->constrained()->onDelete('cascade');
             $table->string('bureau_check_id');
-            $table->foreign('bureau_check_id')
-                ->references('service_reference')
-                ->on('bureau_checks')
-                ->onDelete('cascade');
+            // $table->foreign('bureau_check_id')
+            //     ->references('service_reference')
+            //     ->on('bureau_checks')
+            //     ->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('address_id')->nullable();
             $table->string('line')->nullable();

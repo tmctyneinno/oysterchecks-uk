@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('aml_verification_id')->constrained()->onDelete('cascade');
             $table->string('aml_verification_id');
-            $table->foreign('aml_verification_id')
-                ->references('service_reference')
-                ->on('aml_verification')
-                ->onDelete('cascade');
+            // $table->foreign('aml_verification_id')
+            //     ->references('service_reference')
+            //     ->on('aml_verifications')
+            //     ->onDelete('cascade');
             $table->string('service_reference')->nullable();
             $table->string('client_ref')->nullable();
             $table->string('outcome')->nullable();
