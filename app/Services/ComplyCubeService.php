@@ -2,10 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\OTP_TYPE;
-use App\Models\Otp;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class ComplyCubeService

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('telephone')->nullable();
             $table->string('dob')->nullable();
             $table->string('nationality')->nullable();
+            $table->integer('no_of_checks')->default(0);
             $table->timestamps();
         });
     }

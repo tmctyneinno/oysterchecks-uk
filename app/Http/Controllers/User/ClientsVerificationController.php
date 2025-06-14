@@ -38,14 +38,24 @@ class ClientsVerificationController extends Controller
 
     public function allClients(Request $request)
     {
-        $clients = Auth::user()->serviceClients()->when($request->search, function ($query) use ($request) {
-            $query->where('first_name', 'LIKE', "%{$request->search}%")
-                ->orWhere('last_name', 'LIKE', "%{$request->search}%")
-                ->orWhere('email', 'LIKE', "%{$request->search}%");
-        })->orderByDesc('created_at')->paginate(15);
+        $clients = Client::where('service_reference', Auth::user()->id)
+
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('first_name', 'LIKE', "%{$request->search}%")
+                    ->orWhere('last_name', 'LIKE', "%{$request->search}%")
+                    ->orWhere('email', 'LIKE', "%{$request->search}%");
+            })
+
+            ->when($request->checks, function ($query) use ($request) {
+                $query->where('no_of_checks', '>', 0);
+            })
+
+            ->orderByDesc('created_at')->paginate(15);
 
         return response()->json(['data' =>  $clients, 'message' => 'All clients retrieved successfully.']);
     }
+
+
 
     public function createClient(CreateClientRequest $request)
     {
@@ -91,13 +101,42 @@ class ClientsVerificationController extends Controller
         // 
     }
 
+
+    public function verify(Request $request)
+    {
+        $handlerMethods = [
+            'standard_screening_check' => [$this, 'verifyAML'],
+            'extensive_screening_check' => [$this, 'verifyAML'],
+            'document_check' => [$this, 'verifyDocument'],
+            'identity_check' => [$this, 'verifyIdentity'],
+            'age_estimation_check' => [$this, 'verifyAge'],
+            'proof_of_address_check' => [$this, 'verifyAddress'],
+            'multi_bureau_check' => [$this, 'verifyBureau'],
+        ];
+
+        try {
+
+            $check_type = $request->check_type;
+
+            if (isset($handlerMethods[$check_type])) {
+                return call_user_func($handlerMethods[$check_type], $request);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+
+
+
+
     public function verifyAML(Request $request)
     {
         $client = Client::find($request->id);
 
         $data = [
             'clientId' => $client->client_id,
-            'type' => $request->type, // standard_screening_check || extensive_screening_check
+            'type' => $request->check_type, // standard_screening_check || extensive_screening_check
             'enableMonitoring' => false,
         ];
 
@@ -105,8 +144,6 @@ class ClientsVerificationController extends Controller
         if ($response->successful()) {
 
             $result = $response->json();
-
-            Log::info($result);
 
             AmlVerification::create([
                 'client_id' => $result['clientId'],
