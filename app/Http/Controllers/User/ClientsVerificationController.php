@@ -155,6 +155,8 @@ class ClientsVerificationController extends Controller
                 'status' => $result['status'],
             ]);
 
+            $client->increment('no_of_checks');
+
             return response()->json([
                 'status' => 201,
                 'message' => 'Verification Successful.'
