@@ -18,6 +18,7 @@ class ClientsChecksCollectionFormat extends JsonResource
             'client' => $this->client(),
             'model' => $this->modelName(),
             'status' => $this->status,
+            'service_reference' => $this->service_reference,
             'created_at' => $this->created_at,
         ];
     }
