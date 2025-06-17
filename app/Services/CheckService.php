@@ -14,13 +14,48 @@ class CheckService
 {
 
     public const CHECK_TYPES = [
-        ['id' => 1, 'name' => 'Standard AML Screening Check', 'type' => 'standard_screening_check'],
-        ['id' => 2, 'name' => 'Extensive AML Screening Check', 'type' => 'extensive_screening_check'],
-        ['id' => 3, 'name' => 'Document Check', 'type' => 'document_check'],
-        ['id' => 4, 'name' => 'Identity Check', 'type' => 'identity_check'],
-        ['id' => 5, 'name' => 'Age Estimation Check', 'type' => 'age_estimation_check'],
-        ['id' => 6, 'name' => 'Proof of Address Check', 'type' => 'proof_of_address_check'],
-        ['id' => 7, 'name' => 'Multi-Bureau Check', 'value' => 'multi_bureau_check'],
+        [
+            'id' => 1,
+            'name' => 'Standard AML Screening Check',
+            'type' => 'standard_screening_check',
+            'fields' => []
+        ],
+        [
+            'id' => 2,
+            'name' => 'Extensive AML Screening Check',
+            'type' => 'extensive_screening_check',
+            'fields' => []
+        ],
+        [
+            'id' => 3,
+            'name' => 'Document Check',
+            'type' => 'document_check',
+            'fields' => []
+        ],
+        [
+            'id' => 4,
+            'name' => 'Identity Check',
+            'type' => 'identity_check',
+            'fields' => []
+        ],
+        [
+            'id' => 5,
+            'name' => 'Age Estimation Check',
+            'type' => 'age_estimation_check',
+            'fields' => []
+        ],
+        [
+            'id' => 6,
+            'name' => 'Proof of Address Check',
+            'type' => 'proof_of_address_check',
+            'fields' => []
+        ],
+        [
+            'id' => 7,
+            'name' => 'Multi-Bureau Check',
+            'type' => 'multi_bureau_check',
+            'fields' => ['line', 'city', 'postalCode', 'state', 'country']
+        ],
     ];
 
     public const DOCUMENT_TYPES = [

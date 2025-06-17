@@ -24,10 +24,17 @@ class ComplyCubeService
     }
 
 
-    public function verifyAML(array $data)
+    public function runCheck(array $data)
     {
         return Http::withHeaders([
             'Authorization' => $this->token,
         ])->post($this->baseUrl . 'checks', $data);
+    }
+
+    public function addAddress(array $data)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'addresses', $data);
     }
 }

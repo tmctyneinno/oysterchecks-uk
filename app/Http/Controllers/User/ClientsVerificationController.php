@@ -20,6 +20,8 @@ use App\Models\BureauCheck;
 use App\Models\DocumentVerification;
 use App\Models\IdentityVerification;
 use App\Services\CheckService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 // use App\Services\EmailService;
 
@@ -150,45 +152,158 @@ class ClientsVerificationController extends Controller
     }
 
 
-
-
-
     public function verifyAML(Request $request)
     {
-        $client = Client::find($request->id);
+        try {
+            $validated = $request->validate([
+                'clientId' => 'required|string',
+                'check_type' => 'required|string|in:standard_screening_check,extensive_screening_check',
+                'enableMonitoring' => 'sometimes|boolean'
+            ]);
 
-        $data = [
-            'clientId' => $client->client_id,
-            'type' => $request->check_type, // standard_screening_check || extensive_screening_check
-            'enableMonitoring' => false,
-        ];
+            $client = Client::where('client_id', $validated['clientId'])->first();
 
-        $response = $this->complyCubeService->verifyAML($data);
-        if ($response->successful()) {
+            $data = [
+                'clientId' => $validated['clientId'],
+                'type' => $validated['check_type'],
+                'enableMonitoring' => $validated['enableMonitoring'] ?? false,
+            ];
+
+            $response = $this->complyCubeService->runCheck($data);
+
+            if (!$response->successful()) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'AML verification failed',
+                    'errors' => $response->json()
+                ], 400);
+            }
 
             $result = $response->json();
 
-            AmlVerification::create([
-                'client_id' => $result['clientId'],
-                'service_reference' => $result['id'],
-                'client_ref' => $request->id,
-                'entity_name' => $result['entityName'],
-                'type' => $result['type'],
-                'enable_monitoring' => $result['enableMonitoring'],
-                'status' => $result['status'],
-            ]);
+            DB::transaction(function () use ($result, $client) {
+                AmlVerification::create([
+                    'client_id' => $result['clientId'],
+                    'service_reference' => $result['id'],
+                    'entity_name' => $result['entityName'],
+                    'type' => $result['type'],
+                    'enable_monitoring' => $result['enableMonitoring'],
+                    'status' => $result['status'],
+                ]);
 
-            $client->increment('no_of_checks');
+                $client->increment('no_of_checks');
+            });
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Verification Successful.'
-            ]);
-        } else {
+                'message' => 'AML verification request sent successfully',
+                'data' => $result
+            ], 201);
+        } catch (ValidationException $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Could not perform verificication, Something went wrong.'
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('AML verification failed: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'An unexpected error occurred during AML verification',
+            ], 500);
+        }
+    }
+
+
+    public function verifyBureau(Request $request)
+    {
+
+        try {
+            $validated = $request->validate([
+                'clientId' => 'required|string',
+                'line' => 'required|string',
+                'country' => 'required|string',
+                'state' => 'required|string',
+                'city' => 'required|string',
+                'check_type' => 'required|string',
+                'postalCode' => 'required|string',
             ]);
+
+            $client = Client::where('client_id', $validated['clientId'])->first();
+
+            $addressData = [
+                'clientId' => $validated['clientId'],
+                'line' => $validated['line'],
+                'city' => $validated['city'],
+                'postalCode' => $validated['postalCode'],
+                'state' => $validated['state'],
+                'country' => $validated['country'],
+            ];
+
+            $addressResponse = $this->complyCubeService->addAddress($addressData);
+
+            if (!$addressResponse->successful()) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Address verification failed',
+                    'errors' => $addressResponse->json()
+                ], 500);
+            }
+
+            $addressResult = $addressResponse->json();
+
+            $checkData = [
+                'clientId' => $addressResult['clientId'],
+                'addressId' => $addressResult['id'],
+                'firstName' => $client->first_name,
+                'lastName' => $client->last_name,
+                'dob' => $client->dob,
+                'nationalIdentityNumber' => '4564764767467',
+                'type' => $validated['check_type'],
+            ];
+
+            $checkResponse = $this->complyCubeService->runCheck($checkData);
+
+            if (!$checkResponse->successful()) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Check verification failed',
+                    'errors' => $checkResponse->json()
+                ], 500);
+            }
+
+            $result = $checkResponse->json();
+
+            DB::transaction(function () use ($result, $client) {
+                BureauCheck::create([
+                    'client_id' => $result['clientId'],
+                    'service_reference' => $result['id'],
+                    'entity_name' => $result['entityName'],
+                    'type' => $result['type'],
+                    'address_id' => $result['addressId'],
+                    'status' => $result['status'],
+                ]);
+
+                $client->increment('no_of_checks');
+            });
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'Request Sent Successfully',
+                'data' => $result
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('Bureau verification failed: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'An unexpected error occurred',
+            ], 500);
         }
     }
 }
