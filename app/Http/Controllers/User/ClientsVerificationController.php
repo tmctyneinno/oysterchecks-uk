@@ -11,10 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-use App\Constants\ChecksResources;
 use App\Http\Resources\ClientsChecksCollectionFormat;
+use App\Models\AddressVerification;
+use App\Models\AgeEstimation;
 use App\Models\AmlVerification;
 use App\Models\AmlVerificationDetail;
+use App\Models\BureauCheck;
+use App\Models\DocumentVerification;
+use App\Models\IdentityVerification;
+use App\Services\CheckService;
 
 // use App\Services\EmailService;
 
@@ -22,17 +27,19 @@ class ClientsVerificationController extends Controller
 {
 
     protected ComplyCubeService $complyCubeService;
+    protected CheckService $checkService;
 
-    public function __construct(ComplyCubeService $complyCubeService)
+    public function __construct(ComplyCubeService $complyCubeService,  CheckService $checkService)
     {
         $this->complyCubeService = $complyCubeService;
+        $this->checkService = $checkService;
     }
 
     public function getChecksResources()
     {
         return response()->json([
-            'check_types' => ChecksResources::CHECK_TYPES,
-            'document_types' => ChecksResources::DOCUMENT_TYPES
+            'check_types' => $this->checkService::CHECK_TYPES,
+            'document_types' => $this->checkService::DOCUMENT_TYPES
         ]);
     }
 
@@ -96,20 +103,24 @@ class ClientsVerificationController extends Controller
         return response()->json($client, 200);
     }
 
-
     public function checks(Request $request)
     {
-        $checks = collect()
-            ->merge(AmlVerification::where('client_id', $request->client_id)->get())
-            // ->merge(AgeCheck::where('client_id', $clientId)->get())
-            ->sortByDesc('created_at');
+        $checks = $this->checkService->clientChecksCollection($request->client_id);
 
+        // Extract unique existing_checks
+        $existing_checks = collect($checks)
+            ->pluck('type')
+            ->unique() // Remove duplicates
+            ->values() // Reset array keys
+            ->toArray();
+
+
+        // paginate collection with helper
         $paginator = paginateHelper($checks);
-
         $transformedData = ClientsChecksCollectionFormat::collection($paginator->items());
-
         $response = $paginator->toArray();
         $response['data'] = $transformedData;
+        $response['existing_checks'] = $existing_checks;
 
         return response()->json($response, 200);
     }

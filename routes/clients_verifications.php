@@ -6,15 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Route::prefix('clients')->group(function () {
-    //     Route::get('/all', [ClientsVerificationController::class, 'allClients']);
-    //     Route::post('/new', [ClientsVerificationController::class, 'createClient']);
-    //     Route::get('/{id}', [ClientsVerificationController::class, 'clientDetails']);
-    //     // Route::post('/update/{id}', [ClientsVerificationController::class, 'updateClient']);
-    //     // Route::post('/delete/{id}', [ClientsVerificationController::class, 'deleteClient']);
-    //     Route::get('/resources', [ClientsVerificationController::class, 'getChecksResources']);
-
-    // });
+    // Route::prefix('clients')->group(function () {});
 
     Route::get('checks/resources', [ClientsVerificationController::class, 'getChecksResources']);
     Route::get('checks', [ClientsVerificationController::class, 'checks']);

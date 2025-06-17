@@ -19,7 +19,6 @@ class ClientsChecksCollectionFormat extends JsonResource
             'model' => $this->modelName(),
             'status' => $this->status,
             'created_at' => $this->created_at,
-            // 'details' => $this->whenLoaded('details', $this->details)
         ];
     }
 
@@ -38,9 +37,4 @@ class ClientsChecksCollectionFormat extends JsonResource
         $client = Client::where('client_id', $this->client_id)->first();
         return  $client->name;
     }
-
-    // protected function createdAt()
-    // {
-    //     return Carbon::parse($this->created_at)->toDayDateTimeString();
-    // }
 }

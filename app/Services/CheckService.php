@@ -1,9 +1,18 @@
 <?php
 
-namespace App\Constants;
+namespace App\Services;
 
-class ChecksResources
+use App\Models\AmlVerification;
+use App\Models\DocumentVerification;
+use App\Models\IdentityVerification;
+use App\Models\AgeEstimation;
+use App\Models\AddressVerification;
+use App\Models\BureauCheck;
+use Illuminate\Http\Request;
+
+class CheckService
 {
+
     public const CHECK_TYPES = [
         ['id' => 1, 'name' => 'Standard AML Screening Check', 'type' => 'standard_screening_check'],
         ['id' => 2, 'name' => 'Extensive AML Screening Check', 'type' => 'extensive_screening_check'],
@@ -36,4 +45,17 @@ class ChecksResources
         ['id' => 19, 'name' => 'Articles of Incorporation', 'description' => 'Legal formation documents for a company'],
         ['id' => 20, 'name' => 'Power of Attorney', 'description' => 'Legal authorization to act for another person'],
     ];
+
+
+    public function clientChecksCollection($client_id)
+    {
+        return collect()
+            ->merge(AmlVerification::where('client_id', $client_id)->get())
+            ->merge(DocumentVerification::where('client_id', $client_id)->get())
+            ->merge(IdentityVerification::where('client_id', $client_id)->get())
+            ->merge(AgeEstimation::where('client_id', $client_id)->get())
+            ->merge(AddressVerification::where('client_id', $client_id)->get())
+            ->merge(BureauCheck::where('client_id', $client_id)->get())
+            ->sortByDesc('created_at');
+    }
 }
