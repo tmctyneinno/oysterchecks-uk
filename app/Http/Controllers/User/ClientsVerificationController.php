@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Constants\ChecksResources;
+use App\Http\Resources\ClientsChecksCollectionFormat;
 use App\Models\AmlVerification;
 use App\Models\AmlVerificationDetail;
 
@@ -36,7 +37,7 @@ class ClientsVerificationController extends Controller
     }
 
 
-    public function allClients(Request $request)
+    public function index(Request $request)
     {
         $clients = Client::where('service_reference', Auth::user()->id)
 
@@ -57,7 +58,7 @@ class ClientsVerificationController extends Controller
 
 
 
-    public function createClient(CreateClientRequest $request)
+    public function store(CreateClientRequest $request)
     {
         $response = $this->complyCubeService->createClient($request->validated());
 
@@ -89,21 +90,35 @@ class ClientsVerificationController extends Controller
 
 
 
-    public function clientDetails($id)
+    public function show($id)
     {
         $client = Client::find($id);
         return response()->json($client, 200);
     }
 
 
-    public function clientChecks($id)
+    public function checks(Request $request)
     {
-        // 
+        $checks = collect()
+            ->merge(AmlVerification::where('client_id', $request->client_id)->get())
+            // ->merge(AgeCheck::where('client_id', $clientId)->get())
+            ->sortByDesc('created_at');
+
+        $paginator = paginateHelper($checks);
+
+        $transformedData = ClientsChecksCollectionFormat::collection($paginator->items());
+
+        $response = $paginator->toArray();
+        $response['data'] = $transformedData;
+
+        return response()->json($response, 200);
     }
 
 
     public function verify(Request $request)
     {
+        $check_type = $request->check_type;
+
         $handlerMethods = [
             'standard_screening_check' => [$this, 'verifyAML'],
             'extensive_screening_check' => [$this, 'verifyAML'],
@@ -115,9 +130,6 @@ class ClientsVerificationController extends Controller
         ];
 
         try {
-
-            $check_type = $request->check_type;
-
             if (isset($handlerMethods[$check_type])) {
                 return call_user_func($handlerMethods[$check_type], $request);
             }
