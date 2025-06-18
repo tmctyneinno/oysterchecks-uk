@@ -260,6 +260,12 @@ class ClientsVerificationController extends Controller
                 'dob' => $client->dob,
                 'nationalIdentityNumber' => '4564764767467',
                 'type' => $validated['check_type'],
+                'line' => $validated['line'],
+                'city' => $validated['city'],
+                'postalCode' => $validated['postalCode'],
+                'state' => $validated['state'],
+                'country' => $validated['country'],
+                'propertyNumber' => '3455678890'
             ];
 
             $checkResponse = $this->complyCubeService->runCheck($checkData);

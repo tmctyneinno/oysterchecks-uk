@@ -30,7 +30,7 @@ class CheckService
             'id' => 3,
             'name' => 'Document Check',
             'type' => 'document_check',
-            'fields' => []
+            'fields' => ['issuingCountry', 'classification', 'document']
         ],
         [
             'id' => 4,
@@ -59,26 +59,38 @@ class CheckService
     ];
 
     public const DOCUMENT_TYPES = [
-        ['id' => 1,  'name' => 'Passport', 'description' => 'Government-issued international travel document'],
-        ['id' => 2,  'name' => 'National ID', 'description' => 'Government-issued identification card'],
-        ['id' => 3,  'name' => 'Driver\'s License', 'description' => 'Official permit to operate motor vehicles'],
-        ['id' => 4,  'name' => 'Birth Certificate', 'description' => 'Official record of a person\'s birth'],
-        ['id' => 5,  'name' => 'Utility Bill', 'description' => 'Proof of address (electricity, water, gas)'],
-        ['id' => 6,  'name' => 'Bank Statement', 'description' => 'Official record of account activity'],
-        ['id' => 7,  'name' => 'Tax Identification Document', 'description' => 'Official tax registration document'],
-        ['id' => 8,  'name' => 'Social Security Card', 'description' => 'Government-issued social insurance document'],
-        ['id' => 9,  'name' => 'Visa', 'description' => 'Authorization for entry/residence in a country'],
-        ['id' => 10, 'name' => 'Proof of Employment', 'description' => 'Letter or document from employer'],
-        ['id' => 11, 'name' => 'Academic Certificate', 'description' => 'Diploma or educational qualification'],
-        ['id' => 12, 'name' => 'Marriage Certificate', 'description' => 'Official record of marriage'],
-        ['id' => 13, 'name' => 'Divorce Decree', 'description' => 'Legal document dissolving a marriage'],
-        ['id' => 14, 'name' => 'Property Deed', 'description' => 'Document proving property ownership'],
-        ['id' => 15, 'name' => 'Vehicle Registration', 'description' => 'Document proving vehicle ownership'],
-        ['id' => 16, 'name' => 'Insurance Policy', 'description' => 'Contract with insurance provider'],
-        ['id' => 17, 'name' => 'Medical Records', 'description' => 'Confidential health documentation'],
-        ['id' => 18, 'name' => 'Business License', 'description' => 'Authorization to operate a business'],
-        ['id' => 19, 'name' => 'Articles of Incorporation', 'description' => 'Legal formation documents for a company'],
-        ['id' => 20, 'name' => 'Power of Attorney', 'description' => 'Legal authorization to act for another person'],
+        ['id' => 1,  'name' => 'Passport', 'value' => 'passport', 'description' => 'Government-issued international travel document'],
+        ['id' => 2,  'name' => 'Driver\'s License', 'value' => 'driving_license', 'description' => 'Official permit to operate motor vehicles'],
+        ['id' => 3,  'name' => 'National Insurance Number', 'value' => 'national_insurance_number', 'description' => 'UK social security identifier'],
+        ['id' => 4,  'name' => 'Social Security Number', 'value' => 'social_security_number', 'description' => 'US social insurance identifier'],
+        ['id' => 5,  'name' => 'Tax Identification Number', 'value' => 'tax_identification_number', 'description' => 'Official tax registration identifier'],
+        ['id' => 6,  'name' => 'Utility Bill', 'value' => 'utility_bill', 'description' => 'Proof of address (electricity, water, gas)'],
+        ['id' => 7,  'name' => 'National Identity Card', 'value' => 'national_identity_card', 'description' => 'Government-issued identification card'],
+        ['id' => 8,  'name' => 'Visa', 'value' => 'visa', 'description' => 'Authorization for entry/residence in a country'],
+        ['id' => 9,  'name' => 'Polling Card', 'value' => 'polling_card', 'description' => 'Document confirming voter registration'],
+        ['id' => 10, 'name' => 'Residence Permit', 'value' => 'residence_permit', 'description' => 'Authorization for long-term residence'],
+        ['id' => 11, 'name' => 'Birth Certificate', 'value' => 'birth_certificate', 'description' => 'Official record of a person\'s birth'],
+        ['id' => 12, 'name' => 'Bank Statement', 'value' => 'bank_statement', 'description' => 'Official record of account activity'],
+        ['id' => 13, 'name' => 'Change of Name Document', 'value' => 'change_of_name', 'description' => 'Legal proof of name change'],
+        ['id' => 14, 'name' => 'Tax Document', 'value' => 'tax_document', 'description' => 'Official tax-related record'],
+        ['id' => 15, 'name' => 'Company Confirmation Statement', 'value' => 'company_confirmation_statement', 'description' => 'UK company annual filing'],
+        ['id' => 16, 'name' => 'Company Annual Accounts', 'value' => 'company_annual_accounts', 'description' => 'Financial statements of a company'],
+        ['id' => 17, 'name' => 'Company Statement of Capital', 'value' => 'company_statement_of_capital', 'description' => 'Document outlining share capital'],
+        ['id' => 18, 'name' => 'Company Change of Address', 'value' => 'company_change_of_address', 'description' => 'Record of registered office update'],
+        ['id' => 19, 'name' => 'Company Incorporation', 'value' => 'company_incorporation', 'description' => 'Legal formation documents for a company'],
+        ['id' => 20, 'name' => 'Company Change of Officers', 'value' => 'company_change_of_officers', 'description' => 'Record of director/officer updates'],
+        ['id' => 21, 'name' => 'Company Change of Beneficial Owners', 'value' => 'company_change_of_beneficial_owners', 'description' => 'Record of ownership updates'],
+        ['id' => 22, 'name' => 'Unknown', 'value' => 'unknown', 'description' => 'Unspecified or uncategorized document'],
+        ['id' => 23, 'name' => 'Other', 'value' => 'other', 'description' => 'Document not listed above'],
+    ];
+
+    public const DOCUMENT_CLASSIFICATIONS = [
+        ['id' => 1, 'name' => 'Proof of Identity', 'value' => 'proof_of_identity', 'description' => 'Documents verifying personal identity'],
+        ['id' => 2, 'name' => 'Source of Wealth', 'value' => 'source_of_wealth', 'description' => 'Documents showing origin of assets'],
+        ['id' => 3, 'name' => 'Source of Funds', 'value' => 'source_of_funds', 'description' => 'Documents showing origin of transaction funds'],
+        ['id' => 4, 'name' => 'Proof of Address', 'value' => 'proof_of_address', 'description' => 'Documents verifying residential address'],
+        ['id' => 5, 'name' => 'Company Filing', 'value' => 'company_filing', 'description' => 'Official company registration documents'],
+        ['id' => 6, 'name' => 'Other', 'value' => 'other', 'description' => 'Uncategorized document classification'],
     ];
 
 
