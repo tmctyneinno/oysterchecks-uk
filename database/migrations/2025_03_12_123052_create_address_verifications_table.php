@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
+            $table->string('status')->nullable();
             $table->string('type')->nullable();
             $table->string('document_side')->nullable();
             $table->string('file_name')->nullable();

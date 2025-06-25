@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('line')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
+            $table->string('status')->nullable();
             $table->string('country')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();

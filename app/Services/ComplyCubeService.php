@@ -31,6 +31,14 @@ class ComplyCubeService
         ])->post($this->baseUrl . 'checks', $data);
     }
 
+
+    public function getClientAddresses(string $clientId)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->get($this->baseUrl . 'addresses?clientId=' . $clientId);
+    }
+
     public function addAddress(array $data)
     {
         return Http::withHeaders([

@@ -105,6 +105,12 @@ class ClientsVerificationController extends Controller
         return response()->json($client, 200);
     }
 
+    public function getClientAddresses($client_id)
+    {
+        $addresses = $this->complyCubeService->getClientAddresses($client_id);
+        return response()->json($addresses->json(), 200);
+    }
+
     public function checks(Request $request)
     {
         $checks = $this->checkService->clientChecksCollection($request->client_id);
@@ -227,6 +233,7 @@ class ClientsVerificationController extends Controller
                 'city' => 'required|string',
                 'check_type' => 'required|string',
                 'postalCode' => 'required|string',
+                'propertyNumber' => 'required|string',
             ]);
 
             $client = Client::where('client_id', $validated['clientId'])->first();
@@ -245,7 +252,7 @@ class ClientsVerificationController extends Controller
             if (!$addressResponse->successful()) {
                 return response()->json([
                     'status' => 500,
-                    'message' => 'Address verification failed',
+                    'message' => 'Failed to add Address',
                     'errors' => $addressResponse->json()
                 ], 500);
             }
@@ -255,18 +262,15 @@ class ClientsVerificationController extends Controller
             $checkData = [
                 'clientId' => $addressResult['clientId'],
                 'addressId' => $addressResult['id'],
-                'firstName' => $client->first_name,
-                'lastName' => $client->last_name,
-                'dob' => $client->dob,
-                'nationalIdentityNumber' => '4564764767467',
                 'type' => $validated['check_type'],
-                'line' => $validated['line'],
-                'city' => $validated['city'],
-                'postalCode' => $validated['postalCode'],
-                'state' => $validated['state'],
                 'country' => $validated['country'],
-                'propertyNumber' => '3455678890'
+                'state' => $validated['state'],
+                'city' => $validated['city'],
+                'line' => $validated['line'],
+                'propertyNumber' => $validated['propertyNumber'],
+                'postalCode' => $validated['postalCode'],
             ];
+
 
             $checkResponse = $this->complyCubeService->runCheck($checkData);
 
@@ -274,6 +278,7 @@ class ClientsVerificationController extends Controller
                 return response()->json([
                     'status' => 500,
                     'message' => 'Check verification failed',
+                    'dataSent' =>  $checkData,
                     'errors' => $checkResponse->json()
                 ], 500);
             }

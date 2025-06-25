@@ -11,5 +11,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('checks/resources', [ClientsVerificationController::class, 'getChecksResources']);
     Route::get('checks', [ClientsVerificationController::class, 'checks']);
     Route::post('client/verify', [ClientsVerificationController::class, 'verify']);
+    Route::get('client/addresses/{client_id}', [ClientsVerificationController::class, 'getClientAddresses']);
     Route::apiResource('clients', ClientsVerificationController::class);
 });

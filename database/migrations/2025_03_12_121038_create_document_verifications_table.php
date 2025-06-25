@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('download_link')->nullable();
             $table->string('content_type')->nullable();
             $table->string('size')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
