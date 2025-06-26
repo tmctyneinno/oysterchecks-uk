@@ -45,4 +45,11 @@ class ComplyCubeService
             'Authorization' => $this->token,
         ])->post($this->baseUrl . 'addresses', $data);
     }
+
+    public function deleteAddress(string $clientId)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->delete($this->baseUrl . 'addresses/' . $clientId);
+    }
 }

@@ -111,6 +111,12 @@ class ClientsVerificationController extends Controller
         return response()->json($addresses->json(), 200);
     }
 
+    public function deleteAddress($addressId)
+    {
+        $addresses = $this->complyCubeService->deleteAddress($addressId);
+        return response()->json($addresses->json(), 200);
+    }
+
     public function checks(Request $request)
     {
         $checks = $this->checkService->clientChecksCollection($request->client_id);
