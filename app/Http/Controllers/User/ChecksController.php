@@ -25,7 +25,7 @@ use Illuminate\Validation\ValidationException;
 
 // use App\Services\EmailService;
 
-class ClientsVerificationController extends Controller
+class ChecksController extends Controller
 {
 
     protected ComplyCubeService $complyCubeService;
@@ -43,78 +43,6 @@ class ClientsVerificationController extends Controller
             'check_types' => $this->checkService::CHECK_TYPES,
             'document_types' => $this->checkService::DOCUMENT_TYPES
         ]);
-    }
-
-
-    public function index(Request $request)
-    {
-        $clients = Client::where('service_reference', Auth::user()->id)
-
-            ->when($request->search, function ($query) use ($request) {
-                $query->where('first_name', 'LIKE', "%{$request->search}%")
-                    ->orWhere('last_name', 'LIKE', "%{$request->search}%")
-                    ->orWhere('email', 'LIKE', "%{$request->search}%");
-            })
-
-            ->when($request->checks, function ($query) use ($request) {
-                $query->where('no_of_checks', '>', 0);
-            })
-
-            ->orderByDesc('created_at')->paginate(15);
-
-        return response()->json(['data' =>  $clients, 'message' => 'All clients retrieved successfully.']);
-    }
-
-
-
-    public function store(CreateClientRequest $request)
-    {
-        $response = $this->complyCubeService->createClient($request->validated());
-
-        if ($response->successful()) {
-            $createdClient = $response->json();
-            $localClient = Client::create([
-                'client_id' => $createdClient['id'],
-                'telephone' => $createdClient['telephone'],
-                'email' => $createdClient['email'],
-                'type' => $createdClient['type'],
-                'service_reference' => Auth::user()->id,
-                'first_name' => $createdClient['personDetails']['firstName'],
-                'last_name' => $createdClient['personDetails']['lastName'],
-                'dob' => $createdClient['personDetails']['dob'],
-                'nationality' => $createdClient['personDetails']['nationality'],
-            ]);
-            return response()->json([
-                'status' => 201,
-                'response' => $localClient,
-                'message' => 'Client created successfully.'
-            ]);
-        } else {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Could not create client, Something went wrong.'
-            ]);
-        }
-    }
-
-
-
-    public function show($id)
-    {
-        $client = Client::find($id);
-        return response()->json($client, 200);
-    }
-
-    public function getClientAddresses($client_id)
-    {
-        $addresses = $this->complyCubeService->getClientAddresses($client_id);
-        return response()->json($addresses->json(), 200);
-    }
-
-    public function deleteAddress($addressId)
-    {
-        $addresses = $this->complyCubeService->deleteAddress($addressId);
-        return response()->json($addresses->json(), 200);
     }
 
     public function checks(Request $request)
