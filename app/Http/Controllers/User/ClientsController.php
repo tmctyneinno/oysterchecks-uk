@@ -96,16 +96,4 @@ class ClientsController extends Controller
         $client = Client::find($id);
         return response()->json($client, 200);
     }
-
-    public function getClientAddresses($client_id)
-    {
-        $addresses = $this->complyCubeService->getClientAddresses($client_id);
-        return response()->json($addresses->json(), 200);
-    }
-
-    public function deleteAddress($addressId)
-    {
-        $addresses = $this->complyCubeService->deleteAddress($addressId);
-        return response()->json($addresses->json(), 200);
-    }
 }
