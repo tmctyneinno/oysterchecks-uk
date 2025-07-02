@@ -1,22 +1,27 @@
 <?php
 
+use App\Http\Controllers\checks\AmlCheckController;
+use App\Http\Controllers\checks\DocumentCheckController;
+use App\Http\Controllers\checks\MultiBureauCheckController;
 use App\Http\Controllers\User\ClientsController;
-use App\Http\Controllers\User\ChecksController;
+use App\Http\Controllers\User\ChecksDataController;
 use App\Http\Controllers\User\ClientAddressesController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Route::prefix('clients')->group(function () {});
 
-    Route::get('checks/resources', [ChecksController::class, 'getChecksResources']);
-    Route::get('checks', [ChecksController::class, 'checks']);
-    Route::post('client/verify', [ChecksController::class, 'verify']);
+    Route::get('checks/resources', [ChecksDataController::class, 'getChecksResources']);
+    Route::get('checks', [ChecksDataController::class, 'checks']);
 
-    // Route::get('client/addresses/{client_id}', [ClientsController::class, 'getClientAddresses']);
-    // Route::delete('client/addresses/{addressId}', [ClientsController::class, 'deleteAddress']);
-    // Route::post('client/addresses', [ClientsController::class, 'newAddress']);
+    Route::prefix('client/verify')->group(function () {
+        Route::post('standard_screening_check', [AmlCheckController::class, 'verify']);
+        Route::post('extensive_screening_check', [AmlCheckController::class, 'verify']);
+        Route::post('multi_bureau_check', [MultiBureauCheckController::class, 'verify']);
+        Route::post('document_check', [DocumentCheckController::class, 'verify']);
+    });
+
 
     Route::apiResource('client/addresses', ClientAddressesController::class);
 
