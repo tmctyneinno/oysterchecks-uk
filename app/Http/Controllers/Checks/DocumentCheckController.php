@@ -16,7 +16,6 @@ use Illuminate\Validation\ValidationException;
 
 class DocumentCheckController extends Controller
 {
-
     protected ComplyCubeService $complyCubeService;
 
     public function __construct(ComplyCubeService $complyCubeService)

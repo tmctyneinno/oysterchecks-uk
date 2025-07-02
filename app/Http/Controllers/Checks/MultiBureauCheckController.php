@@ -93,18 +93,7 @@ class MultiBureauCheckController extends Controller
 
             $result = $checkResponse->json();
 
-            DB::transaction(function () use ($result, $client) {
-                BureauCheck::create([
-                    'client_id' => $result['clientId'],
-                    'service_reference' => $result['id'],
-                    'entity_name' => $result['entityName'],
-                    'type' => $result['type'],
-                    'address_id' => $result['addressId'],
-                    'status' => $result['status'],
-                ]);
-
-                $client->increment('no_of_checks');
-            });
+            $this->createLocalData($result, $client);
 
             return response()->json([
                 'status' => 201,
@@ -124,5 +113,22 @@ class MultiBureauCheckController extends Controller
                 'message' => 'An unexpected error occurred',
             ], 500);
         }
+    }
+
+
+    private function createLocalData($data, Client $client)
+    {
+        DB::transaction(function () use ($data, $client) {
+            BureauCheck::create([
+                'client_id' => $data['clientId'],
+                'service_reference' => $data['id'],
+                'entity_name' => $data['entityName'],
+                'type' => $data['type'],
+                'address_id' => $data['addressId'],
+                'status' => $data['status'],
+            ]);
+
+            $client->increment('no_of_checks');
+        });
     }
 }

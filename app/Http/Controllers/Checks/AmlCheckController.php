@@ -54,18 +54,7 @@ class AmlCheckController extends Controller
 
             $result = $response->json();
 
-            DB::transaction(function () use ($result, $client) {
-                AmlVerification::create([
-                    'client_id' => $result['clientId'],
-                    'service_reference' => $result['id'],
-                    'entity_name' => $result['entityName'],
-                    'type' => $result['type'],
-                    'enable_monitoring' => $result['enableMonitoring'],
-                    'status' => $result['status'],
-                ]);
-
-                $client->increment('no_of_checks');
-            });
+            $this->createLocalData($result, $client);
 
             return response()->json([
                 'status' => 201,
@@ -85,5 +74,22 @@ class AmlCheckController extends Controller
                 'message' => 'An unexpected error occurred during AML verification',
             ], 500);
         }
+    }
+
+
+    private function createLocalData($data, Client $client)
+    {
+        DB::transaction(function () use ($data, $client) {
+            AmlVerification::create([
+                'client_id' => $data['clientId'],
+                'service_reference' => $data['id'],
+                'entity_name' => $data['entityName'],
+                'type' => $data['type'],
+                'enable_monitoring' => $data['enableMonitoring'],
+                'status' => $data['status'],
+            ]);
+
+            $client->increment('no_of_checks');
+        });
     }
 }
