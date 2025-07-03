@@ -52,4 +52,19 @@ class ComplyCubeService
             'Authorization' => $this->token,
         ])->delete($this->baseUrl . 'addresses/' . $clientId);
     }
+
+
+    public function createDocument(array $data)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'documents', $data);
+    }
+
+    public function uploadDocumentAttachment(string $document_id, string $document_side, $data)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'documents/' . $document_id . '/' . $document_side, $data);
+    }
 }

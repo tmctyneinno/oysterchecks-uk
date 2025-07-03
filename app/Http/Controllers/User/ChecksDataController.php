@@ -26,7 +26,8 @@ class ChecksDataController extends Controller
     {
         return response()->json([
             'check_types' => $this->checkService::CHECK_TYPES,
-            'document_types' => $this->checkService::DOCUMENT_TYPES
+            'document_types' => $this->checkService::DOCUMENT_TYPES,
+            'document_classifications' => $this->checkService::DOCUMENT_CLASSIFICATIONS
         ]);
     }
 

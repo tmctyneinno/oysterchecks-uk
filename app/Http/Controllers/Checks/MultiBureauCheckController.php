@@ -31,9 +31,8 @@ class MultiBureauCheckController extends Controller
 
     public function verify(Request $request)
     {
-
         try {
-            $validated = $request->validate([
+            $validatedRequest = $request->validate([
                 'clientId' => 'required|string',
                 'line' => 'required|string',
                 'country' => 'required|string',
@@ -44,49 +43,28 @@ class MultiBureauCheckController extends Controller
                 'propertyNumber' => 'required|string',
             ]);
 
-            $client = Client::where('client_id', $validated['clientId'])->first();
+            $client = Client::where('client_id', $validatedRequest['clientId'])->first();
 
-            $addressData = [
-                'clientId' => $validated['clientId'],
-                'line' => $validated['line'],
-                'city' => $validated['city'],
-                'postalCode' => $validated['postalCode'],
-                'state' => $validated['state'],
-                'country' => $validated['country'],
-            ];
+            $newAddressResponse = $this->createAddress($validatedRequest);
 
-            $addressResponse = $this->complyCubeService->createAddress($addressData);
-
-            if (!$addressResponse->successful()) {
+            if (!$newAddressResponse->successful()) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Failed to add Address',
-                    'errors' => $addressResponse->json()
+                    'errors' => $newAddressResponse->json()
                 ], 500);
             }
 
-            $addressResult = $addressResponse->json();
-
-            $checkData = [
-                'clientId' => $addressResult['clientId'],
-                'addressId' => $addressResult['id'],
-                'type' => $validated['check_type'],
-                'country' => $validated['country'],
-                'state' => $validated['state'],
-                'city' => $validated['city'],
-                'line' => $validated['line'],
-                'propertyNumber' => $validated['propertyNumber'],
-                'postalCode' => $validated['postalCode'],
-            ];
+            $addressResult = $newAddressResponse->json();
 
 
-            $checkResponse = $this->complyCubeService->runCheck($checkData);
+            $checkResponse = $this->runCheck($addressResult, $validatedRequest,  $client);
 
             if (!$checkResponse->successful()) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Check verification failed',
-                    'dataSent' =>  $checkData,
+                    'dataSent' =>  $checkResponse->json(),
                     'errors' => $checkResponse->json()
                 ], 500);
             }
@@ -113,6 +91,43 @@ class MultiBureauCheckController extends Controller
                 'message' => 'An unexpected error occurred',
             ], 500);
         }
+    }
+
+
+
+    private function createAddress($validatedRequest)
+    {
+        $addressData = [
+            'clientId' => $validatedRequest['clientId'],
+            'line' => $validatedRequest['line'],
+            'city' => $validatedRequest['city'],
+            'postalCode' => $validatedRequest['postalCode'],
+            'state' => $validatedRequest['state'],
+            'country' => $validatedRequest['country'],
+        ];
+
+        return $this->complyCubeService->createAddress($addressData);
+    }
+
+    private function runCheck($addressResult, $validatedRequest,  Client $client)
+    {
+        $checkData = [
+            'clientId' => $addressResult['clientId'],
+            'dob' => $client->dob,
+            'addressId' => $addressResult['id'],
+            'type' => $validatedRequest['check_type'],
+            'country' => $validatedRequest['country'],
+            'state' => $validatedRequest['state'],
+            'city' => $validatedRequest['city'],
+            'line' => $validatedRequest['line'],
+            'propertyNumber' => $validatedRequest['propertyNumber'],
+            'postalCode' => $validatedRequest['postalCode'],
+        ];
+
+        Log::info('Running bureau check with data: ', $checkData);
+
+
+        return $this->complyCubeService->runCheck($checkData);
     }
 
 
