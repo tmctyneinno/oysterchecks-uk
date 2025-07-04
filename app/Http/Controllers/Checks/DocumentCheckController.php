@@ -37,13 +37,9 @@ class DocumentCheckController extends Controller
                 'type' => 'required|string',
                 'check_type' => 'required|string',
                 'documentNumber' => 'required|string',
-                'document_side' => 'required|in:front,back',
-                'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
+                'documentBack' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:4096',
             ]);
-
-
-            $client = Client::where('client_id', $validatedRequest['clientId'])->first();
-
 
             // create the Document #####################################
             $documentResponse = $this->createDocument($validatedRequest);
@@ -51,7 +47,7 @@ class DocumentCheckController extends Controller
             if (!$documentResponse->successful()) {
                 return response()->json([
                     'status' => 500,
-                    'message' => 'Failed to create client for document verification',
+                    'message' => 'Failed to create document',
                     'errors' => $documentResponse->json()
                 ], 500);
             }
@@ -59,20 +55,11 @@ class DocumentCheckController extends Controller
             $documentResult = $documentResponse->json();
             #################################################################
 
-            // Upload the document ###############################################
-            $uploadResponse = $this->uploadAttachment($documentResult['id'], $validatedRequest);
-
-            if (!$uploadResponse->successful()) {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Document could be uplaoded',
-                    'errors' => $uploadResponse->json()
-                ], 500);
+            // Upload the document (s) ###############################################
+            $this->uploadAttachment($documentResult['id'], $validatedRequest);
+            if (isset($validatedRequest['documentBack'])) {
+                $this->uploadAttachment($documentResult['id'], $validatedRequest, 'back');
             }
-
-            $uploadResult = $uploadResponse->json();
-            #################################################################
-
 
             // Run the check ###############################################
             $checkResponse = $this->runCheck($documentResult['id'], $validatedRequest);
@@ -86,16 +73,14 @@ class DocumentCheckController extends Controller
             }
 
             $checkResult = $checkResponse->json();
-            Log::info('complete');
             #################################################################
 
-            // $this->createLocalData($result, $client);
-
+            $this->createLocalData($checkResult);
 
             return response()->json([
                 'status' => 201,
                 'message' => 'Document verification request sent successfully',
-                // 'data' => $result
+                'data' => $checkResult
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -130,9 +115,9 @@ class DocumentCheckController extends Controller
     }
 
 
-    private function uploadAttachment($documentId, $validatedRequest)
+    private function uploadAttachment($documentId, $validatedRequest, $side = 'front')
     {
-        $uploadedFile = $validatedRequest['document'];
+        $uploadedFile = $side == 'front' ? $validatedRequest['document'] : $validatedRequest['documentBack'];
         $fileName = $uploadedFile->getClientOriginalName();
         $fileContents = $uploadedFile->get();
         $base64Data = base64_encode($fileContents);
@@ -142,14 +127,16 @@ class DocumentCheckController extends Controller
             'fileName' => $fileName
         ];
 
-        return $this->complyCubeService->uploadDocumentAttachment($documentId, $validatedRequest['document_side'], $uploadData);
+        Log::info('Uplaoding document attachment with data: ');
+
+        return $this->complyCubeService->uploadDocumentAttachment($documentId, $side, $uploadData);
     }
 
-    private function runCheck($documentId, $validatedRequestRequest)
+    private function runCheck($documentId, $validatedRequest)
     {
         $checkData = [
-            'clientId' => $validatedRequestRequest['clientId'],
-            'type' => $validatedRequestRequest['check_type'],
+            'clientId' => $validatedRequest['clientId'],
+            'type' => $validatedRequest['check_type'],
             'documentId' => $documentId,
         ];
 
@@ -159,15 +146,16 @@ class DocumentCheckController extends Controller
         return $this->complyCubeService->runCheck($checkData);
     }
 
-    private function createLocalData($data, Client $client)
+    private function createLocalData($data,)
     {
-        DB::transaction(function () use ($data, $client) {
+        DB::transaction(function () use ($data) {
+            $client = Client::where('client_id', $data['clientId'])->first();
+
             DocumentVerification::create([
                 'client_id' => $data['clientId'],
                 'service_reference' => $data['id'],
-                'entity_name' => $data['entityName'],
                 'type' => $data['type'],
-                'address_id' => $data['addressId'],
+                'documentId' => $data['documentId'],
                 'status' => $data['status'],
             ]);
 

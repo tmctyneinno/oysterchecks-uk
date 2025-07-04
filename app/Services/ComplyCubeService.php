@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ComplyCubeService
 {
@@ -63,8 +64,10 @@ class ComplyCubeService
 
     public function uploadDocumentAttachment(string $document_id, string $document_side, $data)
     {
+        $url = $this->baseUrl . 'documents/' . $document_id . '/upload/' . $document_side;
+        Log::info('Uploading document attachment to URL: ' . $url);
         return Http::withHeaders([
             'Authorization' => $this->token,
-        ])->post($this->baseUrl . 'documents/' . $document_id . '/' . $document_side, $data);
+        ])->post($url, $data);
     }
 }
