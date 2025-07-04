@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\DocumentVerification;
+use App\Models\IdentityVerification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 // use App\Services\EmailService;
 
-class DocumentCheckController extends Controller
+class IdentityCheckController extends Controller
 {
     protected ComplyCubeService $complyCubeService;
 
@@ -36,7 +37,7 @@ class DocumentCheckController extends Controller
                 'check_type' => 'required|string',
                 'documentNumber' => 'required|string',
                 'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
-                'documentBack' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:4096',
+                'livePhoto' => 'required|file|mimes:jpg,jpeg,png|max:4096',
             ]);
 
             // create the Document #####################################
@@ -53,14 +54,27 @@ class DocumentCheckController extends Controller
             $documentResult = $documentResponse->json();
             #################################################################
 
-            // Upload the document (s) ###############################################
+            // Upload the document ###############################################
             $this->uploadAttachment($documentResult['id'], $validatedRequest);
-            if (isset($validatedRequest['documentBack'])) {
-                $this->uploadAttachment($documentResult['id'], $validatedRequest, 'back');
+            // ##################################################################
+
+            // Upload the livePhoto ###############################################
+            $livePhotoResponse = $this->uploadLivePhoto($validatedRequest);
+            // ##################################################################
+
+
+            if (!$livePhotoResponse->successful()) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Failed to upload live photo',
+                    'errors' => $livePhotoResponse->json()
+                ], 500);
             }
 
+            $livePhotoResult = $livePhotoResponse->json();
+
             // Run the check ###############################################
-            $checkResponse = $this->runCheck($documentResult['id'], $validatedRequest);
+            $checkResponse = $this->runCheck($documentResult['id'], $livePhotoResult['id'], $validatedRequest);
 
             if (!$checkResponse->successful()) {
                 return response()->json([
@@ -125,17 +139,35 @@ class DocumentCheckController extends Controller
             'fileName' => $fileName
         ];
 
-        Log::info('Uplaoding document attachment with data: ');
+        Log::info('Uplaoding document attachment with data: ',  ['fileName' => $fileName]);
 
         return $this->complyCubeService->uploadDocumentAttachment($documentId, $side, $uploadData);
     }
 
-    private function runCheck($documentId, $validatedRequest)
+    private function uploadLivePhoto($validatedRequest)
+    {
+        $livePhoto = $validatedRequest['livePhoto'];
+        $fileContents = $livePhoto->get();
+        $base64Data = base64_encode($fileContents);
+
+        $uploadData = [
+            'data' => $base64Data,
+            'clientId' => $validatedRequest['clientId'],
+            'performLivenessCheck' => true,
+        ];
+
+        Log::info('Uploading live photo... for clientId: ' . $validatedRequest['clientId']);
+
+        return $this->complyCubeService->createLivePhoto($uploadData);
+    }
+
+    private function runCheck($documentId, $livePhotoId, $validatedRequest)
     {
         $checkData = [
             'clientId' => $validatedRequest['clientId'],
             'type' => $validatedRequest['check_type'],
             'documentId' => $documentId,
+            'livePhotoId' => $livePhotoId,
         ];
 
         Log::info('Running document check with data: ', $checkData);
@@ -149,11 +181,12 @@ class DocumentCheckController extends Controller
         DB::transaction(function () use ($data) {
             $client = Client::where('client_id', $data['clientId'])->first();
 
-            DocumentVerification::create([
+            IdentityVerification::create([
                 'client_id' => $data['clientId'],
                 'service_reference' => $data['id'],
                 'type' => $data['type'],
                 'documentId' => $data['documentId'],
+                'livePhotoId' => $data['livePhotoId'],
                 'status' => $data['status'],
             ]);
 

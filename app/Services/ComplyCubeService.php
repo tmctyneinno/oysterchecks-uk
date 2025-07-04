@@ -70,4 +70,12 @@ class ComplyCubeService
             'Authorization' => $this->token,
         ])->post($url, $data);
     }
+
+
+    public function createLivePhoto(array $data)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'livePhotos', $data);
+    }
 }
