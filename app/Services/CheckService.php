@@ -18,42 +18,55 @@ class CheckService
             'id' => 1,
             'name' => 'Standard AML Screening Check',
             'type' => 'standard_screening_check',
+            'description' => 'Screen clients against Sanctions & Watchlists, PEP, and Adverse Media database.',
             'fields' => []
         ],
         [
             'id' => 2,
             'name' => 'Extensive AML Screening Check',
             'type' => 'extensive_screening_check',
+            'description' => 'Screen clients against Sanctions & Watchlists, PEP, and Adverse Media database.',
             'fields' => []
         ],
         [
             'id' => 3,
             'name' => 'Document Check',
             'type' => 'document_check',
+            'description' => "Verify your clients' ID documents to extract details and confirm their authenticity.",
             'fields' => ['issuingCountry', 'classification', 'document']
         ],
         [
             'id' => 4,
             'name' => 'Identity Check',
             'type' => 'identity_check',
+            'description' => "Ensure that your clients are who they say they are through our liveness solution.",
             'fields' => []
         ],
-        [
-            'id' => 5,
-            'name' => 'Age Estimation Check',
-            'type' => 'age_estimation_check',
-            'fields' => []
-        ],
+        // [
+        //     'id' => 5,
+        //     'name' => 'Enhanced Identity Check',
+        //     'type' => 'enhanced_identity_check',
+        //     'fields' => []
+        // ],
         [
             'id' => 6,
-            'name' => 'Proof of Address Check',
-            'type' => 'proof_of_address_check',
+            'name' => 'Age Estimation Check',
+            'type' => 'age_estimation_check',
+            'description' => "Effortlessly estimate your client's age by analyzing their selfie.",
             'fields' => []
         ],
         [
             'id' => 7,
+            'name' => 'Proof of Address Check',
+            'type' => 'proof_of_address_check',
+            'description' => "Extracts data from proof of address documents and verifies them against your client details.",
+            'fields' => []
+        ],
+        [
+            'id' => 8,
             'name' => 'Multi-Bureau Check',
             'type' => 'multi_bureau_check',
+            'description' => "Verify client identity and address details against trusted sources, such as government and credit bureaus.",
             'fields' => ['line', 'city', 'postalCode', 'state', 'country']
         ],
     ];
