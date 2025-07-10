@@ -31,6 +31,15 @@ class ChecksDataController extends Controller
         ]);
     }
 
+    public function getCheckResult($service_reference)
+    {
+        $result = $this->complyCubeService->getCheckResult($service_reference);
+        $data = null;
+        if ($result->successful()) $data = $result->json();
+
+        return response()->json($data, 200);
+    }
+
     public function checks(Request $request)
     {
         $checks = $this->checkService->clientChecksCollection($request->client_id);

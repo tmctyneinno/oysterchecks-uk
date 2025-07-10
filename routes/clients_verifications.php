@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('checks/resources', [ChecksDataController::class, 'getChecksResources']);
+    Route::get('check/result/{service_reference}', [ChecksDataController::class, 'getCheckResult']);
     Route::get('checks', [ChecksDataController::class, 'checks']);
 
     Route::prefix('client/verify')->group(function () {
