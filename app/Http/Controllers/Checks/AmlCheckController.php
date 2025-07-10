@@ -54,7 +54,7 @@ class AmlCheckController extends Controller
 
             $result = $response->json();
 
-            $this->createLocalData($result, $client);
+            $this->storeLocalData($result, $client);
 
             return response()->json([
                 'status' => 201,
@@ -77,7 +77,7 @@ class AmlCheckController extends Controller
     }
 
 
-    private function createLocalData($data, Client $client)
+    private function storeLocalData($data, Client $client)
     {
         DB::transaction(function () use ($data, $client) {
             AmlVerification::create([

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\checks;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateClientRequest;
 use App\Models\Client;
 use App\Services\ComplyCubeService;
 use Carbon\Carbon;
@@ -11,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\AmlVerification;
 use App\Models\BureauCheck;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -71,7 +69,7 @@ class MultiBureauCheckController extends Controller
 
             $result = $checkResponse->json();
 
-            $this->createLocalData($result, $client);
+            $this->storeLocalData($result, $client);
 
             return response()->json([
                 'status' => 201,
@@ -132,7 +130,7 @@ class MultiBureauCheckController extends Controller
     }
 
 
-    private function createLocalData($data, Client $client)
+    private function storeLocalData($data, Client $client)
     {
         DB::transaction(function () use ($data, $client) {
             BureauCheck::create([

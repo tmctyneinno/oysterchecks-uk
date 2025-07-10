@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('type')->nullable();
             $table->string('document_side')->nullable();
+            $table->string('documentId')->nullable();
             $table->string('file_name')->nullable();
             $table->string('download_link')->nullable();
             $table->string('content_type')->nullable();

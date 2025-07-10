@@ -73,7 +73,7 @@ class DocumentCheckController extends Controller
             $checkResult = $checkResponse->json();
             #################################################################
 
-            $this->createLocalData($checkResult);
+            $this->storeLocalData($checkResult);
 
             return response()->json([
                 'status' => 201,
@@ -144,7 +144,7 @@ class DocumentCheckController extends Controller
         return $this->complyCubeService->runCheck($checkData);
     }
 
-    private function createLocalData($data,)
+    private function storeLocalData($data,)
     {
         DB::transaction(function () use ($data) {
             $client = Client::where('client_id', $data['clientId'])->first();

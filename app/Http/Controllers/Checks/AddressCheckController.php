@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\checks;
 
 use App\Http\Controllers\Controller;
+use App\Models\AddressVerification;
 use App\Models\Client;
 use App\Services\ComplyCubeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\DocumentVerification;
-use App\Models\ProofOfAddressCheck;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 // use App\Services\EmailService;
 
-class ProofOfAddressCheckController extends Controller
+class AddressCheckController extends Controller
 {
     protected ComplyCubeService $complyCubeService;
 
@@ -70,7 +69,7 @@ class ProofOfAddressCheckController extends Controller
             $checkResult = $checkResponse->json();
             #################################################################
 
-            $this->createLocalData($checkResult);
+            $this->storeLocalData($checkResult);
 
             return response()->json([
                 'status' => 201,
@@ -141,12 +140,12 @@ class ProofOfAddressCheckController extends Controller
         return $this->complyCubeService->runCheck($checkData);
     }
 
-    private function createLocalData($data,)
+    private function storeLocalData($data,)
     {
         DB::transaction(function () use ($data) {
             $client = Client::where('client_id', $data['clientId'])->first();
 
-            ProofOfAddressCheck::create([
+            AddressVerification::create([
                 'client_id' => $data['clientId'],
                 'service_reference' => $data['id'],
                 'type' => $data['type'],

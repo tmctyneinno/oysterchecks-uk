@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\checks;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgeEstimation;
 use App\Models\Client;
 use App\Services\ComplyCubeService;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 
 // use App\Services\EmailService;
 
-class IdentityCheckController extends Controller
+class AgeEstimationCheckController extends Controller
 {
     protected ComplyCubeService $complyCubeService;
 
@@ -29,38 +30,13 @@ class IdentityCheckController extends Controller
         try {
             $validatedRequest = $request->validate([
                 'clientId' => 'required|string',
-                'issuingCountry' => 'required|string',
-                'issuingState' => 'required|string',
-                'classification' => 'required|string',
-                'type' => 'required|string',
                 'check_type' => 'required|string',
-                'documentNumber' => 'required|string',
-                'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
                 'livePhoto' => 'required|file|mimes:jpg,jpeg,png|max:4096',
             ]);
-
-            // create the Document #####################################
-            $documentResponse = $this->createDocument($validatedRequest);
-
-            if (!$documentResponse->successful()) {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Failed to create document',
-                    'errors' => $documentResponse->json()
-                ], 500);
-            }
-
-            $documentResult = $documentResponse->json();
-            #################################################################
-
-            // Upload the document ###############################################
-            $this->uploadAttachment($documentResult['id'], $validatedRequest);
-            // ##################################################################
 
             // Upload the livePhoto ###############################################
             $livePhotoResponse = $this->uploadLivePhoto($validatedRequest);
             // ##################################################################
-
 
             if (!$livePhotoResponse->successful()) {
                 return response()->json([
@@ -73,12 +49,12 @@ class IdentityCheckController extends Controller
             $livePhotoResult = $livePhotoResponse->json();
 
             // Run the check ###############################################
-            $checkResponse = $this->runCheck($documentResult['id'], $livePhotoResult['id'], $validatedRequest);
+            $checkResponse = $this->runCheck($livePhotoResult['id'], $validatedRequest);
 
             if (!$checkResponse->successful()) {
                 return response()->json([
                     'status' => 500,
-                    'message' => 'Document could not be uplaoded',
+                    'message' => 'Age Estimation Check failed',
                     'errors' => $checkResponse->json()
                 ], 500);
             }
@@ -90,7 +66,7 @@ class IdentityCheckController extends Controller
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Document verification request sent successfully',
+                'message' => 'Age Estimation Check request sent successfully',
                 'data' => $checkResult
             ], 201);
         } catch (ValidationException $e) {
@@ -110,39 +86,6 @@ class IdentityCheckController extends Controller
     }
 
 
-
-    private function createDocument($validatedRequest)
-    {
-        $documentData = [
-            'clientId' => $validatedRequest['clientId'],
-            'type' => $validatedRequest['type'],
-            'documentNumber' => $validatedRequest['documentNumber'],
-            'classification' => $validatedRequest['classification'],
-            'issuingCountry' => $validatedRequest['issuingCountry'],
-            'issuingState' => $validatedRequest['issuingState'],
-        ];
-
-        return $this->complyCubeService->createDocument($documentData);
-    }
-
-
-    private function uploadAttachment($documentId, $validatedRequest, $side = 'front')
-    {
-        $uploadedFile = $side == 'front' ? $validatedRequest['document'] : $validatedRequest['documentBack'];
-        $fileName = $uploadedFile->getClientOriginalName();
-        $fileContents = $uploadedFile->get();
-        $base64Data = base64_encode($fileContents);
-
-        $uploadData = [
-            'data' => $base64Data,
-            'fileName' => $fileName
-        ];
-
-        Log::info('Uplaoding document attachment with data: ',  ['fileName' => $fileName]);
-
-        return $this->complyCubeService->uploadDocumentAttachment($documentId, $side, $uploadData);
-    }
-
     private function uploadLivePhoto($validatedRequest)
     {
         $livePhoto = $validatedRequest['livePhoto'];
@@ -160,12 +103,11 @@ class IdentityCheckController extends Controller
         return $this->complyCubeService->createLivePhoto($uploadData);
     }
 
-    private function runCheck($documentId, $livePhotoId, $validatedRequest)
+    private function runCheck($livePhotoId, $validatedRequest)
     {
         $checkData = [
             'clientId' => $validatedRequest['clientId'],
             'type' => $validatedRequest['check_type'],
-            'documentId' => $documentId,
             'livePhotoId' => $livePhotoId,
         ];
 
@@ -180,12 +122,11 @@ class IdentityCheckController extends Controller
         DB::transaction(function () use ($data) {
             $client = Client::where('client_id', $data['clientId'])->first();
 
-            IdentityVerification::create([
+            AgeEstimation::create([
                 'client_id' => $data['clientId'],
                 'service_reference' => $data['id'],
                 'type' => $data['type'],
-                'documentId' => $data['documentId'],
-                'livePhotoId' => $data['livePhotoId'],
+                'live_photo_id' => $data['livePhotoId'],
                 'status' => $data['status'],
             ]);
 
