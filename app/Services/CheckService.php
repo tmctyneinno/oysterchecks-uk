@@ -8,6 +8,7 @@ use App\Models\IdentityVerification;
 use App\Models\AgeEstimation;
 use App\Models\AddressVerification;
 use App\Models\BureauCheck;
+use App\Models\ProofOfAddressCheck;
 use Illuminate\Http\Request;
 
 class CheckService
@@ -116,6 +117,7 @@ class CheckService
             ->merge(AgeEstimation::where('client_id', $client_id)->get())
             ->merge(AddressVerification::where('client_id', $client_id)->get())
             ->merge(BureauCheck::where('client_id', $client_id)->get())
+            ->merge(ProofOfAddressCheck::where('client_id', $client_id)->get())
             ->sortByDesc('created_at');
     }
 }

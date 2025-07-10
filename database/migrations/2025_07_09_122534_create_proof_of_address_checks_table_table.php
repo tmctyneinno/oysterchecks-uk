@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proof_of_address_checks)', function (Blueprint $table) {
+        Schema::create('proof_of_address_checks', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->string('client_id');

@@ -104,6 +104,7 @@ class MultiBureauCheckController extends Controller
             'postalCode' => $validatedRequest['postalCode'],
             'state' => $validatedRequest['state'],
             'country' => $validatedRequest['country'],
+            'propertyNumber' => $validatedRequest['propertyNumber'],
         ];
 
         return $this->complyCubeService->createAddress($addressData);
