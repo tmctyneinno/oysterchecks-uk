@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Services\OtpService;
 use App\Services\EmailService;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -87,7 +88,7 @@ class AuthController extends Controller
 
             return response()->json($result, 201);
         } catch (\Exception $e) {
-            Log::error('Registration failed', ['error' => $e->getMessage()]);
+            // Log::error('Registration failed', ['error' => $e->getMessage()]);
             return response()->json(['message' => 'Registration failed. Please try again later.'], 500);
         }
     }
@@ -122,9 +123,42 @@ class AuthController extends Controller
     }
 
 
-    public function profile(Request $request)
+    public function Profile(Request $request)
     {
-        $user = User::find($request->user()->id);
-        return response()->json($user, 200);
+        return response()->json($request->user(), 200);
+    }
+
+
+
+
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+
+        $validatedData = $request->validate([
+            'password' => 'required|string|min:8',
+            'new_password' => 'required|string|min:8',
+        ]);
+
+
+        // Verify current password
+        if (!Hash::check($validatedData['password'], $user->password)) {
+            return response()->json([
+                'message' => 'The provided current password is incorrect.',
+                'errors' => [
+                    'password' => ['Current password does not match our records']
+                ]
+            ], 422);
+        }
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($validatedData['new_password'])
+        ]);
+
+
+        return response()->json([
+            'message' => 'Password changed successfully',
+        ], 200);
     }
 }

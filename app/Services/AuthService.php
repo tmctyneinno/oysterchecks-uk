@@ -15,7 +15,9 @@ class AuthService  implements AuthInterface
     {
 
         $user = User::create([
-            'name' => $requestDto->first_name . ' ' . $requestDto->last_name,
+            // 'name' => $requestDto->first_name . ' ' . $requestDto->last_name,
+            'first_name' => $requestDto->first_name,
+            'last_name' => $requestDto->last_name,
             'email' => $requestDto->email,
             'password' => Hash::make($requestDto->password),
             'phone' => $requestDto->phone,
