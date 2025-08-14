@@ -118,4 +118,19 @@ class CheckService
             ->merge(BureauCheck::where('client_id', $client_id)->get())
             ->sortByDesc('created_at');
     }
+
+    public function getModelNameFromCheckType($type)
+    {
+        $modelArrays = [
+            'standard_screening_check' => AmlVerification::class,
+            'extensive_screening_check' => AmlVerification::class,
+            'document_check' => DocumentVerification::class,
+            'identity_check' => IdentityVerification::class,
+            'age_estimation_check' => AgeEstimation::class,
+            'proof_of_address_check' => AddressVerification::class,
+            'multi_bureau_check' => BureauCheck::class,
+        ];
+
+        return $modelArrays[$type];
+    }
 }

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\ClientsChecksCollectionFormat;
 use App\Services\CheckService;
-
+use Illuminate\Support\Facades\Log;
 
 class ChecksDataController extends Controller
 {
@@ -35,7 +35,18 @@ class ChecksDataController extends Controller
     {
         $result = $this->complyCubeService->getCheckResult($service_reference);
         $data = null;
-        if ($result->successful()) $data = $result->json();
+        if ($result->successful()) {
+            $data = $result->json();
+            try {
+                // update status in the Checks table
+                $model = $this->checkService->getModelNameFromCheckType($data['type']);
+                $model::where('service_reference', $data['id'])
+                    ->where('client_id', $data['clientId'])
+                    ->update(['status' => $data['status']]);
+            } catch (\Throwable $th) {
+                // throw $th;
+            }
+        }
 
         return response()->json($data, 200);
     }
