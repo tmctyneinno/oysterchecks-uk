@@ -90,6 +90,39 @@ class ClientsController extends Controller
     }
 
 
+    public function update(CreateClientRequest $request, $id)
+    {
+        $client = Client::find($id);
+
+        $response = $this->complyCubeService->updateClient($request->validated(), $client->client_id);
+
+        if ($response->successful()) {
+            $updatedClient = $response->json();
+
+            $client->update([
+                'telephone' => $updatedClient['telephone'],
+                'email' => $updatedClient['email'],
+                'first_name' => $updatedClient['personDetails']['firstName'],
+                'last_name' => $updatedClient['personDetails']['lastName'],
+                'dob' => $updatedClient['personDetails']['dob'],
+                'nationality' => $updatedClient['personDetails']['nationality'],
+            ]);
+
+            return response()->json([
+                'status' => 201,
+                'response' => $client,
+                'message' => 'Client updated successfully.'
+            ]);
+        } else {
+            Log::info($response);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Could not update client, Something went wrong.'
+            ]);
+        }
+    }
+
+
 
     public function show($id)
     {

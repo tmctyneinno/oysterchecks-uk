@@ -24,6 +24,14 @@ class ComplyCubeService
         ])->post($this->baseUrl . 'clients', $data);
     }
 
+    public function updateClient(array $data, $clientId)
+    {
+        return Http::withHeaders([
+            'Authorization' => $this->token,
+        ])->post($this->baseUrl . 'clients/' . $clientId, $data);
+    }
+
+
 
     public function runCheck(array $data)
     {

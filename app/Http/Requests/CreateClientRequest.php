@@ -19,7 +19,7 @@ class CreateClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required', 'string', Rule::in(['person'])],
+            'type' => ['nullable', 'string', Rule::in(['person'])],
             'email' => ['required', 'email', 'max:255'],
             'mobile' => ['required', 'string', 'max:20'],
             'telephone' => ['nullable', 'string', 'max:20'],
